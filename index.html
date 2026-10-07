@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riskal | Handwritten Text Recognition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['Fira Code', 'monospace'] },
+                    colors: { base: '#ffffff', surface: '#f9fafb', border: '#e5e7eb', muted: '#6b7280', primary: '#111827', accent: '#2563eb' },
+                    boxShadow: { 'subtle': '0 1px 2px 0 rgba(0, 0, 0, 0.05)', 'floating': '0 10px 40px -10px rgba(0,0,0,0.08)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { color: #111827; background-color: #ffffff; -webkit-font-smoothing: antialiased; }
+        .grid-pattern {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+            mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+        }
+        .upload-area { transition: all 0.2s ease; }
+        .upload-area.drag-active { border-color: #2563eb; background-color: #eff6ff; }
+        .shimmer { background: linear-gradient(90deg, #f3f4f6 0%, #e5e7eb 50%, #f3f4f6 100%); background-size: 200% 100%; animation: shimmer 1.5s infinite linear; }
+        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        body.lang-en .lang-id { display: none !important; }
+        body.lang-id .lang-en { display: none !important; }
+        
+        .prose p { margin-bottom: 1rem; line-height: 1.7; }
+        .prose ul { margin-top: 1rem; margin-bottom: 1rem; }
+        .prose li { margin-bottom: 0.5rem; line-height: 1.6; }
+        
+        .custom-scrollbar::-webkit-scrollbar { height: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .erd-node.active-node { border-color: #3b82f6 !important; box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.3) !important; transform: scale(1.02); }
+    </style>
+</head>
+<body class="min-h-screen relative flex flex-col lang-id">
+
+    <div class="absolute inset-0 grid-pattern pointer-events-none z-0 h-[60vh]"></div>
+
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
+        <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="#" class="flex items-center gap-2.5 font-bold tracking-tight text-gray-900 hover:opacity-80 transition-opacity">
+                <div class="w-7 h-7 bg-gray-900 text-white flex items-center justify-center rounded-lg shadow-sm">
+                    <i data-lucide="scan-text" class="w-4 h-4"></i>
+                </div>
+                <span class="text-lg">HTR Engine</span>
+            </a>
+            
+            <div class="flex items-center gap-4 sm:gap-8 text-sm font-semibold text-gray-500 main-nav">
+                <a href="#how-it-works" class="hover:text-gray-900 transition-colors">
+                    <span class="lang-en">How it works</span><span class="lang-id">Cara Kerja</span>
+                </a>
+                <a href="#architecture" class="hover:text-gray-900 transition-colors">
+                    <span class="lang-en">Architecture</span><span class="lang-id">Arsitektur</span>
+                </a>
+                
+                <div class="relative bg-gray-100/80 p-1 flex rounded-lg items-center text-xs font-bold shadow-inner border border-gray-200/60 ml-2 cursor-pointer" id="langToggleBox">
+                    <div id="langSlider" class="absolute left-1 top-1 bottom-1 w-[42px] bg-white rounded shadow-sm border border-gray-200/50 transition-transform duration-300 ease-in-out transform translate-x-[42px]"></div>
+                    <button id="btnEn" class="relative z-10 w-[42px] py-1 text-center text-gray-500 transition-colors tracking-wide">EN</button>
+                    <button id="btnId" class="relative z-10 w-[42px] py-1 text-center text-gray-900 transition-colors tracking-wide">ID</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <div id="mainAppContent" class="flex flex-col flex-grow w-full max-w-5xl mx-auto px-6 pt-12 pb-24 z-10">
+        
+        <header class="mb-10 mt-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight mb-3">
+                <span class="lang-en">Handwritten Text Recognition</span>
+                <span class="lang-id">Pengenalan Tulisan Tangan</span>
+            </h1>
+            <p class="text-slate-500 text-base max-w-2xl">
+                <span class="lang-en">An offline machine learning pipeline powered by a Hybrid CNN-BiLSTM architecture, CTC decoding, and Lexical DP mapping.</span>
+                <span class="lang-id">Pipeline <i>Machine Learning offline</i> yang ditenagai oleh arsitektur Hybrid CNN-BiLSTM, dekoder CTC, dan matriks Lexical DP.</span>
+            </p>
+        </header>
+
+        <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden flex flex-col md:flex-row">
+            
+            <!-- Left: Upload -->
+            <div class="w-full md:w-1/2 p-6 md:p-8 border-b md:border-b-0 md:border-r border-slate-200 bg-slate-50/50 flex flex-col">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-sm font-semibold text-slate-800"><span class="lang-en">Input Image</span><span class="lang-id">Input Gambar</span></h3>
+                </div>
+                
+                <div id="dropzone" class="upload-area border-2 border-dashed border-slate-300 rounded-lg bg-white flex-grow relative cursor-pointer min-h-[220px] flex flex-col items-center justify-center hover:bg-slate-50 hover:border-slate-400 transition-colors">
+                    <input type="file" id="fileInput" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" accept="image/png, image/jpeg, image/jpg">
+                    <div id="uploadPlaceholder" class="text-center px-4">
+                        <i data-lucide="image-plus" class="w-8 h-8 mx-auto text-slate-400 mb-3"></i>
+                        <p class="text-sm font-medium text-slate-700">
+                            <span class="lang-en">Click or drag image here</span><span class="lang-id">Klik atau seret gambar ke sini</span>
+                        </p>
+                    </div>
+                    <img id="imagePreview" class="hidden absolute inset-0 w-full h-full object-contain p-4 z-10" />
+                </div>
+                
+                <button id="predictBtn" disabled class="mt-4 w-full py-3 bg-slate-900 hover:bg-slate-800 disabled:bg-slate-100 disabled:text-slate-400 disabled:border border-slate-200 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 group">
+                    <i data-lucide="cpu" class="w-4 h-4 group-disabled:hidden"></i>
+                    <span class="lang-en">Run Prediction</span>
+                    <span class="lang-id hidden" id="btnIdTargetHack">Jalankan Prediksi</span>
+                    <span class="lang-id">Jalankan Prediksi</span>
+                </button>
+            </div>
+
+            <!-- Right: Output -->
+            <div class="w-full md:w-1/2 p-6 md:p-8 flex flex-col bg-white">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-sm font-semibold text-slate-800"><span class="lang-en">Prediction Result</span><span class="lang-id">Hasil Prediksi</span></h3>
+                    <div class="text-xs font-mono text-slate-500 bg-slate-100 px-2 py-1 rounded border border-slate-200">
+                        <span id="inferenceTime">0ms</span>
+                    </div>
+                </div>
+
+                <div class="flex-grow flex flex-col justify-center items-center p-6 border border-slate-100 rounded-lg bg-slate-50 min-h-[220px]">
+                    <div id="emptyResult" class="text-center">
+                        <p class="text-slate-400 text-sm"><span class="lang-en">No result yet</span><span class="lang-id">Belum ada hasil</span></p>
+                    </div>
+
+                    <div id="resultContainer" class="hidden w-full text-center flex flex-col h-full justify-center">
+                        <p class="text-[11px] font-bold text-emerald-600 uppercase tracking-widest mb-4"><span class="lang-en">Decoded String</span><span class="lang-id">Teks Didekode</span></p>
+                        <h2 id="predictionText" class="text-4xl md:text-5xl font-mono font-bold text-slate-900 break-all mb-8"></h2>
+                        
+                        <div class="mt-auto pt-4 border-t border-slate-200 w-full flex items-center justify-between text-xs">
+                            <div class="flex items-center gap-2 text-slate-500 font-mono">
+                                RAW: <span id="rawText" class="font-bold text-slate-700"></span>
+                            </div>
+                            <a href="#architecture" class="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-1">
+                                <span class="lang-en">View Telemetry</span><span class="lang-id">Lihat Telemetri</span> <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<section id="how-it-works" class="w-full hidden bg-[#f8fafc] font-sans min-h-screen text-slate-800 relative">
+    
+    <!-- Background Graph Paper -->
+    <div class="absolute inset-0 pointer-events-none" style="background-image: linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px); background-size: 40px 40px;"></div>
+
+    <div class="max-w-6xl mx-auto px-6 py-24 md:py-32 relative z-10">
+        
+        <!-- Back Button -->
+        <a href="#" class="back-home-btn group fixed top-20 left-6 md:top-24 md:left-12 inline-flex items-center gap-3 text-sm font-semibold text-slate-500 hover:text-slate-900 transition-colors z-[9999] w-fit">
+            <div class="w-10 h-10 rounded-full border border-slate-200 bg-white flex items-center justify-center group-hover:border-slate-300 group-hover:shadow-md transition-all shadow-sm group-hover:-translate-x-1">
+                <i data-lucide="arrow-left" class="w-4 h-4 text-slate-600 group-hover:text-slate-900 transition-colors"></i>
+            </div>
+            <div class="flex flex-col">
+                <span class="lang-en">Back to Workspace</span>
+                <span class="lang-id">Kembali ke Beranda</span>
+            </div>
+        </a>
+
+        <div class="mb-20 max-w-3xl border-b border-slate-200 pb-10">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-200/50 border border-slate-300 mb-6 shadow-sm">
+                <div class="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></div>
+                <span class="text-xs font-bold tracking-widest text-slate-600 uppercase">Documentation</span>
+            </div>
+            <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">
+                <span class="lang-en">Pipeline Architecture</span>
+                <span class="lang-id">Arsitektur Pipeline HTR</span>
+            </h2>
+            <p class="text-lg text-slate-600 leading-relaxed">
+                <span class="lang-en">A deep dive into the handwritten text recognition pipeline. Discover how we transform raw pixel matrices into digital strings using advanced Neural Networks and Dynamic Programming.</span>
+                <span class="lang-id">Dokumentasi teknis dari arsitektur <i>Handwritten Text Recognition</i>. Menguraikan transformasi matriks piksel mentah menjadi teks digital melalui algoritma Jaringan Saraf Tiruan dan Pemrograman Dinamis.</span>
+            </p>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-16">
+            
+            <!-- Sticky Sidebar -->
+            <aside class="w-full lg:w-1/4 hidden lg:block">
+                <div class="sticky top-32">
+                    <h3 class="text-xs font-bold tracking-[0.2em] text-slate-400 uppercase mb-6">
+                        <span class="lang-en">Execution Stages</span>
+                        <span class="lang-id">Tahapan Eksekusi</span>
+                    </h3>
+                    <nav id="sidebar-nav" class="space-y-6 border-l-2 border-slate-200 pl-6 relative">
+                        <div id="scroll-indicator" class="absolute -left-[2px] top-0 h-6 w-1 bg-sky-500 rounded-r-md transition-all duration-300" style="transform: translateY(0px);"></div>
+                        
+                        <a href="#stage-1" class="stage-link block text-sm font-semibold text-slate-900 hover:text-sky-600 transition-colors">
+                            <span class="lang-en">1. Otsu Variance</span>
+                            <span class="lang-id">1. Binarisasi Otsu</span>
+                        </a>
+                        <a href="#stage-2" class="stage-link block text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">
+                            <span class="lang-en">2. Spatial Extraction</span>
+                            <span class="lang-id">2. Ekstraksi Spasial</span>
+                        </a>
+                        <a href="#stage-3" class="stage-link block text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">
+                            <span class="lang-en">3. Temporal Memory</span>
+                            <span class="lang-id">3. Memori Temporal</span>
+                        </a>
+                        <a href="#stage-4" class="stage-link block text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">
+                            <span class="lang-en">4. CTC Alignment</span>
+                            <span class="lang-id">4. Perataan CTC</span>
+                        </a>
+                        <a href="#stage-5" class="stage-link block text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">
+                            <span class="lang-en">5. Lexical Alignment</span>
+                            <span class="lang-id">5. Penyelarasan Leksikal</span>
+                        </a>
+                    </nav>
+                </div>
+            </aside>
+
+            <!-- Content Area -->
+            <div class="w-full lg:w-3/4 flex flex-col gap-20">
+
+                <!-- STAGE 1 -->
+                <article id="stage-1" class="relative scroll-mt-32">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-2xl bg-sky-100 border border-sky-200 flex items-center justify-center shadow-sm">
+                            <span class="text-xl font-black text-sky-600">01</span>
+                        </div>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-900">
+                            <span class="lang-en">Vision & Otsu Binarization</span>
+                            <span class="lang-id">Binarisasi Visi & Otsu</span>
+                        </h3>
+                    </div>
+                    <div class="space-y-6 text-slate-600 text-base md:text-lg leading-loose">
+                        <p class="lang-en">Raw handwriting images frequently exhibit uneven illumination and visual noise from paper textures. In this initial stage, the system applies the Inverse Otsu's Thresholding algorithm. Rather than relying on a static contrast threshold, it mathematically calculates the optimal boundary to separate ink strokes from the background. This process yields a pristine binary matrix as the foundation for neural processing.</p>
+                        <p class="lang-id">Citra tulisan tangan mentah umumnya memiliki intensitas cahaya yang tidak merata serta derau visual dari tekstur kertas. Pada tahap awal ini, sistem menerapkan algoritma <i>Inverse Otsu's Thresholding</i>. Alih-alih menggunakan nilai ambang statis, algoritma ini menghitung titik kontras paling optimal secara matematis untuk memisahkan guratan tinta dari latar belakang. Proses ini menghasilkan matriks biner yang sepenuhnya bersih sebagai landasan pemrosesan jaringan saraf.</p>
+                    </div>
+                    
+                    <div class="mt-8 rounded-xl overflow-hidden border border-slate-700 shadow-xl">
+                        <div class="bg-[#1e1e1e] text-slate-300 text-[12px] px-4 py-2.5 font-mono flex items-center gap-2 border-b border-slate-700/80">
+                            <i data-lucide="file-code-2" class="w-4 h-4 text-sky-400"></i> image_preprocessing.py
+                        </div>
+                        <pre class="bg-[#1e1e1e] text-slate-100 p-5 overflow-x-auto font-mono text-[13.5px] leading-relaxed"><code><span class="text-pink-400">def</span> <span class="text-blue-300">apply_otsu_variance</span>(image_matrix):
+    <span class="text-green-500 opacity-80"># 1. Bersihkan noise kecil dengan Gaussian Blur</span>
+    blurred = cv2.GaussianBlur(image_matrix, (<span class="text-orange-300">5</span>, <span class="text-orange-300">5</span>), <span class="text-orange-300">0</span>)
+    
+    <span class="text-green-500 opacity-80"># 2. Hitung ambang batas optimal secara dinamis</span>
+    optimal_t, binary_tensor = cv2.threshold(
+        blurred, <span class="text-orange-300">0</span>, <span class="text-orange-300">255</span>, 
+        cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU
+    )
+    
+    <span class="text-pink-400">return</span> (binary_tensor.astype(<span class="text-amber-200">'float32'</span>) / <span class="text-orange-300">255.0</span>)</code></pre>
+                    </div>
+                </article>
+
+                <hr class="border-slate-200">
+
+                <!-- STAGE 2 -->
+                <article id="stage-2" class="relative scroll-mt-32">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-2xl bg-indigo-100 border border-indigo-200 flex items-center justify-center shadow-sm">
+                            <span class="text-xl font-black text-indigo-600">02</span>
+                        </div>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-900">
+                            <span class="lang-en">Spatial Feature Extraction</span>
+                            <span class="lang-id">Ekstraksi Fitur Spasial</span>
+                        </h3>
+                    </div>
+                    <div class="space-y-6 text-slate-600 text-base md:text-lg leading-loose">
+                        <p class="lang-en">Once the image is clean, the computer needs to understand the curves and strokes of the letters. We run it through a 3-layer Convolutional Neural Network (CNN). The early layers pick up basic edges, while deeper layers recognize complex shapes. By the end, the visual patterns are translated into 256 distinct numerical features.</p>
+                        <p class="lang-id">Matriks gambar yang telah dibersihkan kemudian diproses untuk mengenali pola morfologi karakter. Tahap ini memanfaatkan arsitektur <i>Convolutional Neural Network</i> (CNN) tiga lapis. Lapisan konvolusi awal bertugas mendeteksi pola tepi atau garis lengkung dasar, sedangkan lapisan yang lebih dalam menyusun abstraksi bentuk yang lebih kompleks. Pada akhir tahap ini, seluruh representasi visual gambar telah berhasil diekstraksi menjadi 256 fitur numerik spasial.</p>
+                    </div>
+                    
+                    <div class="mt-8 rounded-xl overflow-hidden border border-slate-700 shadow-xl">
+                        <div class="bg-[#1e1e1e] text-slate-300 text-[12px] px-4 py-2.5 font-mono flex items-center gap-2 border-b border-slate-700/80">
+                            <i data-lucide="file-code-2" class="w-4 h-4 text-indigo-400"></i> spatial_cnn.py
+                        </div>
+                        <pre class="bg-[#1e1e1e] text-slate-100 p-5 overflow-x-auto font-mono text-[13.5px] leading-relaxed"><code><span class="text-pink-400">def</span> <span class="text-blue-300">build_cnn_extractor</span>(input_tensor):
+    <span class="text-green-500 opacity-80"># Deteksi lengkungan dasar (64 Filters)</span>
+    x = layers.Conv2D(<span class="text-orange-300">64</span>, (<span class="text-orange-300">3</span>, <span class="text-orange-300">3</span>), activation=<span class="text-amber-200">'relu'</span>)(input_tensor)
+    x = layers.MaxPooling2D(pool_size=(<span class="text-orange-300">2</span>, <span class="text-orange-300">2</span>))(x)
+    
+    <span class="text-green-500 opacity-80"># Pemetaan bentuk yang lebih rumit (128 - 256 Channels)</span>
+    x = layers.Conv2D(<span class="text-orange-300">128</span>, (<span class="text-orange-300">3</span>, <span class="text-orange-300">3</span>), activation=<span class="text-amber-200">'relu'</span>)(x)
+    x = layers.MaxPooling2D(pool_size=(<span class="text-orange-300">2</span>, <span class="text-orange-300">2</span>))(x)
+    x = layers.Conv2D(<span class="text-orange-300">256</span>, (<span class="text-orange-300">3</span>, <span class="text-orange-300">3</span>), activation=<span class="text-amber-200">'relu'</span>)(x)
+    
+    <span class="text-green-500 opacity-80"># Ubah wujud matriks ke deretan waktu (Sequence)</span>
+    <span class="text-pink-400">return</span> layers.Reshape(target_shape=(<span class="text-orange-300">32</span>, <span class="text-orange-300">256</span>))(x)</code></pre>
+                    </div>
+                </article>
+
+                <hr class="border-slate-200">
+
+                <!-- STAGE 3 -->
+                <article id="stage-3" class="relative scroll-mt-32">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-2xl bg-teal-100 border border-teal-200 flex items-center justify-center shadow-sm">
+                            <span class="text-xl font-black text-teal-600">03</span>
+                        </div>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-900">
+                            <span class="lang-en">Bidirectional Temporal Memory</span>
+                            <span class="lang-id">Memori Temporal Dua Arah</span>
+                        </h3>
+                    </div>
+                    <div class="space-y-6 text-slate-600 text-base md:text-lg leading-loose">
+                        <p class="lang-en">Reading cursive handwriting is tricky because the letters are connected. This is where Bidirectional LSTM comes in. It scans the feature sequence from left to right, and simultaneously from right to left. By looking at the preceding and succeeding characters at the same time, the network can accurately deduce ambiguous letters based on context.</p>
+                        <p class="lang-id">Pengenalan tulisan tegak bersambung memiliki tingkat kompleksitas tinggi akibat karakter yang saling bertumpuk dan berkesinambungan. Untuk mengatasi hal ini, sistem mengandalkan arsitektur <i>Bidirectional Long Short-Term Memory</i> (BiLSTM). Jaringan ini menganalisis deretan fitur spasial secara dua arah: berurutan dari kiri ke kanan dan sebaliknya. Melalui pemahaman konteks karakter sebelum dan sesudahnya secara simultan, model mampu mengklasifikasikan huruf-huruf yang ambigu dengan probabilitas yang jauh lebih akurat.</p>
+                    </div>
+                    
+                    <div class="mt-8 rounded-xl overflow-hidden border border-slate-700 shadow-xl">
+                        <div class="bg-[#1e1e1e] text-slate-300 text-[12px] px-4 py-2.5 font-mono flex items-center gap-2 border-b border-slate-700/80">
+                            <i data-lucide="file-code-2" class="w-4 h-4 text-teal-400"></i> temporal_lstm.py
+                        </div>
+                        <pre class="bg-[#1e1e1e] text-slate-100 p-5 overflow-x-auto font-mono text-[13.5px] leading-relaxed"><code><span class="text-pink-400">def</span> <span class="text-blue-300">build_temporal_memory</span>(sequence_tensor):
+    <span class="text-green-500 opacity-80"># Baca data maju (kiri-kanan) dan mundur (kanan-kiri)</span>
+    forward_lstm = layers.LSTM(<span class="text-orange-300">256</span>, return_sequences=<span class="text-purple-400">True</span>)
+    backward_lstm = layers.LSTM(<span class="text-orange-300">256</span>, return_sequences=<span class="text-purple-400">True</span>, go_backwards=<span class="text-purple-400">True</span>)
+    
+    <span class="text-green-500 opacity-80"># Satukan pemahaman kedua arah (Bi-directional)</span>
+    hidden_states = layers.Bidirectional(
+        forward_lstm, 
+        backward_layer=backward_lstm
+    )(sequence_tensor)
+    
+    <span class="text-green-500 opacity-80"># Hitung kemungkinan tebakan untuk setiap 80 karakter unik</span>
+    <span class="text-pink-400">return</span> layers.Dense(<span class="text-orange-300">80</span>, activation=<span class="text-amber-200">'softmax'</span>)(hidden_states)</code></pre>
+                    </div>
+                </article>
+
+                <hr class="border-slate-200">
+
+                <!-- STAGE 4 -->
+                <article id="stage-4" class="relative scroll-mt-32">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-100 border border-emerald-200 flex items-center justify-center shadow-sm">
+                            <span class="text-xl font-black text-emerald-600">04</span>
+                        </div>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-900">
+                            <span class="lang-en">CTC Alignment</span>
+                            <span class="lang-id">Perataan CTC</span>
+                        </h3>
+                    </div>
+                    <div class="space-y-6 text-slate-600 text-base md:text-lg leading-loose">
+                        <p class="lang-en">Because our model scans the image in tiny slices, a wide letter 'a' might be predicted multiple times as 'a-a-a'. The Connectionist Temporal Classification (CTC) algorithm cleans this up. It collapses consecutive duplicate characters and removes blank gaps, merging the raw predictions into a cohesive, readable word.</p>
+                        <p class="lang-id">Pemindaian gambar dalam bentuk irisan tipis sering kali menyebabkan satu karakter dominan diprediksi secara berulang (misalnya 'a' diprediksi sebagai 'a-a-a'). Modul <i>Connectionist Temporal Classification</i> (CTC) diimplementasikan untuk melakukan normalisasi terhadap hasil keluaran tersebut. Algoritma ini menyusutkan probabilitas karakter berurutan menjadi satu entitas tunggal dan mengeliminasi token kosong, sehingga probabilitas mentah berhasil dirangkai menjadi susunan kata yang utuh.</p>
+                    </div>
+                    
+                    <div class="mt-8 rounded-xl overflow-hidden border border-slate-700 shadow-xl">
+                        <div class="bg-[#1e1e1e] text-slate-300 text-[12px] px-4 py-2.5 font-mono flex items-center gap-2 border-b border-slate-700/80">
+                            <i data-lucide="file-code-2" class="w-4 h-4 text-emerald-400"></i> ctc_decoder.py
+                        </div>
+                        <pre class="bg-[#1e1e1e] text-slate-100 p-5 overflow-x-auto font-mono text-[13.5px] leading-relaxed"><code><span class="text-pink-400">def</span> <span class="text-blue-300">decode_ctc_matrix</span>(probability_matrix):
+    <span class="text-green-500 opacity-80"># Tetapkan batas maksimal irisan pembacaan</span>
+    sequence_length = np.ones(probability_matrix.shape[<span class="text-orange-300">0</span>]) * <span class="text-orange-300">32</span>
+    
+    <span class="text-green-500 opacity-80"># Greedy Decoder: cari rute probabilitas tertinggi</span>
+    decoded_indices, _ = tf.keras.backend.ctc_decode(
+        probability_matrix, 
+        input_length=sequence_length, 
+        greedy=<span class="text-purple-400">True</span>
+    )
+    
+    <span class="text-green-500 opacity-80"># Hapus duplikat berturut-turut dan buang token kosong (ID: 79)</span>
+    <span class="text-pink-400">return</span> map_indices_to_charset(decoded_indices[<span class="text-orange-300">0</span>])</code></pre>
+                    </div>
+                </article>
+
+                <hr class="border-slate-200">
+
+                <!-- STAGE 5 -->
+                <article id="stage-5" class="relative scroll-mt-32">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-2xl bg-rose-100 border border-rose-200 flex items-center justify-center shadow-sm">
+                            <span class="text-xl font-black text-rose-600">05</span>
+                        </div>
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-900">
+                            <span class="lang-en">Lexical Alignment</span>
+                            <span class="lang-id">Penyelarasan Leksikal</span>
+                        </h3>
+                    </div>
+                    <div class="space-y-6 text-slate-600 text-base md:text-lg leading-loose">
+                        <p class="lang-en">Sometimes, the network might still misjudge a character (e.g., predicting 'DlassiC' instead of 'classic'). Rather than relying on simple spellcheckers, we engineered a custom Dynamic Programming matrix (Levenshtein Distance). It mathematically calculates the similarity between the raw prediction and our lexical corpus, guaranteeing that the final output is a perfectly valid word.</p>
+                        <p class="lang-id">Walaupun jaringan saraf telah mengklasifikasikan karakter, probabilitas kesalahan minor akibat kemiripan visual masih berpotensi terjadi (seperti 'classic' diprediksi 'DlassiC'). Guna memitigasi hal ini, sistem memanfaatkan optimasi matematis melalui matriks Pemrograman Dinamis (<i>Levenshtein Distance</i>). Algoritma ini mengevaluasi jarak kedekatan string hasil prediksi dengan korpus linguistik yang valid secara komputasional. Hal ini menjamin bahwa seluruh teks keluaran memiliki integritas leksikal berstandar tinggi.</p>
+                    </div>
+                    
+                    <div class="mt-8 rounded-xl overflow-hidden border border-slate-700 shadow-xl">
+                        <div class="bg-[#1e1e1e] text-slate-300 text-[12px] px-4 py-2.5 font-mono flex items-center gap-2 border-b border-slate-700/80">
+                            <i data-lucide="file-code-2" class="w-4 h-4 text-rose-400"></i> lexical_alignment.py
+                        </div>
+                        <pre class="bg-[#1e1e1e] text-slate-100 p-5 overflow-x-auto font-mono text-[13.5px] leading-relaxed"><code><span class="text-pink-400">def</span> <span class="text-blue-300">lexical_dp_alignment</span>(raw_string, lexical_corpus):
+    optimal_string = raw_string
+    min_distance = <span class="text-cyan-300">float</span>(<span class="text-amber-200">'inf'</span>)
+    
+    <span class="text-green-500 opacity-80"># Uji setiap kata dari kamus referensi bahasa</span>
+    <span class="text-pink-400">for</span> valid_token <span class="text-pink-400">in</span> lexical_corpus:
+        <span class="text-green-500 opacity-80"># Hitung seberapa jauh jarak/selisih matriks hurufnya (D[i,j])</span>
+        matrix_dist = compute_levenshtein_distance(raw_string, valid_token)
+        
+        <span class="text-pink-400">if</span> matrix_dist < min_distance:
+            min_distance = matrix_dist
+            optimal_string = valid_token
+            
+    <span class="text-pink-400">return</span> optimal_string</code></pre>
+                    </div>
+                </article>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- Architecture Section (Light Mode Canvas Panning) -->
+
+<section id="architecture" class="w-full hidden bg-[#f8fafc] font-sans">
+        
+        <style>
+            /* Light Mode Premium Enterprise ERD Styling */
+            .erd-table { 
+                width: 280px; 
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(20px); 
+                -webkit-backdrop-filter: blur(20px); 
+                border: 1px solid #e2e8f0; 
+                border-radius: 16px; 
+                overflow: hidden; 
+                box-shadow: 0 10px 40px -10px rgba(0,0,0,0.06); 
+                z-index: 10; 
+                position: relative; 
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+            .erd-table:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 20px 40px -10px rgba(0,0,0,0.12); 
+            }
+            .erd-header { 
+                padding: 12px 16px; 
+                background: #f1f5f9; 
+                border-bottom: 1px solid #e2e8f0; 
+                display: flex; 
+                justify-content: space-between; 
+                align-items: center; 
+                font-family: 'Inter', sans-serif;
+                font-size: 11px;
+                font-weight: 700; 
+                color: #334155; 
+                letter-spacing: 0.05em;
+                text-transform: uppercase;
+            }
+            .erd-row { 
+                padding: 10px 16px; 
+                border-bottom: 1px solid #f8fafc; 
+                display: flex; 
+                justify-content: space-between; 
+                align-items: center;
+                font-family: 'Fira Code', monospace; 
+                font-size: 11px;
+                color: #475569; 
+            }
+            .erd-row:last-child { border-bottom: none; }
+            .erd-pk { color: #b45309; font-weight: 700; margin-right: 8px; font-size: 9px; padding: 2px 4px; background: #fef3c7; border-radius: 4px; }
+            .erd-fk { color: #0369a1; font-weight: 700; margin-right: 8px; font-size: 9px; padding: 2px 4px; background: #e0f2fe; border-radius: 4px; }
+            .erd-type { color: #0f766e; font-weight: 500; }
+            .erd-val { color: #1e293b; font-weight: 500; }
+
+            /* Light Mode Elegant Explanation Cards */
+            .expl-card { 
+                width: 380px; 
+                background: rgba(255, 255, 255, 0.85);
+                backdrop-filter: blur(24px); 
+                -webkit-backdrop-filter: blur(24px); 
+                border: 1px solid #e2e8f0; 
+                padding: 32px; 
+                border-radius: 24px; 
+                box-shadow: 0 20px 40px -15px rgba(0,0,0,0.06); 
+                position: relative;
+            }
+            .expl-icon-wrap {
+                width: 48px; height: 48px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;
+                background: #f8fafc; border: 1px solid #e2e8f0;
+            }
+        </style>
+
+        <div class="scroll-track h-[800vh] w-full relative">
+            
+            <div class="sticky-viewport sticky top-0 h-screen w-full overflow-hidden bg-[#f8fafc]">
+
+                
+                <!-- Telemetry Status Badge -->
+                <div id="telemetry-status" class="absolute top-6 right-6 md:top-8 md:right-12 z-[9999] shadow-sm">
+                    <span class="px-2 py-1 bg-amber-100 text-amber-700 rounded text-xs font-bold uppercase lang-en block">Awaiting Tensor</span>
+                    <span class="px-2 py-1 bg-amber-100 text-amber-700 rounded text-xs font-bold uppercase lang-id hidden">Menunggu Tensor</span>
+                </div>
+                <!-- Back Button (Light Mode Fixed) -->
+                <a href="#" class="back-home-btn group fixed top-20 left-6 md:top-24 md:left-12 inline-flex items-center gap-3 text-sm font-semibold text-slate-500 hover:text-slate-900 transition-colors z-[9999] w-fit">
+                    <div class="w-10 h-10 rounded-full border border-slate-200 bg-white/80 backdrop-blur-md flex items-center justify-center group-hover:border-slate-300 group-hover:bg-white transition-all shadow-sm group-hover:-translate-x-1">
+                        <i data-lucide="arrow-left" class="w-4 h-4 text-slate-600 group-hover:text-slate-900 transition-colors"></i>
+                    </div>
+                    <div class="flex flex-col text-left">
+                        <span class="lang-en block">Back to Workspace</span>
+                        <span class="lang-id block">Kembali ke Beranda</span>
+                    </div>
+                </a>
+
+                
+                <!-- Clean Light Graph Paper Grid -->
+                <div class="absolute inset-0 pointer-events-none" style="background-image: linear-gradient(to right, rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.04) 1px, transparent 1px); background-size: 50px 50px;"></div>
+
+                
+
+                <!-- The Giant Canvas (5000x3000) -->
+                <div id="miro-canvas" class="absolute top-0 left-0 w-[5000px] h-[3000px] transform-origin-top-left will-change-transform">
+                    
+                    <!-- SVG Connectors (Clean Slate lines) -->
+                    <svg class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: 1;">
+                        <path d="M 800 600 L 2500 800 L 4200 1200 L 3500 2200 L 2000 2500 L 800 2200" stroke="#cbd5e1" stroke-width="2" fill="none" stroke-dasharray="8 8" />
+                        <!-- Connecting circles -->
+                        <circle cx="800" cy="600" r="5" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+                        <circle cx="2500" cy="800" r="5" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+                        <circle cx="4200" cy="1200" r="5" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+                        <circle cx="3500" cy="2200" r="5" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+                        <circle cx="2000" cy="2500" r="5" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+                        <circle cx="800" cy="2200" r="5" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+                    </svg>
+
+                    <!-- ZONE 1: IMAGE ACQUISITION (800, 600) -->
+                    <div class="absolute flex flex-col md:flex-row items-center gap-20" style="left: 800px; top: 600px; transform: translate(-50%, -50%); z-index: 2;">
+                        <div class="flex flex-col gap-8">
+                            <div class="erd-table">
+                                <div class="erd-header"><span>Raw_Image</span><i data-lucide="image" class="w-4 h-4 text-sky-600"></i></div>
+                                <div class="erd-row"><span><span class="erd-pk">PK</span>image_id</span><span class="erd-type">uuid</span></div>
+                                <div class="erd-row"><span>format</span><span id="tel-raw-format" class="erd-val text-amber-500 font-mono">[STANDBY]</span></div>
+                            </div>
+                            <div class="w-px h-8 bg-slate-200 mx-auto"></div>
+                            <div class="erd-table">
+                                <div class="erd-header"><span>Grayscale_Conv</span><i data-lucide="sun" class="w-4 h-4 text-sky-600"></i></div>
+                                <div class="erd-row"><span>operation</span><span class="erd-val">cv2.cvtColor</span></div>
+                                <div class="erd-row"><span>channels</span><span id="tel-gray-channels" class="erd-val text-amber-500 font-mono">[STANDBY]</span></div>
+                            </div>
+                            <div class="w-px h-8 bg-slate-200 mx-auto"></div>
+                            <div class="erd-table">
+                                <div class="erd-header"><span>Otsu_Threshold</span><i data-lucide="contrast" class="w-4 h-4 text-sky-600"></i></div>
+                                <div class="erd-row"><span>algorithm</span><span class="erd-val">Inverse</span></div>
+                            <div class="p-2 bg-slate-50 border-t border-slate-100 text-[10px] font-mono text-slate-500 overflow-hidden" id="math-vision-otsu">
+                                [Otsu Variance Math Standby]
+                            </div>
+
+                                <div class="erd-row"><span>shape</span><span id="tel-otsu-shape" class="erd-val text-amber-500 font-mono">[STANDBY]</span></div>
+                            </div>
+                        </div>
+
+                        <div class="expl-card">
+                            <div class="expl-icon-wrap bg-sky-50 border-sky-100"><i data-lucide="scan" class="w-6 h-6 text-sky-600"></i></div>
+                            <h3 class="text-xl font-bold text-slate-800 mb-3">1. Vision Pre-processing</h3>
+                            <p class="text-slate-600 text-[13px] leading-relaxed">
+                                <span class="lang-en">The raw image passes through grayscale mapping and <b>Otsu's Thresholding</b> to isolate ink from paper, forming a clean binary tensor.</span>
+                                <span class="lang-id">Citra mentah dipetakan ke skala abu-abu dan dibersihkan dengan <b>Otsu's Thresholding</b> untuk memisahkan tinta dari kertas, membentuk tensor biner yang murni.</span>
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <!-- ZONE 2: CNN BLOCKS (2500, 800) -->
+                    <div class="absolute flex flex-col items-center gap-16" style="left: 2500px; top: 800px; transform: translate(-50%, -50%); z-index: 2;">
+                        <div class="expl-card w-[540px] text-center flex flex-col items-center">
+                            <div class="expl-icon-wrap bg-indigo-50 border-indigo-100"><i data-lucide="layers" class="w-6 h-6 text-indigo-600"></i></div>
+                            <h3 class="text-xl font-bold text-slate-800 mb-3">2. Spatial Feature Extraction</h3>
+                            <p class="text-slate-600 text-[13px] leading-relaxed">
+                                <span class="lang-id">Ekstraksi fitur visual dilakukan melalui 3 blok utama CNN (total 6 lapis). Filter spasial bertambah dari 64, 128, hingga 256 untuk mendeteksi guratan kompleks.</span>
+                            </p>
+                        </div>
+
+                        <div class="flex flex-row gap-10">
+                            <div class="erd-table">
+                                <div class="erd-header"><span>CNN_Block_1</span><i data-lucide="box" class="w-4 h-4 text-indigo-600"></i></div>
+                                <div class="erd-row"><span>layers</span><span class="erd-val">Conv2D x2</span></div>
+                                <div class="erd-row"><span>filters</span><span class="erd-type">64</span></div>
+                                <div class="erd-row"><span>activation</span><span class="erd-val">ReLU</span></div>
+                                <div class="p-2 bg-slate-50 border-t border-slate-100 text-[10px] font-mono text-slate-500 overflow-hidden" id="math-spatial-cnn">
+                                    [CNN Tensor Math Standby]
+                                </div>
+                            </div>
+                            <div class="h-px w-10 bg-slate-200 my-auto"></div>
+                            <div class="erd-table">
+                                <div class="erd-header"><span>CNN_Block_2</span><i data-lucide="box" class="w-4 h-4 text-indigo-600"></i></div>
+                                <div class="erd-row"><span>layers</span><span class="erd-val">Conv2D x2</span></div>
+                                <div class="erd-row"><span>filters</span><span class="erd-type">128</span></div>
+                                <div class="erd-row"><span>pooling</span><span class="erd-val">MaxPool2D</span></div>
+                            </div>
+                            <div class="h-px w-10 bg-slate-200 my-auto"></div>
+                            <div class="erd-table">
+                                <div class="erd-header"><span>CNN_Block_3</span><i data-lucide="box" class="w-4 h-4 text-indigo-600"></i></div>
+                                <div class="erd-row"><span>layers</span><span class="erd-val">Conv2D x2</span></div>
+                                <div class="erd-row"><span>filters</span><span class="erd-type">256</span></div>
+                                <div class="erd-row"><span>output</span><span class="erd-val">Feature_Map</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- ZONE 3: SQUEEZE/RESHAPE (4200, 1200) -->
+                    <div class="absolute flex flex-row items-center gap-20" style="left: 4200px; top: 1200px; transform: translate(-50%, -50%); z-index: 2;">
+                        <div class="flex flex-col gap-8">
+                            <div class="erd-table">
+                                <div class="erd-header"><span>Reshape_Layer</span><i data-lucide="arrow-right-left" class="w-4 h-4 text-violet-600"></i></div>
+                                <div class="erd-row"><span>operation</span><span class="erd-val">Squeeze_Dims</span></div>
+                                <div class="erd-row"><span>input</span><span class="erd-type">3D_Tensor</span></div>
+                            </div>
+                            <div class="w-px h-8 bg-slate-200 mx-auto"></div>
+                            <div class="erd-table">
+                                <div class="erd-header"><span>Time_Steps</span><i data-lucide="clock" class="w-4 h-4 text-violet-600"></i></div>
+                                <div class="erd-row"><span>frames</span><span class="erd-val">64</span></div>
+                                <div class="erd-row"><span>features</span><span class="erd-type">256</span></div>
+                            </div>
+                        </div>
+                        
+                        <div class="expl-card">
+                            <div class="expl-icon-wrap bg-violet-50 border-violet-100"><i data-lucide="align-center-horizontal" class="w-6 h-6 text-violet-600"></i></div>
+                            <h3 class="text-xl font-bold text-slate-800 mb-3">3. Sequence Reshape</h3>
+                            <p class="text-slate-600 text-[13px] leading-relaxed">
+                                <span class="lang-id">Peta fitur spasial dari CNN dipipihkan dan dikonversi menjadi urutan 64 langkah-waktu (Time-steps), mempersiapkannya untuk jaringan memori sekuensial.</span>
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <!-- ZONE 4: BILSTM (3500, 2200) -->
+                    <div class="absolute flex flex-col items-center gap-16" style="left: 3500px; top: 2200px; transform: translate(-50%, -50%); z-index: 2;">
+                        <div class="expl-card w-[540px] text-center flex flex-col items-center">
+                            <div class="expl-icon-wrap bg-teal-50 border-teal-100"><i data-lucide="git-merge" class="w-6 h-6 text-teal-600"></i></div>
+                            <h3 class="text-xl font-bold text-slate-800 mb-2">4. Bidirectional Temporal Memory</h3>
+                            <p class="text-slate-600 text-[13px] leading-relaxed">
+                                <span class="lang-id">Jaringan LSTM memproses urutan secara paralel dari dua arah (Maju dan Mundur) dengan masing-masing 256 unit untuk membaca konteks huruf sebelum digabung ke lapisan Softmax.</span>
+                            </p>
+                        </div>
+
+                        <div class="flex flex-row items-start gap-12">
+                            <div class="erd-table mt-8">
+                                <div class="erd-header"><span>Forward_LSTM</span><i data-lucide="arrow-right" class="w-4 h-4 text-teal-600"></i></div>
+                                <div class="erd-row"><span>direction</span><span class="erd-val">Left-to-Right</span></div>
+                                <div class="erd-row"><span>units</span><span class="erd-type">256</span></div>
+                            </div>
+                            
+                            <div class="flex flex-col items-center">
+                                <div class="w-px h-10 bg-slate-200"></div>
+                                <div class="w-full h-px bg-slate-200 relative flex justify-between" style="width: 320px; margin-left: -160px; margin-right: -160px;">
+                                    <div class="w-px h-8 bg-slate-200 absolute left-0 top-0"></div>
+                                    <div class="w-px h-8 bg-slate-200 absolute right-0 top-0"></div>
+                                </div>
+                                <div class="w-px h-8 bg-slate-200"></div>
+                                
+                                <div class="erd-table">
+                                    <div class="erd-header"><span>Dense_Softmax</span><i data-lucide="bar-chart" class="w-4 h-4 text-teal-600"></i></div>
+                                    <div class="erd-row"><span>activation</span><span class="erd-val">Softmax</span></div>
+                                    <div class="erd-row"><span>classes</span><span class="erd-type">80_Chars</span></div>
+                                    <div class="erd-row"><span>output</span><span class="erd-val">Probabilities</span></div>
+                                    <div class="p-2 bg-slate-50 border-t border-slate-100 text-[10px] font-mono text-slate-500 overflow-hidden" id="math-temporal-lstm">
+                                        [LSTM Math Standby]
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="erd-table mt-8">
+                                <div class="erd-header"><span>Backward_LSTM</span><i data-lucide="arrow-left" class="w-4 h-4 text-teal-600"></i></div>
+                                <div class="erd-row"><span>direction</span><span class="erd-val">Right-to-Left</span></div>
+                                <div class="erd-row"><span>units</span><span class="erd-type">256</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- ZONE 5: CTC DECODER (2000, 2500) -->
+                    <div class="absolute flex flex-row items-center gap-20" style="left: 2000px; top: 2500px; transform: translate(-50%, -50%); z-index: 2;">
+                        <div class="expl-card">
+                            <div class="expl-icon-wrap bg-emerald-50 border-emerald-100"><i data-lucide="file-digit" class="w-6 h-6 text-emerald-600"></i></div>
+                            <h3 class="text-xl font-bold text-slate-800 mb-3">5. CTC Alignment</h3>
+                            <p class="text-slate-600 text-[13px] leading-relaxed">
+                                <span class="lang-id"><b>Connectionist Temporal Classification (CTC)</b> mereduksi probabilitas menjadi teks aktual dengan menyusutkan karakter berulang (misal: 'a-a-a' menjadi 'a') dan membuang token kosong.</span>
+                            </p>
+                        </div>
+                        
+                        <div class="flex flex-col gap-8">
+                            <div class="erd-table">
+                                <div class="erd-header"><span>CTC_Loss</span><i data-lucide="cpu" class="w-4 h-4 text-emerald-600"></i></div>
+                                <div class="erd-row"><span>algorithm</span><span class="erd-val">CTC</span></div>
+                                <div class="erd-row"><span>blank_token</span><span class="erd-type">True</span></div>
+                                <div class="p-2 bg-slate-50 border-t border-slate-100 text-[10px] font-mono text-slate-500 overflow-hidden" id="math-ctc-softmax">
+                                    [CTC Softmax Math Standby]
+                                </div>
+                            </div>
+                            <div class="w-px h-8 bg-slate-200 mx-auto"></div>
+                            <div class="erd-table">
+                                <div class="erd-header"><span>Greedy_Decoder</span><i data-lucide="chevron-right" class="w-4 h-4 text-emerald-600"></i></div>
+                                <div class="erd-row"><span>operation</span><span class="erd-val">ArgMax</span></div>
+                                <div class="erd-row"><span>output</span><span class="erd-type">Raw_String</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- ZONE 6: LEXICAL DECODING (800, 2200) -->
+                    <div class="absolute flex flex-row items-center gap-20" style="left: 800px; top: 2200px; transform: translate(-50%, -50%); z-index: 2;">
+                        <div class="flex flex-col gap-8">
+                            <div class="erd-table">
+                                <div class="erd-header"><span>Dynamic_Programming_Matrix</span><i data-lucide="spell-check-2" class="w-4 h-4 text-rose-600"></i></div>
+                                <div class="erd-row"><span>distance</span><span class="erd-val">Matrix_Ops</span></div>
+                            <div class="p-2 bg-slate-50 border-t border-slate-100 text-[10px] font-mono text-slate-500 overflow-hidden leading-tight" id="math-nlp-dp">
+                                [DP Grid Standby]
+                            </div>
+
+                                <div class="erd-row"><span>library</span><span class="erd-type">Contextual_Lexicon</span></div>
+                            </div>
+                            <div class="w-px h-8 bg-slate-200 mx-auto"></div>
+                            <div class="erd-table">
+                                <div class="erd-header"><span>English_Corpus</span><i data-lucide="book" class="w-4 h-4 text-rose-600"></i></div>
+                                <div class="erd-row"><span>source</span><span class="erd-val">NLTK_Words</span></div>
+                                <div class="erd-row"><span>type</span><span class="erd-type">Lexical_Weights</span></div>
+                            </div>
+                            <div class="w-px h-8 bg-slate-200 mx-auto"></div>
+                            <div class="erd-table" style="background: #fff1f2; border-color: #fecdd3; box-shadow: 0 10px 40px -10px rgba(225,29,72,0.15);">
+                                <div class="erd-header" style="background: #ffe4e6; border-color: #fecdd3;"><span class="text-rose-700">Digital_String</span><i data-lucide="check-circle" class="w-4 h-4 text-rose-600"></i></div>
+                                <div class="erd-row" style="background: transparent;"><span>output_type</span><span class="text-rose-600 font-bold">TEXT</span></div>
+                                <div class="p-6 text-center">
+                                    <span id="final-output-text" class="font-mono text-2xl text-rose-600 font-bold tracking-widest drop-shadow-sm">[STANDBY]</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="expl-card">
+                            <div class="expl-icon-wrap bg-rose-50 border-rose-100"><i data-lucide="text-cursor" class="w-6 h-6 text-rose-600"></i></div>
+                            <h3 class="text-xl font-bold text-slate-800 mb-3">6. Lexical Alignment</h3>
+                            <p class="text-slate-600 text-[13px] leading-relaxed">
+                                <span class="lang-id">String mentah seringkali mengandung salah eja minor akibat kebingungan model. <b>Jarak Levenshtein</b> membandingkannya dengan kamus kosakata yang valid untuk menghasilkan teks akhir yang sempurna.</span>
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+
+<footer class="mt-auto border-t border-slate-200 bg-slate-50 overflow-hidden relative">
+        <!-- Decorative grid/gradient -->
+        <div class="absolute inset-0 pointer-events-none" style="background-image: radial-gradient(circle at 100% 100%, rgba(14, 165, 233, 0.05) 0%, transparent 50%);"></div>
+        
+        <div class="max-w-6xl mx-auto px-6 py-16 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 border-b border-slate-200 pb-12 mb-8">
+                
+                <div class="md:col-span-2">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center shadow-md">
+                            <i data-lucide="scan-line" class="w-4 h-4 text-white"></i>
+                        </div>
+                        <span class="font-black text-xl text-slate-900 tracking-tight">HTR<span class="text-sky-600">Engine</span></span>
+                    </div>
+                    <p class="text-sm text-slate-500 leading-relaxed max-w-sm mb-6">
+                        <span class="lang-en">An offline Handwritten Text Recognition engine. It processes raw handwriting into digital text using a Hybrid CNN-BiLSTM network and Dynamic Programming.</span>
+                        <span class="lang-id">Mesin pengenal tulisan tangan (HTR) luring. Sistem ini mengonversi piksel guratan pena menjadi teks digital menggunakan arsitektur Hybrid CNN-BiLSTM dan Pemrograman Dinamis.</span>
+                    </p>
+                    <div class="flex items-center gap-2">
+                        <span class="flex h-2.5 w-2.5 relative">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                        </span>
+                        <span class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                            <span class="lang-en">System Operational</span>
+                            <span class="lang-id">Sistem Aktif</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-bold text-slate-900 uppercase tracking-widest mb-6">
+                        <span class="lang-en">Architecture</span>
+                        <span class="lang-id">Arsitektur</span>
+                    </h4>
+                    <ul class="space-y-4 text-sm text-slate-500 font-medium">
+                        <li><a href="#how-it-works" class="hover:text-sky-600 transition-colors">
+                            <span class="lang-en">Pipeline Stages</span>
+                            <span class="lang-id">Tahapan Pipeline</span>
+                        </a></li>
+                        <li><a href="#architecture" class="hover:text-sky-600 transition-colors">
+                            <span class="lang-en">Data Telemetry</span>
+                            <span class="lang-id">Dasbor Telemetri</span>
+                        </a></li>
+                        <li><a href="#" class="hover:text-sky-600 transition-colors cursor-default">
+                            <span class="lang-en">Lexical Corpus</span>
+                            <span class="lang-id">Korpus Leksikal</span>
+                        </a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-bold text-slate-900 uppercase tracking-widest mb-6">
+                        <span class="lang-en">Technology</span>
+                        <span class="lang-id">Teknologi</span>
+                    </h4>
+                    <ul class="space-y-4 text-sm text-slate-500 font-mono text-[13px]">
+                        <li class="flex items-center gap-2"><i data-lucide="cpu" class="w-3.5 h-3.5"></i> TensorFlow <span class="text-slate-400">2.14</span></li>
+                        <li class="flex items-center gap-2"><i data-lucide="server" class="w-3.5 h-3.5"></i> FastAPI <span class="text-slate-400">0.111</span></li>
+                        <li class="flex items-center gap-2"><i data-lucide="box" class="w-3.5 h-3.5"></i> OpenCV-Py <span class="text-slate-400">4.10</span></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-between text-[13px] font-medium text-slate-400">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="copyright" class="w-3.5 h-3.5"></i>
+                    <span>2026 Muhammad Riskal Fadhilla (ID: 10122487)</span>
+                </div>
+                <div class="mt-4 sm:mt-0 flex items-center gap-6">
+                    <span class="hover:text-slate-600 transition-colors cursor-default hidden sm:block">
+                        <span class="lang-en">System Architect</span>
+                        <span class="lang-id">Arsitek Sistem</span>
+                    </span>
+                    <span class="w-1 h-1 rounded-full bg-slate-300 hidden sm:block"></span>
+                    <span class="hover:text-slate-600 transition-colors cursor-default font-mono text-xs">v1.4.0-Enterprise</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const body = document.body;
+        const btnEn = document.getElementById('btnEn');
+        const btnId = document.getElementById('btnId');
+        const langSlider = document.getElementById('langSlider');
+        const langToggleBox = document.getElementById('langToggleBox');
+        
+        function setLanguage(lang) {
+            if (lang === 'en') {
+                body.classList.remove('lang-id');
+                body.classList.add('lang-en');
+                if(langSlider) langSlider.style.transform = 'translateX(0px)';
+                if(btnEn) { btnEn.classList.add('text-gray-900'); btnEn.classList.remove('text-gray-500'); }
+                if(btnId) { btnId.classList.add('text-gray-500'); btnId.classList.remove('text-gray-900'); }
+            } else {
+                body.classList.remove('lang-en');
+                body.classList.add('lang-id');
+                if(langSlider) langSlider.style.transform = 'translateX(42px)';
+                if(btnId) { btnId.classList.add('text-gray-900'); btnId.classList.remove('text-gray-500'); }
+                if(btnEn) { btnEn.classList.add('text-gray-500'); btnEn.classList.remove('text-gray-900'); }
+            }
+            
+            // Re-trigger active node update to refresh language content in detail panel
+            const activeNode = document.querySelector('.erd-node.active-node');
+            if(activeNode) activeNode.click();
+        }
+
+        if(langToggleBox) {
+            langToggleBox.addEventListener('click', () => {
+                if (body.classList.contains('lang-id')) setLanguage('en');
+                else setLanguage('id');
+            });
+        }
+
+        if(body.classList.contains('lang-en')) setLanguage('en'); else setLanguage('id');
+
+        const navLinks = document.querySelectorAll('.main-nav a[href^="#"]');
+        const mainAppContent = document.getElementById('mainAppContent');
+        const howItWorksSection = document.getElementById('how-it-works');
+        const architectureSection = document.getElementById('architecture');
+        const backToAppBtn = document.getElementById('backToAppBtn');
+
+        function navigateTo(hash) {
+            if (hash.startsWith('#stage-')) return;
+            if(mainAppContent) mainAppContent.classList.add('hidden');
+            if(howItWorksSection) howItWorksSection.classList.add('hidden');
+            if(architectureSection) architectureSection.classList.add('hidden');
+
+            if (hash === '#how-it-works' && howItWorksSection) {
+                howItWorksSection.classList.remove('hidden');
+            } else if (hash === '#architecture' && architectureSection) {
+                architectureSection.classList.remove('hidden');
+            } else if (mainAppContent) {
+                mainAppContent.classList.remove('hidden');
+            }
+            window.scrollTo(0, 0);
+        }
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const hash = link.getAttribute('href');
+                history.pushState(null, '', hash);
+                navigateTo(hash);
+            });
+        });
+
+        if (backToAppBtn) {
+            backToAppBtn.addEventListener('click', () => {
+                history.pushState(null, '', '#');
+                navigateTo('#');
+            });
+        }
+
+        window.addEventListener('popstate', () => navigateTo(window.location.hash || '#'));
+        navigateTo(window.location.hash || '#');
+
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('fileInput');
+        const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+        const imagePreview = document.getElementById('imagePreview');
+        const predictBtn = document.getElementById('predictBtn');
+        const emptyResult = document.getElementById('emptyResult');
+        const loadingState = document.getElementById('loadingState');
+        const resultContainer = document.getElementById('resultContainer');
+        const resultText = document.getElementById('resultText');
+        const rawOutput = document.getElementById('rawOutput');
+        const latencyOutput = document.getElementById('latencyOutput');
+        const processedImgPreview = document.getElementById('processedImgPreview');
+        const copyBtn = document.getElementById('copyBtn');
+
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+        let selectedFile = null;
+
+        if (dropzone) {
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropzone.addEventListener(eventName, (e) => { e.preventDefault(); e.stopPropagation(); }, false)
+            });
+            ['dragenter', 'dragover'].forEach(eventName => dropzone.addEventListener(eventName, () => dropzone.classList.add('drag-active')));
+            ['dragleave', 'drop'].forEach(eventName => dropzone.addEventListener(eventName, () => dropzone.classList.remove('drag-active')));
+
+            dropzone.addEventListener('drop', (e) => handleFile(e.dataTransfer.files[0]));
+            dropzone.addEventListener('click', (e) => { if(e.target !== fileInput && fileInput) fileInput.click(); });
+        }
+        if (fileInput) fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+
+        function handleFile(file) {
+            if (!file || !file.type.startsWith('image/')) return;
+            selectedFile = file;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                if(imagePreview) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.classList.remove('hidden');
+                }
+                if(uploadPlaceholder) uploadPlaceholder.classList.add('hidden');
+            };
+            reader.readAsDataURL(file);
+            if(predictBtn) {
+                predictBtn.disabled = false;
+                const btnEn = document.getElementById('btnText');
+                const btnId = document.getElementById('btnTextId');
+                if(btnEn) btnEn.innerText = "Run Inference";
+                if(btnId) btnId.innerText = "Jalankan Model";
+            }
+            if(resultContainer) resultContainer.classList.add('hidden');
+            if(emptyResult) emptyResult.classList.remove('hidden');
+        }
+
+        if(predictBtn) {
+            predictBtn.addEventListener('click', async () => {
+                if (!selectedFile) return;
+                predictBtn.disabled = true;
+                const btnEn = document.getElementById('btnText');
+                const btnId = document.getElementById('btnTextId');
+                if(btnEn) btnEn.innerText = "Processing...";
+                if(btnId) btnId.innerText = "Memproses...";
+                
+                if(emptyResult) emptyResult.classList.add('hidden');
+                if(resultContainer) resultContainer.classList.add('hidden');
+                if(loadingState) loadingState.classList.remove('hidden');
+
+                const formData = new FormData();
+                formData.append('file', selectedFile);
+
+                try {
+                    const response = await fetch('/api/predict', { method: 'POST', body: formData });
+                    if (!response.ok) throw new Error("Server error");
+                    const data = await response.json();
+                    
+                    if (data.telemetry && window.updateTelemetryUI) {
+                        window.updateTelemetryUI(data.telemetry);
+                    }
+                    
+                    if(resultText) resultText.innerText = data.prediction || "[None]";
+                    if(rawOutput) rawOutput.innerText = data.raw || "N/A";
+                    if(latencyOutput) latencyOutput.innerText = data.latency_ms;
+                    if(processedImgPreview) processedImgPreview.src = data.processed_image;
+
+                    if(loadingState) loadingState.classList.add('hidden');
+                    if(resultContainer) {
+                        resultContainer.classList.remove('hidden');
+                        resultContainer.classList.add('fade-in');
+                    }
+
+                    if(btnEn) btnEn.innerText = "Run Again";
+                    if(btnId) btnId.innerText = "Jalankan Ulang";
+                    predictBtn.disabled = false;
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert("Koneksi gagal. Pastikan server lokal berjalan.");
+                    if(loadingState) loadingState.classList.add('hidden');
+                    if(btnEn) btnEn.innerText = "Run Inference";
+                    if(btnId) btnId.innerText = "Jalankan Model";
+                    predictBtn.disabled = false;
+                }
+            });
+        }
+
+        // TELEMETRY REAL-TIME LOGIC
+        window.updateTelemetryUI = function(t) {
+            const updateField = (id, val) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.textContent = val;
+                    el.classList.remove('text-amber-500');
+                    el.classList.add('text-emerald-500');
+                }
+            };
+            const resetField = (id, val='[STANDBY]') => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.textContent = val;
+                    el.classList.remove('text-emerald-500');
+                    el.classList.add('text-amber-500');
+                }
+            };
+
+            const statusEl = document.getElementById('telemetry-status');
+            if (!t) {
+                if (statusEl) statusEl.innerHTML = '<span class="px-2 py-1 bg-amber-100 text-amber-700 rounded text-xs font-bold uppercase lang-en block">Awaiting Tensor</span><span class="px-2 py-1 bg-amber-100 text-amber-700 rounded text-xs font-bold uppercase lang-id hidden">Menunggu Tensor</span>';
+                resetField('tel-raw-format'); resetField('tel-gray-channels'); resetField('tel-otsu-shape');
+                resetField('tel-cnn1-filters'); resetField('tel-cnn1-shape'); resetField('tel-cnn2-filters'); resetField('tel-cnn2-shape');
+                resetField('tel-lstm1-units'); resetField('tel-lstm1-shape'); resetField('tel-dense-classes'); resetField('tel-dense-shape');
+                resetField('tel-ctc-blank'); resetField('tel-ctc-raw'); resetField('tel-nlp-dist'); resetField('tel-nlp-out');
+                return;
+            }
+
+            if (statusEl) statusEl.innerHTML = '<span class="px-2 py-1 bg-emerald-100 text-emerald-700 rounded text-xs font-bold uppercase lang-en block">Live Telemetry</span><span class="px-2 py-1 bg-emerald-100 text-emerald-700 rounded text-xs font-bold uppercase lang-id hidden">Telemetri Aktif</span>';
+            
+            try {
+                updateField('tel-raw-format', 'Float32');
+                updateField('tel-gray-channels', '1_Channel');
+                updateField('tel-otsu-shape', '32x128');
+                updateField('tel-cnn1-filters', '64');
+                updateField('tel-cnn1-shape', '32x128x64');
+                updateField('tel-cnn2-filters', '128');
+                updateField('tel-cnn2-shape', '16x64x128');
+                updateField('tel-lstm1-units', '256_Bidirectional');
+                updateField('tel-lstm1-shape', '(None, 32, 256)');
+                updateField('tel-dense-classes', '80_Classes');
+                updateField('tel-dense-shape', '(None, 32, 80)');
+                updateField('tel-ctc-blank', 'Class_79');
+                updateField('tel-ctc-raw', '"' + t.nlp.raw_word + '"');
+                updateField('tel-nlp-dist', t.nlp.distance + '_Edit');
+                updateField('tel-nlp-out', '"' + t.nlp.target + '"');
+                updateField('final-output-text', t.nlp.final_text);
+                
+                // MATH INJECTIONS
+                const vMath = document.getElementById('math-vision-otsu');
+                if(vMath) {
+                    vMath.innerHTML = `σ²_w(t) = w₀(t)σ²₀(t) + w₁(t)σ²₁(t)<br>Optimal T = <span class="text-emerald-600 font-bold">${t.vision.thresh}</span><br>Min Var = ${t.vision.variance_min.toExponential(2)}<br><br>Sample 5x5 Grid:<br>` + t.vision.mat_after.map(row => row.join(' ')).join('<br>');
+                    vMath.classList.remove('text-amber-500', 'text-slate-500'); vMath.classList.add('text-emerald-700');
+                }
+                
+                const sMath = document.getElementById('math-spatial-cnn');
+                if(sMath) {
+                    sMath.innerHTML = `Tensor Map (Channel 0):<br>` + t.spatial.tensor_map.map(row => `[${row.map(n=>n.toFixed(2).padStart(5)).join(' ')}]`).join('<br>');
+                    sMath.classList.remove('text-amber-500', 'text-slate-500'); sMath.classList.add('text-emerald-700');
+                }
+                
+                const tMath = document.getElementById('math-temporal-lstm');
+                if(tMath) {
+                    tMath.innerHTML = `Hidden State h_t (t=32):<br>[${t.temporal.hidden_state.map(n=>n.toFixed(3)).join(', ')}]...`;
+                    tMath.classList.remove('text-amber-500', 'text-slate-500'); tMath.classList.add('text-emerald-700');
+                }
+                
+                const cMath = document.getElementById('math-ctc-softmax');
+                if(cMath) {
+                    cMath.innerHTML = `Softmax P(k|x) at t=10:<br>[${t.ctc.softmax_sample.map(n=>n.toFixed(4)).join(', ')}]...<br><br>Raw Path:<br><span class="text-rose-500">${t.ctc.raw_path}</span>`;
+                    cMath.classList.remove('text-amber-500', 'text-slate-500'); cMath.classList.add('text-emerald-700');
+                }
+                
+                const nMath = document.getElementById('math-nlp-dp');
+                if(nMath) {
+                    let gridHTML = `Target: ${t.nlp.target}<br>DP Matrix (D[i,j] = min(...)):<br>`;
+                    gridHTML += t.nlp.dp_grid.map(row => `[${row.map(n=>n.toString().padStart(2, '0')).join(' ')}]`).join('<br>');
+                    nMath.innerHTML = gridHTML;
+                    nMath.classList.remove('text-amber-500', 'text-slate-500'); nMath.classList.add('text-emerald-700');
+                }
+            } catch (err) {
+                console.error("Telemetry update error", err);
+            }
+            if (typeof updateLang === 'function') updateLang();
+        };
+
+        
+        // SCROLLSPY LOGIC FOR SIDEBAR
+        function initScrollSpy() {
+            const sections = document.querySelectorAll('article[id^="stage-"]');
+            const navLinks = document.querySelectorAll('.stage-link');
+            const indicator = document.getElementById('scroll-indicator');
+            const sidebarNav = document.getElementById('sidebar-nav');
+
+            if (!sections.length || !navLinks.length || !indicator || !sidebarNav) return;
+
+            // Optional: Click behavior (smooth scroll without hash jump)
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href').substring(1);
+                    const targetEl = document.getElementById(targetId);
+                    if(targetEl) {
+                        targetEl.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '-20% 0px -60% 0px',
+                threshold: 0
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        const activeLink = document.querySelector(`.stage-link[href="#${id}"]`);
+                        
+                        // Reset all links
+                        navLinks.forEach(link => {
+                            link.classList.remove('text-slate-900', 'font-semibold');
+                            link.classList.add('text-slate-500', 'font-medium');
+                        });
+                        
+                        // Highlight active
+                        if (activeLink) {
+                            activeLink.classList.remove('text-slate-500', 'font-medium');
+                            activeLink.classList.add('text-slate-900', 'font-semibold');
+                            
+                            // Move indicator (Y offset relative to parent)
+                            const linkRect = activeLink.getBoundingClientRect();
+                            const navRect = sidebarNav.getBoundingClientRect();
+                            const offsetTop = linkRect.top - navRect.top;
+                            indicator.style.transform = `translateY(${offsetTop}px)`;
+                        }
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(sec => observer.observe(sec));
+        }
+        initScrollSpy();
+
+
+        // CAMERA PARALLAX LOGIC
+        const canvasObj = document.getElementById('miro-canvas');
+        /* removed dup */
+        const keyframes = [
+            { p: 0.00, x: 800,  y: 600,  scale: 1.15 }, // Start at Zone 1 (zoomed in)
+            { p: 0.18, x: 2500, y: 800,  scale: 1.15 }, // Zone 2
+            { p: 0.36, x: 4200, y: 1200, scale: 1.15 }, // Zone 3
+            { p: 0.54, x: 3500, y: 2200, scale: 1.15 }, // Zone 4
+            { p: 0.72, x: 2000, y: 2500, scale: 1.15 }, // Zone 5
+            { p: 0.90, x: 800,  y: 2080, scale: 1.15 }, // Zone 6
+            { p: 1.00, x: 800,  y: 2080, scale: 1.15 }  // Stay at Zone 6
+        ];
+
+        let cX = 800, cY = 600, cScale = 1.15;
+        
+        function updateCamera() {
+            if (!architectureSection || architectureSection.classList.contains('hidden') || !canvasObj) return;
+            
+            const track = document.querySelector('.scroll-track');
+            if (!track) return;
+            
+            const rect = track.getBoundingClientRect();
+            const scrollTotal = rect.height - window.innerHeight;
+            let progress = -rect.top / scrollTotal;
+            progress = Math.max(0, Math.min(1, progress));
+
+            let target = keyframes[keyframes.length - 1];
+            for (let i = 0; i < keyframes.length - 1; i++) {
+                if (progress >= keyframes[i].p && progress < keyframes[i + 1].p) {
+                    const segP = (progress - keyframes[i].p) / (keyframes[i + 1].p - keyframes[i].p);
+                    target = {
+                        x: keyframes[i].x + (keyframes[i + 1].x - keyframes[i].x) * segP,
+                        y: keyframes[i].y + (keyframes[i + 1].y - keyframes[i].y) * segP,
+                        scale: keyframes[i].scale + (keyframes[i + 1].scale - keyframes[i].scale) * segP
+                    };
+                    break;
+                }
+            }
+
+            cX += (target.x - cX) * 0.05;
+            cY += (target.y - cY) * 0.05;
+            cScale += (target.scale - cScale) * 0.05;
+
+            canvasObj.style.transform = `translate(calc(70vw - ${cX * cScale}px), calc(65vh - ${cY * cScale}px)) scale(${cScale})`;
+            requestAnimationFrame(updateCamera);
+        }
+
+        window.addEventListener('scroll', () => {
+            if (architectureSection && !architectureSection.classList.contains('hidden')) {
+                // Not requesting animation frame here directly, instead let's just trigger a flag, but for now we can just call it
+            }
+        });
+
+        // Start render loop
+        function renderLoop() {
+            updateCamera();
+            requestAnimationFrame(renderLoop);
+        }
+        renderLoop();
+
+    </script>
+</body>
+</html>
