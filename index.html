@@ -544,13 +544,19 @@
 <!-- ZONE 1: IMAGE ACQUISITION (800, 600) -->
                     <div class="absolute flex flex-col md:flex-row items-center gap-12" style="left: 800px; top: 600px; transform: translate(-50%, -50%); z-index: 2;">
                         
-                        <!-- Side Scroll Hint -->
-                        <div id="side-scroll-hint" class="flex flex-col items-center gap-2 transition-opacity duration-700 opacity-100">
-                            <span class="text-sky-500/80 font-bold tracking-[0.4em] uppercase text-sm" style="writing-mode: vertical-rl; text-orientation: upright;">SCROLL</span>
-                            <div class="flex flex-col items-center text-sky-400/60 animate-bounce font-bold text-lg mt-2 leading-none">
-                                <span>V</span>
-                                <span>V</span>
-                                <span>V</span>
+                        <!-- Premium Side Scroll Hint -->
+                        <div id="side-scroll-hint" class="flex flex-col items-center gap-2 transition-opacity duration-700 opacity-100 mr-2 -mt-10">
+                            <!-- Glassmorphism Track -->
+                            <div class="w-6 h-14 rounded-full border border-slate-300/70 flex justify-center p-1 bg-white/40 backdrop-blur-md shadow-sm">
+                                <div class="w-1.5 h-4 bg-sky-400 rounded-full animate-bounce shadow-[0_0_8px_rgba(56,189,248,0.8)] mt-1"></div>
+                            </div>
+                            <!-- Pulsing Chevron -->
+                            <div class="text-sky-500/70 -mt-2 animate-pulse">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                            </div>
+                            <!-- Upright Typography -->
+                            <div class="text-slate-400 font-bold tracking-[0.3em] text-[9px] uppercase mt-2 opacity-80" style="writing-mode: vertical-rl; text-orientation: upright;">
+                                SCROLL
                             </div>
                         </div>
 
