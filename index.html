@@ -850,7 +850,18 @@
                     <!-- ZONE 6: LEXICAL DECODING (800, 2200) -->
                     <div class="absolute flex flex-row items-center gap-20" style="left: 800px; top: 2200px; transform: translate(-50%, -50%); z-index: 2;">
                         <div class="flex flex-col gap-8">
-                            <div class="erd-table">
+                            <div class="erd-table relative group">
+                                <div class="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-80 bg-slate-900 rounded-xl p-3 shadow-2xl opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 z-[9999] origin-bottom border border-slate-700">
+                                    <div class="text-[9px] font-mono text-slate-400 mb-2 flex justify-between"><span>LEVENSHTEIN_DISTANCE</span><span class="text-sky-400">LIVE COMPUTATION</span></div>
+                                    <div id="vis-dp" class="w-full bg-white rounded-lg p-2 overflow-hidden text-center text-xs font-mono">
+                                        <!-- Matrix rendered via JS -->
+                                        <div class="text-slate-400 py-4">[Awaiting Calculation]</div>
+                                    </div>
+                                    <div class="mt-2 flex justify-between items-center text-[8px] font-mono">
+                                        <div class="flex items-center gap-1"><span class="w-2 h-2 bg-emerald-300 border border-emerald-500 block"></span><span class="text-slate-400">MATCH (0)</span></div>
+                                        <div class="flex items-center gap-1"><span class="w-2 h-2 bg-rose-300 border border-rose-500 block"></span><span class="text-slate-400">ERROR (+1)</span></div>
+                                    </div>
+                                </div>
                                 <div class="erd-header"><span>Dynamic_Programming_Matrix</span><i data-lucide="spell-check-2" class="w-4 h-4 text-rose-600"></i></div>
                                                             <div class="p-2 bg-slate-50 border-t border-slate-100 flex justify-center items-center py-4">
                                 <div class="grid grid-cols-4 gap-px bg-slate-200 border border-slate-300 p-px text-[8px] font-mono text-center text-slate-500">
@@ -1222,6 +1233,50 @@
                     if(vc && t.visual_tensors.cnn) { vc.src = 'data:image/png;base64,' + t.visual_tensors.cnn; vc.classList.remove('hidden'); }
                     if(vl && t.visual_tensors.lstm) { vl.src = 'data:image/png;base64,' + t.visual_tensors.lstm; vl.classList.remove('hidden'); }
                     if(vctc && t.visual_tensors.ctc) { vctc.src = 'data:image/png;base64,' + t.visual_tensors.ctc; vctc.classList.remove('hidden'); }
+                }
+
+                // Render Live Levenshtein Matrix
+                if(t.nlp && t.nlp.ops) {
+                    const dpContainer = document.getElementById('vis-dp');
+                    if (dpContainer) {
+                        let rawStr = "E" + (t.nlp.raw_text ? t.nlp.raw_text.substring(0, 5) : "");
+                        let tgtStr = "E" + (t.nlp.final_text ? t.nlp.final_text.substring(0, 5) : "");
+                        
+                        let tableHTML = '<table class="w-full border-collapse border border-slate-300 text-[10px] text-slate-700 text-center bg-slate-50">';
+                        
+                        // Header Row (Original Word)
+                        tableHTML += '<tr class="bg-slate-200 font-bold text-slate-600"><th class="border border-slate-300 p-1"></th>';
+                        for(let j = 0; j < tgtStr.length; j++) {
+                            tableHTML += `<th class="border border-slate-300 p-1 uppercase">${tgtStr[j] === 'E' ? 'ε' : tgtStr[j]}</th>`;
+                        }
+                        tableHTML += '</tr>';
+
+                        let iMax = Math.min(t.nlp.ops.length, rawStr.length);
+                        for(let i = 0; i < iMax; i++) {
+                            tableHTML += `<tr><th class="border border-slate-300 p-1 bg-slate-200 font-bold text-slate-600 uppercase">${rawStr[i] === 'E' ? 'ε' : rawStr[i]}</th>`;
+                            let row = t.nlp.ops[i];
+                            let jMax = Math.min(row.length, tgtStr.length);
+                            for(let j = 0; j < jMax; j++) {
+                                let val = row[j];
+                                // Highlight logic (diagonal match/mismatch heuristic for visualization)
+                                let bgClass = "bg-white";
+                                let textClass = "";
+                                if (i === j) {
+                                    if (rawStr[i] === tgtStr[j]) {
+                                        bgClass = "bg-emerald-100 border-2 border-emerald-400";
+                                        textClass = "font-bold text-emerald-700";
+                                    } else {
+                                        bgClass = "bg-rose-100 border-2 border-rose-400";
+                                        textClass = "font-bold text-rose-700";
+                                    }
+                                }
+                                tableHTML += `<td class="border border-slate-300 p-1 ${bgClass} ${textClass}">${val}</td>`;
+                            }
+                            tableHTML += '</tr>';
+                        }
+                        tableHTML += '</table>';
+                        dpContainer.innerHTML = tableHTML;
+                    }
                 }
                 updateField('tel-nlp-out', '"' + t.nlp.target + '"');
                 updateField('final-output-text', t.nlp.final_text);
