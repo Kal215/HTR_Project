@@ -579,13 +579,13 @@
                     <!-- SVG Connectors (Minimalist Flowing Bezier) -->
                     <svg class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: 1;">
                         <!-- Thick Ambient Track for Depth -->
-                        <path d="M 800 600 C 1700 600, 1600 800, 2500 800 C 3350 800, 3350 1200, 4200 1200 C 4700 1700, 4000 2200, 3500 2200 C 2750 2200, 2750 2500, 2000 2500 C 1400 2500, 1400 2200, 800 2200" stroke="#f1f5f9" stroke-width="10" fill="none" />
+                        <path d="M 800 620 C 1700 620, 1600 800, 2500 800 C 3350 800, 3350 1200, 4200 1200 C 4700 1700, 4000 2200, 3500 2200 C 2750 2200, 2750 2500, 2000 2500 C 1400 2500, 1400 2200, 800 2200" stroke="#f1f5f9" stroke-width="10" fill="none" />
                         
                         <!-- Foreground Sleek Dashed Line -->
-                        <path d="M 800 600 C 1700 600, 1600 800, 2500 800 C 3350 800, 3350 1200, 4200 1200 C 4700 1700, 4000 2200, 3500 2200 C 2750 2200, 2750 2500, 2000 2500 C 1400 2500, 1400 2200, 800 2200" stroke="#94a3b8" stroke-width="2.5" fill="none" stroke-dasharray="12 16" stroke-linecap="round" style="opacity: 0.6;" />
+                        <path d="M 800 620 C 1700 620, 1600 800, 2500 800 C 3350 800, 3350 1200, 4200 1200 C 4700 1700, 4000 2200, 3500 2200 C 2750 2200, 2750 2500, 2000 2500 C 1400 2500, 1400 2200, 800 2200" stroke="#94a3b8" stroke-width="2.5" fill="none" stroke-dasharray="12 16" stroke-linecap="round" style="opacity: 0.6;" />
                         
                         <!-- Glowing Junction Nodes -->
-                        <circle cx="800" cy="600" r="7" fill="#ffffff" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"/>
+                        <circle cx="800" cy="620" r="7" fill="#ffffff" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"/>
                         <circle cx="2500" cy="800" r="7" fill="#ffffff" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"/>
                         <circle cx="4200" cy="1200" r="7" fill="#ffffff" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"/>
                         <circle cx="3500" cy="2200" r="7" fill="#ffffff" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"/>
@@ -607,8 +607,8 @@
                             <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
                         </svg>
                     </div>
-<!-- ZONE 1: IMAGE ACQUISITION (800, 600) -->
-                    <div class="absolute flex flex-col md:flex-row items-center gap-12" style="left: 800px; top: 600px; transform: translate(-50%, -50%); z-index: 2;">
+<!-- ZONE 1: IMAGE ACQUISITION (800, 620) -->
+                    <div class="absolute flex flex-col md:flex-row items-center gap-12" style="left: 800px; top: 620px; transform: translate(-50%, -50%); z-index: 2;">
                         
                         <!-- Premium Side Scroll Hint -->
                         <div id="side-scroll-hint" class="flex flex-col items-center gap-2 transition-opacity duration-700 opacity-100 mr-6 -mt-8">
@@ -1272,7 +1272,7 @@
         const canvasObj = document.getElementById('miro-canvas');
         /* removed dup */
         const keyframes = [
-            { p: 0.00, x: 800,  y: 600,  scale: 1.15 }, // Start at Zone 1 (zoomed in)
+            { p: 0.00, x: 800,  y: 620,  scale: 1.15 }, // Start at Zone 1 (zoomed in)
             { p: 0.18, x: 2500, y: 800,  scale: 1.15 }, // Zone 2
             { p: 0.36, x: 4200, y: 1200, scale: 1.15 }, // Zone 3
             { p: 0.54, x: 3500, y: 2200, scale: 1.15 }, // Zone 4
@@ -1281,7 +1281,7 @@
             { p: 1.00, x: 800,  y: 2080, scale: 1.15 }  // Stay at Zone 6
         ];
 
-        let cX = 800, cY = 600, cScale = 1.15;
+        let cX = 800, cY = 620, cScale = 1.15;
         
         function updateCamera() {
             if (!architectureSection || architectureSection.classList.contains('hidden') || !canvasObj) return;
