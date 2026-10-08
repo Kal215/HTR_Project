@@ -490,6 +490,15 @@
             <div class="sticky-viewport sticky top-0 h-screen w-full overflow-hidden bg-[#f8fafc]">
 
                 
+                                <!-- Scroll Indicator (Option 1) -->
+                <div id="scroll-indicator" class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-[9999] transition-opacity duration-700 opacity-100 pointer-events-none">
+                    <div class="w-5 h-8 border-2 border-slate-300 rounded-full flex justify-center pt-1 shadow-sm bg-white/50 backdrop-blur-sm">
+                        <div class="w-1 h-2 bg-sky-400 rounded-full animate-bounce"></div>
+                    </div>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest lang-en block drop-shadow-sm">Scroll to explore</span>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest lang-id hidden drop-shadow-sm">Gulir untuk menjelajah</span>
+                </div>
+
                 <!-- Telemetry Status Badge -->
                 <div id="telemetry-status" class="absolute top-6 right-6 md:top-8 md:right-12 z-[9999] shadow-sm">
                     <span class="px-2 py-1 bg-amber-100 text-amber-700 rounded text-xs font-bold uppercase lang-en block">Awaiting Tensor</span>
@@ -1198,6 +1207,12 @@
             const scrollTotal = rect.height - window.innerHeight;
             let progress = -rect.top / scrollTotal;
             progress = Math.max(0, Math.min(1, progress));
+            
+            const scrollIndicator = document.getElementById('scroll-indicator');
+            if (scrollIndicator) {
+                if (progress > 0.02) scrollIndicator.style.opacity = '0';
+                else scrollIndicator.style.opacity = '1';
+            }
 
             let target = keyframes[keyframes.length - 1];
             for (let i = 0; i < keyframes.length - 1; i++) {
