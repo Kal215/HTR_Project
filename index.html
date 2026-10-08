@@ -515,16 +515,21 @@
                 <!-- The Giant Canvas (5000x3000) -->
                 <div id="miro-canvas" class="absolute top-0 left-0 w-[5000px] h-[3000px] transform-origin-top-left will-change-transform">
                     
-                    <!-- SVG Connectors (Clean Slate lines) -->
+                    <!-- SVG Connectors (Minimalist Flowing Bezier) -->
                     <svg class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: 1;">
-                        <path d="M 800 600 L 2500 800 L 4200 1200 L 3500 2200 L 2000 2500 L 800 2200" stroke="#cbd5e1" stroke-width="2" fill="none" stroke-dasharray="8 8" />
-                        <!-- Connecting circles -->
-                        <circle cx="800" cy="600" r="5" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
-                        <circle cx="2500" cy="800" r="5" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
-                        <circle cx="4200" cy="1200" r="5" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
-                        <circle cx="3500" cy="2200" r="5" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
-                        <circle cx="2000" cy="2500" r="5" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
-                        <circle cx="800" cy="2200" r="5" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+                        <!-- Thick Ambient Track for Depth -->
+                        <path d="M 800 600 C 1700 600, 1600 800, 2500 800 C 3350 800, 3350 1200, 4200 1200 C 4700 1700, 4000 2200, 3500 2200 C 2750 2200, 2750 2500, 2000 2500 C 1400 2500, 1400 2200, 800 2200" stroke="#f1f5f9" stroke-width="10" fill="none" />
+                        
+                        <!-- Foreground Sleek Dashed Line -->
+                        <path d="M 800 600 C 1700 600, 1600 800, 2500 800 C 3350 800, 3350 1200, 4200 1200 C 4700 1700, 4000 2200, 3500 2200 C 2750 2200, 2750 2500, 2000 2500 C 1400 2500, 1400 2200, 800 2200" stroke="#94a3b8" stroke-width="2.5" fill="none" stroke-dasharray="12 16" stroke-linecap="round" style="opacity: 0.6;" />
+                        
+                        <!-- Glowing Junction Nodes -->
+                        <circle cx="800" cy="600" r="7" fill="#ffffff" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"/>
+                        <circle cx="2500" cy="800" r="7" fill="#ffffff" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"/>
+                        <circle cx="4200" cy="1200" r="7" fill="#ffffff" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"/>
+                        <circle cx="3500" cy="2200" r="7" fill="#ffffff" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"/>
+                        <circle cx="2000" cy="2500" r="7" fill="#ffffff" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"/>
+                        <circle cx="800" cy="2200" r="7" fill="#ffffff" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"/>
                     </svg>
 
                     
