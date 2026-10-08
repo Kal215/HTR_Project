@@ -65,7 +65,7 @@
                     <span class="lang-en">How it works</span><span class="lang-id">Cara Kerja</span>
                 </a>
                 <a href="#architecture" class="hover:text-gray-900 transition-colors">
-                    <span class="lang-en">Architecture</span><span class="lang-id">Arsitektur</span>
+                    <span class="lang-en">Architecture</span><span class="lang-en">Architecture</span><span class="lang-id">Arsitektur</span>
                 </a>
                 
                 <div class="relative bg-gray-100/80 p-1 flex rounded-lg items-center text-xs font-bold shadow-inner border border-gray-200/60 ml-2 cursor-pointer" id="langToggleBox">
@@ -83,11 +83,11 @@
         <header class="mb-10 mt-8">
             <h1 class="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight mb-3">
                 <span class="lang-en">Handwritten Text Recognition</span>
-                <span class="lang-id">Pengenalan Tulisan Tangan</span>
+                <span class="lang-en">Handwritten Text Recognition</span><span class="lang-id">Pengenalan Tulisan Tangan</span>
             </h1>
             <p class="text-slate-500 text-base max-w-2xl">
                 <span class="lang-en">An offline machine learning pipeline powered by a Hybrid CNN-BiLSTM architecture, CTC decoding, and Lexical DP mapping.</span>
-                <span class="lang-id">Pipeline <i>Machine Learning offline</i> yang ditenagai oleh arsitektur Hybrid CNN-BiLSTM, dekoder CTC, dan matriks Lexical DP.</span>
+                <span class="lang-en">An offline <i>Machine Learning</i> pipeline powered by a Hybrid CNN-BiLSTM architecture, CTC decoder, and Lexical DP matrix.</span><span class="lang-id">Pipeline <i>Machine Learning offline</i> yang ditenagai oleh arsitektur Hybrid CNN-BiLSTM, dekoder CTC, dan matriks Lexical DP.</span>
             </p>
         </header>
 
@@ -113,8 +113,8 @@
                 <button id="predictBtn" disabled class="mt-4 w-full py-3 bg-slate-900 hover:bg-slate-800 disabled:bg-slate-100 disabled:text-slate-400 disabled:border border-slate-200 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 group">
                     <i data-lucide="cpu" class="w-4 h-4 group-disabled:hidden"></i>
                     <span class="lang-en">Run Prediction</span>
-                    <span class="lang-id" id="btnIdTargetHack">Jalankan Prediksi</span>
-                    <span class="lang-id">Jalankan Prediksi</span>
+                    <span class="lang-en">Run Prediction</span><span class="lang-id" id="btnIdTargetHack">Jalankan Prediksi</span>
+                    <span class="lang-en">Run Prediction</span><span class="lang-id">Jalankan Prediksi</span>
                 </button>
             </div>
 
@@ -165,7 +165,7 @@
             </div>
             <div class="flex flex-col">
                 <span class="lang-en">Back to Workspace</span>
-                <span class="lang-id">Kembali ke Beranda</span>
+                <span class="lang-en">Back to Home</span><span class="lang-id">Kembali ke Beranda</span>
             </div>
         </a>
 
@@ -176,11 +176,11 @@
             </div>
             <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">
                 <span class="lang-en">Pipeline Architecture</span>
-                <span class="lang-id">Arsitektur Pipeline HTR</span>
+                <span class="lang-en">HTR Pipeline Architecture</span><span class="lang-id">Arsitektur Pipeline HTR</span>
             </h2>
             <p class="text-lg text-slate-600 leading-relaxed">
                 <span class="lang-en">A deep dive into the handwritten text recognition pipeline. Discover how we transform raw pixel matrices into digital strings using advanced Neural Networks and Dynamic Programming.</span>
-                <span class="lang-id">Dokumentasi teknis dari arsitektur <i>Handwritten Text Recognition</i>. Menguraikan transformasi matriks piksel mentah menjadi teks digital melalui algoritma Jaringan Saraf Tiruan dan Pemrograman Dinamis.</span>
+                <span class="lang-en">Technical documentation of the <i>Handwritten Text Recognition</i> architecture. Details the transformation of raw pixel matrices into digital text via Artificial Neural Networks and Dynamic Programming.</span><span class="lang-id">Dokumentasi teknis dari arsitektur <i>Handwritten Text Recognition</i>. Menguraikan transformasi matriks piksel mentah menjadi teks digital melalui algoritma Jaringan Saraf Tiruan dan Pemrograman Dinamis.</span>
             </p>
         </div>
 
@@ -191,30 +191,30 @@
                 <div class="sticky top-32">
                     <h3 class="text-xs font-bold tracking-[0.2em] text-slate-400 uppercase mb-6">
                         <span class="lang-en">Execution Stages</span>
-                        <span class="lang-id">Tahapan Eksekusi</span>
+                        <span class="lang-en">Execution Stages</span><span class="lang-id">Tahapan Eksekusi</span>
                     </h3>
                     <nav id="sidebar-nav" class="space-y-6 border-l-2 border-slate-200 pl-6 relative">
                         <div id="scroll-indicator" class="absolute -left-[2px] top-0 h-6 w-1 bg-sky-500 rounded-r-md transition-all duration-300" style="transform: translateY(0px);"></div>
                         
                         <a href="#stage-1" class="stage-link block text-sm font-semibold text-slate-900 hover:text-sky-600 transition-colors">
                             <span class="lang-en">1. Otsu Variance</span>
-                            <span class="lang-id">1. Binarisasi Otsu</span>
+                            <span class="lang-en">1. Otsu Binarization</span><span class="lang-id">1. Binarisasi Otsu</span>
                         </a>
                         <a href="#stage-2" class="stage-link block text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">
                             <span class="lang-en">2. Spatial Extraction</span>
-                            <span class="lang-id">2. Ekstraksi Spasial</span>
+                            <span class="lang-en">2. Spatial Extraction</span><span class="lang-id">2. Ekstraksi Spasial</span>
                         </a>
                         <a href="#stage-3" class="stage-link block text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">
                             <span class="lang-en">3. Temporal Memory</span>
-                            <span class="lang-id">3. Memori Temporal</span>
+                            <span class="lang-en">3. Temporal Memory</span><span class="lang-id">3. Memori Temporal</span>
                         </a>
                         <a href="#stage-4" class="stage-link block text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">
                             <span class="lang-en">4. CTC Alignment</span>
-                            <span class="lang-id">4. Perataan CTC</span>
+                            <span class="lang-en">4. CTC Alignment</span><span class="lang-id">4. Perataan CTC</span>
                         </a>
                         <a href="#stage-5" class="stage-link block text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">
                             <span class="lang-en">5. Lexical Alignment</span>
-                            <span class="lang-id">5. Penyelarasan Leksikal</span>
+                            <span class="lang-en">5. Lexical Alignment</span><span class="lang-id">5. Penyelarasan Leksikal</span>
                         </a>
                     </nav>
                 </div>
@@ -231,7 +231,7 @@
                         </div>
                         <h3 class="text-2xl md:text-3xl font-bold text-slate-900">
                             <span class="lang-en">Vision & Otsu Binarization</span>
-                            <span class="lang-id">Binarisasi Visi & Otsu</span>
+                            <span class="lang-en">Vision & Otsu Binarization</span><span class="lang-id">Binarisasi Visi & Otsu</span>
                         </h3>
                     </div>
                     <div class="space-y-6 text-slate-600 text-base md:text-lg leading-loose">
@@ -267,7 +267,7 @@
                         </div>
                         <h3 class="text-2xl md:text-3xl font-bold text-slate-900">
                             <span class="lang-en">Spatial Feature Extraction</span>
-                            <span class="lang-id">Ekstraksi Fitur Spasial</span>
+                            <span class="lang-en">Spatial Feature Extraction</span><span class="lang-id">Ekstraksi Fitur Spasial</span>
                         </h3>
                     </div>
                     <div class="space-y-6 text-slate-600 text-base md:text-lg leading-loose">
@@ -304,7 +304,7 @@
                         </div>
                         <h3 class="text-2xl md:text-3xl font-bold text-slate-900">
                             <span class="lang-en">Bidirectional Temporal Memory</span>
-                            <span class="lang-id">Memori Temporal Dua Arah</span>
+                            <span class="lang-en">Bidirectional Temporal Memory</span><span class="lang-id">Memori Temporal Dua Arah</span>
                         </h3>
                     </div>
                     <div class="space-y-6 text-slate-600 text-base md:text-lg leading-loose">
@@ -342,7 +342,7 @@
                         </div>
                         <h3 class="text-2xl md:text-3xl font-bold text-slate-900">
                             <span class="lang-en">CTC Alignment</span>
-                            <span class="lang-id">Perataan CTC</span>
+                            <span class="lang-en">CTC Alignment</span><span class="lang-id">Perataan CTC</span>
                         </h3>
                     </div>
                     <div class="space-y-6 text-slate-600 text-base md:text-lg leading-loose">
@@ -380,7 +380,7 @@
                         </div>
                         <h3 class="text-2xl md:text-3xl font-bold text-slate-900">
                             <span class="lang-en">Lexical Alignment</span>
-                            <span class="lang-id">Penyelarasan Leksikal</span>
+                            <span class="lang-en">Lexical Alignment</span><span class="lang-id">Penyelarasan Leksikal</span>
                         </h3>
                     </div>
                     <div class="space-y-6 text-slate-600 text-base md:text-lg leading-loose">
@@ -502,7 +502,7 @@
                     </div>
                     <div class="flex flex-col text-left">
                         <span class="lang-en">Back to Workspace</span>
-                        <span class="lang-id block">Kembali ke Beranda</span>
+                        <span class="lang-en block">Back to Home</span><span class="lang-id block">Kembali ke Beranda</span>
                     </div>
                 </a>
 
@@ -660,6 +660,7 @@
                             <h3 class="text-xl font-bold text-slate-800 mb-3">1. Vision Pre-processing</h3>
                             <p class="text-slate-600 text-[13px] leading-relaxed">
                                 <span class="lang-en">The raw image passes through grayscale mapping and <b>Otsu's Thresholding</b> to isolate ink from paper, forming a clean binary tensor.</span>
+                                <span class="lang-en">The raw image is mapped to grayscale and cleaned using <b>Otsu's Thresholding</b> to separate ink from paper, forming a pure binary tensor.</span>
                                 <span class="lang-id">Citra mentah dipetakan ke skala abu-abu dan dibersihkan dengan <b>Otsu's Thresholding</b> untuk memisahkan tinta dari kertas, membentuk tensor biner yang murni.</span>
                             </p>
                         </div>
@@ -672,6 +673,7 @@
                             <div class="expl-icon-wrap bg-indigo-50 border-indigo-100"><i data-lucide="layers" class="w-6 h-6 text-indigo-600"></i></div>
                             <h3 class="text-xl font-bold text-slate-800 mb-3">2. Spatial Feature Extraction</h3>
                             <p class="text-slate-600 text-[13px] leading-relaxed">
+                                <span class="lang-en">Visual feature extraction is performed through 3 main CNN blocks (6 layers total). Spatial filters increase from 64, 128, to 256 to detect complex strokes.</span>
                                 <span class="lang-id">Ekstraksi fitur visual dilakukan melalui 3 blok utama CNN (total 6 lapis). Filter spasial bertambah dari 64, 128, hingga 256 untuk mendeteksi guratan kompleks.</span>
                             </p>
                         </div>
@@ -724,6 +726,7 @@
                             <div class="expl-icon-wrap bg-violet-50 border-violet-100"><i data-lucide="align-center-horizontal" class="w-6 h-6 text-violet-600"></i></div>
                             <h3 class="text-xl font-bold text-slate-800 mb-3">3. Sequence Reshape</h3>
                             <p class="text-slate-600 text-[13px] leading-relaxed">
+                                <span class="lang-en">The spatial feature map from the CNN is flattened and converted into a sequence of 64 time-steps, preparing it for the sequential memory network.</span>
                                 <span class="lang-id">Peta fitur spasial dari CNN dipipihkan dan dikonversi menjadi urutan 64 langkah-waktu (Time-steps), mempersiapkannya untuk jaringan memori sekuensial.</span>
                             </p>
                         </div>
@@ -736,6 +739,7 @@
                             <div class="expl-icon-wrap bg-teal-50 border-teal-100"><i data-lucide="git-merge" class="w-6 h-6 text-teal-600"></i></div>
                             <h3 class="text-xl font-bold text-slate-800 mb-2">4. Bidirectional Temporal Memory</h3>
                             <p class="text-slate-600 text-[13px] leading-relaxed">
+                                <span class="lang-en">The LSTM network processes the sequence in parallel from two directions (Forward and Backward) with 256 units each to read letter context before merging into the Softmax layer.</span>
                                 <span class="lang-id">Jaringan LSTM memproses urutan secara paralel dari dua arah (Maju dan Mundur) dengan masing-masing 256 unit untuk membaca konteks huruf sebelum digabung ke lapisan Softmax.</span>
                             </p>
                         </div>
@@ -781,6 +785,7 @@
                             <div class="expl-icon-wrap bg-emerald-50 border-emerald-100"><i data-lucide="file-digit" class="w-6 h-6 text-emerald-600"></i></div>
                             <h3 class="text-xl font-bold text-slate-800 mb-3">5. CTC Alignment</h3>
                             <p class="text-slate-600 text-[13px] leading-relaxed">
+                                <span class="lang-en"><b>Connectionist Temporal Classification (CTC)</b> reduces probabilities into actual text by shrinking repeating characters (e.g., 'a-a-a' to 'a') and discarding blank tokens.</span>
                                 <span class="lang-id"><b>Connectionist Temporal Classification (CTC)</b> mereduksi probabilitas menjadi teks aktual dengan menyusutkan karakter berulang (misal: 'a-a-a' menjadi 'a') dan membuang token kosong.</span>
                             </p>
                         </div>
@@ -836,6 +841,7 @@
                             <div class="expl-icon-wrap bg-rose-50 border-rose-100"><i data-lucide="text-cursor" class="w-6 h-6 text-rose-600"></i></div>
                             <h3 class="text-xl font-bold text-slate-800 mb-3">6. Lexical Alignment</h3>
                             <p class="text-slate-600 text-[13px] leading-relaxed">
+                                <span class="lang-en">The raw string often contains minor spelling errors due to model confusion. <b>Levenshtein Distance</b> compares it against a valid vocabulary dictionary to produce perfect final text.</span>
                                 <span class="lang-id">String mentah seringkali mengandung salah eja minor akibat kebingungan model. <b>Jarak Levenshtein</b> membandingkannya dengan kamus kosakata yang valid untuk menghasilkan teks akhir yang sempurna.</span>
                             </p>
                         </div>
@@ -867,6 +873,7 @@
                     </div>
                     <p class="text-sm text-slate-500 leading-relaxed max-w-sm mb-6">
                         <span class="lang-en">An offline Handwritten Text Recognition engine. It processes raw handwriting into digital text using a Hybrid CNN-BiLSTM network and Dynamic Programming.</span>
+                        <span class="lang-en">Offline Handwritten Text Recognition (HTR) engine. This system converts pen stroke pixels into digital text using a Hybrid CNN-BiLSTM architecture and Dynamic Programming.</span>
                         <span class="lang-id">Mesin pengenal tulisan tangan (HTR) luring. Sistem ini mengonversi piksel guratan pena menjadi teks digital menggunakan arsitektur Hybrid CNN-BiLSTM dan Pemrograman Dinamis.</span>
                     </p>
                     <div class="flex items-center gap-2">
@@ -876,7 +883,7 @@
                         </span>
                         <span class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
                             <span class="lang-en">System Operational</span>
-                            <span class="lang-id">Sistem Aktif</span>
+                            <span class="lang-en">Active Systems</span><span class="lang-id">Sistem Aktif</span>
                         </span>
                     </div>
                 </div>
@@ -884,20 +891,20 @@
                 <div>
                     <h4 class="text-xs font-bold text-slate-900 uppercase tracking-widest mb-6">
                         <span class="lang-en">Architecture</span>
-                        <span class="lang-id">Arsitektur</span>
+                        <span class="lang-en">Architecture</span><span class="lang-id">Arsitektur</span>
                     </h4>
                     <ul class="space-y-4 text-sm text-slate-500 font-medium">
                         <li><a href="#how-it-works" class="hover:text-sky-600 transition-colors">
                             <span class="lang-en">Pipeline Stages</span>
-                            <span class="lang-id">Tahapan Pipeline</span>
+                            <span class="lang-en">Pipeline Stages</span><span class="lang-id">Tahapan Pipeline</span>
                         </a></li>
                         <li><a href="#architecture" class="hover:text-sky-600 transition-colors">
                             <span class="lang-en">Data Telemetry</span>
-                            <span class="lang-id">Dasbor Telemetri</span>
+                            <span class="lang-en">Telemetry Dashboard</span><span class="lang-id">Dasbor Telemetri</span>
                         </a></li>
                         <li><a href="#" class="hover:text-sky-600 transition-colors cursor-default">
                             <span class="lang-en">Lexical Corpus</span>
-                            <span class="lang-id">Korpus Leksikal</span>
+                            <span class="lang-en">Lexical Corpus</span><span class="lang-id">Korpus Leksikal</span>
                         </a></li>
                     </ul>
                 </div>
@@ -905,7 +912,7 @@
                 <div>
                     <h4 class="text-xs font-bold text-slate-900 uppercase tracking-widest mb-6">
                         <span class="lang-en">Technology</span>
-                        <span class="lang-id">Teknologi</span>
+                        <span class="lang-en">Technology</span><span class="lang-id">Teknologi</span>
                     </h4>
                     <ul class="space-y-4 text-sm text-slate-500 font-mono text-[13px]">
                         <li class="flex items-center gap-2"><i data-lucide="cpu" class="w-3.5 h-3.5"></i> TensorFlow <span class="text-slate-400">2.14</span></li>
@@ -924,7 +931,7 @@
                 <div class="mt-4 sm:mt-0 flex items-center gap-6">
                     <span class="hover:text-slate-600 transition-colors cursor-default hidden sm:block">
                         <span class="lang-en">System Architect</span>
-                        <span class="lang-id">Arsitek Sistem</span>
+                        <span class="lang-en">System Architect</span><span class="lang-id">Arsitek Sistem</span>
                     </span>
                     <span class="w-1 h-1 rounded-full bg-slate-300 hidden sm:block"></span>
                     <span class="hover:text-slate-600 transition-colors cursor-default font-mono text-xs">v1.4.0-Enterprise</span>
