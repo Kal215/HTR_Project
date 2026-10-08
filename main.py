@@ -251,6 +251,12 @@ async def predict_image(file: UploadFile = File(...)):
             "final_text": corrected_pred,
             "raw_word": raw_short,
             "target": tgt_short
+        },
+        "visual_tensors": {
+            "otsu": base64_img,
+            "cnn": base64_cnn,
+            "lstm": base64_lstm,
+            "ctc": base64_ctc
         }
     }
     
