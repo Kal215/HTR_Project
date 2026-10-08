@@ -527,7 +527,34 @@
                         <circle cx="800" cy="2200" r="5" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
                     </svg>
 
-                    <!-- ZONE 1: IMAGE ACQUISITION (800, 600) -->
+                    
+                    <!-- WAVY WIND WHOOSH (~) -->
+                    <svg class="absolute top-0 left-0 pointer-events-none" style="z-index: 8; width: 5000px; height: 3000px; overflow: visible;">
+                        <polyline id="wind-path-1" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0; filter: drop-shadow(0 2px 4px rgba(56,189,248,0.4)); transition: opacity 0.2s;" />
+                        <polyline id="wind-path-2" fill="none" stroke="#7dd3fc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0; filter: drop-shadow(0 2px 4px rgba(125,211,252,0.4)); transition: opacity 0.2s;" />
+                        <polyline id="wind-path-3" fill="none" stroke="#bae6fd" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0; transition: opacity 0.2s;" />
+                    </svg>
+
+                    <!-- THE PAPER PLANE (Luxurious Cursor Follower 2D) -->
+                    <div id="paper-plane-wrapper" class="absolute pointer-events-none" style="z-index: 9999; left: 0; top: 0; width: 60px; height: 60px;">
+                        <svg viewBox="0 0 24 24" class="w-full h-full text-sky-500" style="filter: drop-shadow(-5px 10px 10px rgba(14,165,233,0.5));" fill="currentColor">
+                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                        </svg>
+                        
+                        <!-- Aerodynamic HUD -->
+                        <div id="plane-hud" class="absolute -bottom-8 -right-12 bg-slate-900/80 backdrop-blur-md text-[10px] text-sky-300 font-mono p-2 rounded-lg border border-sky-500/30 opacity-0 transition-opacity duration-300 w-32 shadow-lg shadow-sky-900/20" style="pointer-events: none;">
+                            <div class="flex justify-between border-b border-sky-500/30 pb-1 mb-1">
+                                <span class="opacity-70">VEL</span><span id="hud-vel" class="text-sky-100 font-semibold tracking-wider">0.0</span>
+                            </div>
+                            <div class="flex justify-between border-b border-sky-500/30 pb-1 mb-1">
+                                <span class="opacity-70">ALT</span><span id="hud-alt" class="text-sky-100 font-semibold tracking-wider">30</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="opacity-70">BNK</span><span id="hud-bnk" class="text-sky-100 font-semibold tracking-wider">0.0</span>
+                            </div>
+                        </div>
+                    </div>
+<!-- ZONE 1: IMAGE ACQUISITION (800, 600) -->
                     <div class="absolute flex flex-col md:flex-row items-center gap-20" style="left: 800px; top: 600px; transform: translate(-50%, -50%); z-index: 2;">
                         <div class="flex flex-col gap-8">
                             <div class="erd-table">
@@ -1202,11 +1229,134 @@
             cY += (target.y - cY) * 0.05;
             cScale += (target.scale - cScale) * 0.05;
 
+            // --- 2D PLANE PHYSICS & WAVY WIND ---
+            const plane = document.getElementById('paper-plane-wrapper');
+            const planeHUD = document.getElementById('plane-hud');
+
+            if (plane) {
+                if (plane._pos === undefined) {
+                    plane._pos = {x: cX, y: cY};
+                    plane._angle = 0;
+                    plane._vel = {x: 0, y: 0};
+                    plane._curBank = 0;
+                    plane._curPitch = 0;
+                    plane._barrelRoll = 0;
+                    plane._trail = [];
+                    plane._distTraveled = 0;
+                }
+
+                let targetX = cX;
+                let targetY = cY;
+
+                if (window._mouseActive) {
+                    const vw70 = window.innerWidth * 0.7;
+                    const vh65 = window.innerHeight * 0.65;
+                    targetX = (window._mouseX - vw70) / cScale + cX;
+                    targetY = (window._mouseY - vh65) / cScale + cY;
+                }
+
+                const dx = targetX - plane._pos.x;
+                const dy = targetY - plane._pos.y;
+                const distance = Math.sqrt(dx*dx + dy*dy);
+
+                plane._vel.x = dx * 0.08;
+                plane._vel.y = dy * 0.08;
+                plane._pos.x += plane._vel.x;
+                plane._pos.y += plane._vel.y;
+                const speed = Math.sqrt(plane._vel.x**2 + plane._vel.y**2);
+
+                if (distance > 2.0) {
+                    let desiredAngleRad = Math.atan2(dy, dx);
+                    let currentAngleRad = plane._angle * (Math.PI / 180);
+                    let angleDiff = desiredAngleRad - currentAngleRad;
+                    while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
+                    while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
+                    
+                    currentAngleRad += angleDiff * 0.15;
+                    plane._angle = currentAngleRad * (180 / Math.PI);
+                    
+                    let targetBank = (angleDiff * (180/Math.PI)) * -2.5;
+                    targetBank = Math.max(-60, Math.min(60, targetBank));
+                    plane._curBank += (targetBank - plane._curBank) * 0.15;
+                    
+                    let targetPitch = plane._vel.y * 1.5;
+                    plane._curPitch += (targetPitch - plane._curPitch) * 0.15;
+                } else {
+                    plane._curBank += (0 - plane._curBank) * 0.1;
+                    plane._curPitch += (0 - plane._curPitch) * 0.1;
+                }
+
+                if (plane._barrelRoll > 0) {
+                    plane._barrelRoll *= 0.9;
+                    if (plane._barrelRoll < 0.1) plane._barrelRoll = 0;
+                }
+
+                const bobY = Math.sin(performance.now() * 0.002) * 8;
+                
+                // DOM Update via CSS 3D (Smooth as butter)
+                plane.style.transform = `translate3d(${plane._pos.x}px, ${plane._pos.y + bobY}px, 0) translate(-50%, -50%) rotate(${plane._angle}deg) rotateX(${Math.abs(plane._curBank)*0.3 + plane._curPitch}deg) rotateY(${plane._curBank + plane._barrelRoll}deg)`;
+
+                // --- WAVY WIND WHOOSH (~) TRAIL ---
+                plane._distTraveled += speed;
+                const t1 = document.getElementById('wind-path-1');
+                const t2 = document.getElementById('wind-path-2');
+                const t3 = document.getElementById('wind-path-3');
+
+                if (speed > 0.5) {
+                    const perpAngle = (plane._angle + 90) * (Math.PI / 180);
+                    const wave1 = Math.sin(plane._distTraveled * 0.08) * 12;
+                    const wave2 = Math.sin(plane._distTraveled * 0.05 + 1.5) * 20;
+                    const wave3 = Math.cos(plane._distTraveled * 0.1) * -15;
+
+                    // Emit from the tail (-30px backwards based on angle)
+                    const tailX = plane._pos.x - Math.cos(plane._angle * Math.PI/180) * 30;
+                    const tailY = plane._pos.y - Math.sin(plane._angle * Math.PI/180) * 30;
+
+                    const p1X = tailX + Math.cos(perpAngle) * wave1;
+                    const p1Y = tailY + Math.sin(perpAngle) * wave1;
+                    const p2X = tailX + Math.cos(perpAngle) * wave2;
+                    const p2Y = tailY + Math.sin(perpAngle) * wave2;
+                    const p3X = tailX + Math.cos(perpAngle) * wave3;
+                    const p3Y = tailY + Math.sin(perpAngle) * wave3;
+
+                    plane._trail.push({
+                        p1: `${p1X.toFixed(1)},${p1Y.toFixed(1)}`,
+                        p2: `${p2X.toFixed(1)},${p2Y.toFixed(1)}`,
+                        p3: `${p3X.toFixed(1)},${p3Y.toFixed(1)}`
+                    });
+                    
+                    if (plane._trail.length > 30) plane._trail.shift();
+                    
+                    if (t1 && t1.style.opacity === '0') {
+                        t1.style.opacity = '0.7'; t2.style.opacity = '0.5'; t3.style.opacity = '0.3';
+                    }
+                } else {
+                    if (plane._trail.length > 0) plane._trail.shift();
+                    if (plane._trail.length === 0 && t1 && t1.style.opacity !== '0') {
+                        t1.style.opacity = '0'; t2.style.opacity = '0'; t3.style.opacity = '0';
+                    }
+                }
+
+                if (t1 && t2 && t3 && plane._trail.length > 1) {
+                    t1.setAttribute('points', plane._trail.map(p => p.p1).join(' '));
+                    t2.setAttribute('points', plane._trail.map(p => p.p2).join(' '));
+                    t3.setAttribute('points', plane._trail.map(p => p.p3).join(' '));
+                }
+
+                if (distance < 50 && speed < 1 && planeHUD) {
+                    planeHUD.style.opacity = '1';
+                    document.getElementById('hud-vel').innerText = (speed * 10).toFixed(1);
+                    document.getElementById('hud-bnk').innerText = plane._curBank.toFixed(1);
+                } else if (planeHUD) {
+                    planeHUD.style.opacity = '0';
+                }
+            }
+
             canvasObj.style.transform = `translate(calc(70vw - ${cX * cScale}px), calc(65vh - ${cY * cScale}px)) scale(${cScale})`;
             requestAnimationFrame(updateCamera);
         }
 
-        window.addEventListener('scroll', () => {
+window.addEventListener('scroll', () => {
             if (architectureSection && !architectureSection.classList.contains('hidden')) {
                 // Not requesting animation frame here directly, instead let's just trigger a flag, but for now we can just call it
             }
