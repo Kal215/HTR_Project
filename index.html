@@ -541,17 +541,6 @@
                             <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
                         </svg>
                         
-                        <!-- Aerodynamic HUD -->
-                        <div id="plane-hud" class="absolute -bottom-8 -right-12 bg-slate-900/80 backdrop-blur-md text-[10px] text-sky-300 font-mono p-2 rounded-lg border border-sky-500/30 opacity-0 transition-opacity duration-300 w-32 shadow-lg shadow-sky-900/20" style="pointer-events: none;">
-                            <div class="flex justify-between border-b border-sky-500/30 pb-1 mb-1">
-                                <span class="opacity-70">VEL</span><span id="hud-vel" class="text-sky-100 font-semibold tracking-wider">0.0</span>
-                            </div>
-                            <div class="flex justify-between border-b border-sky-500/30 pb-1 mb-1">
-                                <span class="opacity-70">ALT</span><span id="hud-alt" class="text-sky-100 font-semibold tracking-wider">30</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="opacity-70">BNK</span><span id="hud-bnk" class="text-sky-100 font-semibold tracking-wider">0.0</span>
-                            </div>
                         </div>
                     </div>
 <!-- ZONE 1: IMAGE ACQUISITION (800, 600) -->
@@ -1343,13 +1332,7 @@
                     t3.setAttribute('points', plane._trail.map(p => p.p3).join(' '));
                 }
 
-                if (distance < 50 && speed < 1 && planeHUD) {
-                    planeHUD.style.opacity = '1';
-                    document.getElementById('hud-vel').innerText = (speed * 10).toFixed(1);
-                    document.getElementById('hud-bnk').innerText = plane._curBank.toFixed(1);
-                } else if (planeHUD) {
-                    planeHUD.style.opacity = '0';
-                }
+
             }
 
             canvasObj.style.transform = `translate(calc(70vw - ${cX * cScale}px), calc(65vh - ${cY * cScale}px)) scale(${cScale})`;
@@ -1367,17 +1350,44 @@ window.addEventListener('scroll', () => {
             window._mouseX = e.clientX;
             window._mouseY = e.clientY;
             window._mouseActive = true;
-            
-            // Reset idle timeout
-            if (window._mouseTimeout) clearTimeout(window._mouseTimeout);
-            window._mouseTimeout = setTimeout(() => {
-                window._mouseActive = false; // Hover in place when mouse is completely still
-            }, 2000);
         });
         
         window.addEventListener('mouseleave', () => {
             window._mouseActive = false;
         });
+
+        window.addEventListener('mousedown', (e) => {
+            const plane = document.getElementById('paper-plane-wrapper');
+            if (plane && plane._pos) {
+                plane._barrelRoll = 720; // 2 full spins
+                
+                // Stamp "HTR VERIFIED"
+                const stamp = document.createElement('div');
+                stamp.className = 'absolute pointer-events-none text-sky-500 font-bold border-4 border-sky-500 rounded-lg p-2';
+                stamp.style.left = plane._pos.x + 'px';
+                stamp.style.top = plane._pos.y + 'px';
+                stamp.style.transform = 'translate(-50%, -50%) rotate(-15deg) scale(2)';
+                stamp.style.opacity = '0';
+                stamp.style.zIndex = '7';
+                stamp.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s';
+                stamp.innerText = 'HTR VERIFIED';
+                
+                const canvas = document.getElementById('miro-canvas');
+                if (canvas) {
+                    canvas.appendChild(stamp);
+                    requestAnimationFrame(() => {
+                        stamp.style.transform = 'translate(-50%, -50%) rotate(-15deg) scale(1)';
+                        stamp.style.opacity = '0.8';
+                    });
+                    
+                    setTimeout(() => {
+                        stamp.style.opacity = '0';
+                        setTimeout(() => stamp.remove(), 500);
+                    }, 2000);
+                }
+            }
+        });
+
 
 
         // Start render loop
