@@ -166,16 +166,44 @@ async def predict_image(file: UploadFile = File(...)):
     raw_path = ""
     softmax = []
     
+    base64_cnn = ""
+    base64_lstm = ""
+    base64_ctc = ""
+
     if extractor:
         conv_out, lstm_out, probs = extractor(img_input, training=False)
+        
+        # --- CNN Feature Map Image ---
+        cnn_feature = conv_out[0, :, :, 0].numpy()
+        cnn_img = cv2.normalize(cnn_feature, None, 0, 255, cv2.NORM_MINMAX, dtype=cv2.CV_8U)
+        cnn_img = cv2.applyColorMap(cnn_img, cv2.COLORMAP_VIRIDIS)
+        _, buffer_cnn = cv2.imencode('.png', cnn_img)
+        base64_cnn = base64.b64encode(buffer_cnn).decode('utf-8')
+        
         # Spatial Math (Conv2D): Get a 3x3 filter activation map from channel 0
         cnn_map = conv_out[0, :3, :3, 0].numpy()
         cnn_sample = np.round(cnn_map, 3).tolist()
+        
+        # --- BiLSTM Heatmap Image ---
+        lstm_feature = lstm_out[0, :, :].numpy() # shape (32, 256)
+        lstm_img = cv2.normalize(lstm_feature, None, 0, 255, cv2.NORM_MINMAX, dtype=cv2.CV_8U)
+        lstm_img = cv2.applyColorMap(lstm_img, cv2.COLORMAP_PLASMA)
+        lstm_img = cv2.resize(lstm_img, (256, 128), interpolation=cv2.INTER_NEAREST)
+        _, buffer_lstm = cv2.imencode('.png', lstm_img)
+        base64_lstm = base64.b64encode(buffer_lstm).decode('utf-8')
         
         # Temporal Math (BiLSTM): Get first 5 values of hidden state vector at t=32
         lstm_vec = lstm_out[0, 32, :5].numpy()
         lstm_sample = np.round(lstm_vec, 3).tolist()
         
+        # --- CTC Probability Matrix Image ---
+        ctc_feature = probs[0, :, :].numpy() # shape (32, 80)
+        ctc_img = cv2.normalize(ctc_feature, None, 0, 255, cv2.NORM_MINMAX, dtype=cv2.CV_8U)
+        ctc_img = cv2.applyColorMap(ctc_img, cv2.COLORMAP_HOT)
+        ctc_img = cv2.resize(ctc_img, (320, 128), interpolation=cv2.INTER_NEAREST)
+        _, buffer_ctc = cv2.imencode('.png', ctc_img)
+        base64_ctc = base64.b64encode(buffer_ctc).decode('utf-8')
+
         # CTC Math
         text, raw_path, softmax = decode_ctc_math(probs.numpy())
     
