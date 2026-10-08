@@ -647,7 +647,11 @@
                                 <div class="erd-row"><span>channels</span><span id="tel-gray-channels" class="erd-val text-amber-500 font-mono">[STANDBY]</span></div>
                             </div>
                             <div class="w-px h-8 bg-slate-200 mx-auto"></div>
-                            <div class="erd-table">
+                            <div class="erd-table relative group">
+                                <div class="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-48 bg-slate-900 rounded-xl p-2 shadow-2xl opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 z-[9999] origin-bottom border border-slate-700">
+                                    <div class="text-[9px] font-mono text-slate-400 mb-1 flex justify-between"><span>TENSOR_VISUAL</span><span class="text-sky-400">LIVE</span></div>
+                                    <img id="vis-otsu" src="" class="w-full h-auto rounded border border-slate-800 bg-black/50 min-h-[40px] hidden" style="image-rendering: pixelated;" alt="Tensor">
+                                </div>
                                 <div class="erd-header"><span>Otsu_Threshold</span><i data-lucide="contrast" class="w-4 h-4 text-sky-600"></i></div>
                                 <div class="erd-row"><span>algorithm</span><span class="erd-val">Inverse</span></div>
                             <div class="p-2 bg-slate-50 border-t border-slate-100 text-[10px] font-mono text-slate-500 overflow-hidden" id="math-vision-otsu">
@@ -689,7 +693,11 @@
                         </div>
 
                         <div class="flex flex-row gap-10">
-                            <div class="erd-table">
+                            <div class="erd-table relative group">
+                                <div class="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-48 bg-slate-900 rounded-xl p-2 shadow-2xl opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 z-[9999] origin-bottom border border-slate-700">
+                                    <div class="text-[9px] font-mono text-slate-400 mb-1 flex justify-between"><span>TENSOR_VISUAL</span><span class="text-sky-400">LIVE</span></div>
+                                    <img id="vis-cnn" src="" class="w-full h-auto rounded border border-slate-800 bg-black/50 min-h-[40px] hidden" style="image-rendering: pixelated;" alt="Tensor">
+                                </div>
                                 <div class="erd-header"><span>CNN_Block_1</span><i data-lucide="box" class="w-4 h-4 text-indigo-600"></i></div>
                                 <div class="erd-row"><span>layers</span><span class="erd-val">Conv2D x2</span></div>
                                 <div class="erd-row"><span>filters</span><span class="erd-type">64</span></div>
@@ -1204,6 +1212,17 @@
                 updateField('tel-ctc-blank', 'Class_79');
                 updateField('tel-ctc-raw', '"' + t.nlp.raw_word + '"');
                 updateField('tel-nlp-dist', t.nlp.distance + '_Edit');
+                
+                if(t.visual_tensors) {
+                    const vo = document.getElementById('vis-otsu');
+                    const vc = document.getElementById('vis-cnn');
+                    const vl = document.getElementById('vis-lstm');
+                    const vctc = document.getElementById('vis-ctc');
+                    if(vo && t.visual_tensors.otsu) { vo.src = 'data:image/png;base64,' + t.visual_tensors.otsu; vo.classList.remove('hidden'); }
+                    if(vc && t.visual_tensors.cnn) { vc.src = 'data:image/png;base64,' + t.visual_tensors.cnn; vc.classList.remove('hidden'); }
+                    if(vl && t.visual_tensors.lstm) { vl.src = 'data:image/png;base64,' + t.visual_tensors.lstm; vl.classList.remove('hidden'); }
+                    if(vctc && t.visual_tensors.ctc) { vctc.src = 'data:image/png;base64,' + t.visual_tensors.ctc; vctc.classList.remove('hidden'); }
+                }
                 updateField('tel-nlp-out', '"' + t.nlp.target + '"');
                 updateField('final-output-text', t.nlp.final_text);
                 
