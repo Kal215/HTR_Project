@@ -1236,11 +1236,11 @@
                 }
 
                 // Render Live Levenshtein Matrix
-                if(t.nlp && t.nlp.ops) {
+                if(t.nlp && t.nlp.dp_grid) {
                     const dpContainer = document.getElementById('vis-dp');
                     if (dpContainer) {
-                        let rawStr = "E" + (t.nlp.raw_text ? t.nlp.raw_text.substring(0, 5) : "");
-                        let tgtStr = "E" + (t.nlp.final_text ? t.nlp.final_text.substring(0, 5) : "");
+                        let rawStr = "E" + (t.nlp.raw_word ? t.nlp.raw_word.substring(0, 5) : "");
+                        let tgtStr = "E" + (t.nlp.target ? t.nlp.target.substring(0, 5) : "");
                         
                         let tableHTML = '<table class="w-full border-collapse border border-slate-300 text-[10px] text-slate-700 text-center bg-slate-50">';
                         
@@ -1251,10 +1251,10 @@
                         }
                         tableHTML += '</tr>';
 
-                        let iMax = Math.min(t.nlp.ops.length, rawStr.length);
+                        let iMax = Math.min(t.nlp.dp_grid.length, rawStr.length);
                         for(let i = 0; i < iMax; i++) {
                             tableHTML += `<tr><th class="border border-slate-300 p-1 bg-slate-200 font-bold text-slate-600 uppercase">${rawStr[i] === 'E' ? 'ε' : rawStr[i]}</th>`;
-                            let row = t.nlp.ops[i];
+                            let row = t.nlp.dp_grid[i];
                             let jMax = Math.min(row.length, tgtStr.length);
                             for(let j = 0; j < jMax; j++) {
                                 let val = row[j];
