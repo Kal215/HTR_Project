@@ -1361,6 +1361,25 @@ window.addEventListener('scroll', () => {
             }
         });
 
+        
+        // GLOBAL MOUSE TRACKING FOR PAPER PLANE
+        window.addEventListener('mousemove', (e) => {
+            window._mouseX = e.clientX;
+            window._mouseY = e.clientY;
+            window._mouseActive = true;
+            
+            // Reset idle timeout
+            if (window._mouseTimeout) clearTimeout(window._mouseTimeout);
+            window._mouseTimeout = setTimeout(() => {
+                window._mouseActive = false; // Hover in place when mouse is completely still
+            }, 2000);
+        });
+        
+        window.addEventListener('mouseleave', () => {
+            window._mouseActive = false;
+        });
+
+
         // Start render loop
         function renderLoop() {
             updateCamera();
