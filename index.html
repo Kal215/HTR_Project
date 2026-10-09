@@ -744,20 +744,52 @@
 
 </div>
 </section>
-<footer class="mt-20 border-t border-slate-200 bg-white">
-<div class="max-w-5xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
-    <div class="text-sm text-slate-500">
-        &copy; 2026 Muhammad Riskal Fadhilla (10122487). <span class="lang-en">All rights reserved.</span><span class="lang-id">Hak Cipta Dilindungi.</span>
+<footer class="mt-20 border-t border-slate-200 bg-slate-50">
+    <div class="max-w-5xl mx-auto px-6 pt-16 pb-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 border-b border-slate-200 pb-12 mb-8">
+            <div class="md:col-span-2">
+                <div class="flex items-center gap-2.5 mb-4">
+                    <div class="w-7 h-7 bg-slate-900 text-white flex items-center justify-center rounded-lg shadow-sm">
+                        <i class="w-4 h-4" data-lucide="scan-text"></i>
+                    </div>
+                    <span class="font-bold text-lg text-slate-900 tracking-tight">HTR Engine</span>
+                </div>
+                <p class="text-sm text-slate-500 leading-relaxed max-w-sm">
+                    <span class="lang-en">An on-premise handwritten text recognition pipeline. Engineered for high-precision temporal decoding using Hybrid CNN-BiLSTM networks.</span>
+                    <span class="lang-id">Pipeline pengenalan tulisan tangan on-premise. Direkayasa untuk ekstraksi presisi tinggi menggunakan jaringan Hybrid CNN-BiLSTM.</span>
+                </p>
+            </div>
+            
+            <div>
+                <h4 class="font-bold text-slate-900 text-sm mb-4"><span class="lang-en">Architecture</span><span class="lang-id">Arsitektur</span></h4>
+                <ul class="space-y-3 text-sm text-slate-500 font-medium">
+                    <li><a href="#how-it-works" class="hover:text-sky-600 transition-colors"><span class="lang-en">Pipeline Stages</span><span class="lang-id">Tahapan Pipeline</span></a></li>
+                    <li><a href="#architecture" class="hover:text-sky-600 transition-colors"><span class="lang-en">Telemetry Dashboard</span><span class="lang-id">Dasbor Telemetri</span></a></li>
+                    <li><a href="#architecture" class="hover:text-sky-600 transition-colors"><span class="lang-en">Lexical Matrix</span><span class="lang-id">Matriks Leksikal</span></a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="font-bold text-slate-900 text-sm mb-4"><span class="lang-en">Technology</span><span class="lang-id">Teknologi</span></h4>
+                <ul class="space-y-3 text-sm text-slate-500 font-medium">
+                    <li class="flex items-center gap-2"><i class="w-3.5 h-3.5" data-lucide="cpu"></i> TensorFlow 2.14</li>
+                    <li class="flex items-center gap-2"><i class="w-3.5 h-3.5" data-lucide="server"></i> FastAPI 0.111</li>
+                    <li class="flex items-center gap-2"><i class="w-3.5 h-3.5" data-lucide="box"></i> OpenCV 4.10</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-sm font-medium text-slate-400">
+            <div>
+                &copy; 2026 Muhammad Riskal Fadhilla <span class="hidden md:inline ml-1 font-mono text-xs">(ID: 10122487)</span>
+            </div>
+            <div class="flex items-center gap-6">
+                <a href="https://github.com/Kal215" target="_blank" class="hover:text-slate-800 transition-colors flex items-center gap-1.5">
+                    <i data-lucide="github" class="w-4 h-4"></i> Source Code
+                </a>
+            </div>
+        </div>
     </div>
-    <div class="flex items-center gap-6 text-sm font-medium text-slate-500">
-        <a href="#" class="hover:text-slate-900 transition-colors"><span class="lang-en">Home</span><span class="lang-id">Beranda</span></a>
-        <a href="#how-it-works" class="hover:text-slate-900 transition-colors"><span class="lang-en">How it works</span><span class="lang-id">Cara Kerja</span></a>
-        <a href="#architecture" class="hover:text-slate-900 transition-colors"><span class="lang-en">Architecture</span><span class="lang-id">Arsitektur</span></a>
-        <a href="https://github.com/Kal215/HTR_Project" target="_blank" class="hover:text-slate-900 transition-colors flex items-center gap-1.5 md:ml-4">
-            <i data-lucide="github" class="w-4 h-4"></i> GitHub
-        </a>
-    </div>
-</div>
 </footer>
 <script>
         const body = document.body;
