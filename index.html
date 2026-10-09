@@ -1258,8 +1258,8 @@
             { p: 0.45, x: 4100, y: 1500, scale: 1.15 }, // U-Turn Apex
             { p: 0.54, x: 3500, y: 2200, scale: 1.15 }, // Zone 4
             { p: 0.72, x: 2200, y: 2500, scale: 1.15 }, // Zone 5
-            { p: 0.90, x: 800,  y: 2080, scale: 1.15 }, // Zone 6
-            { p: 1.00, x: 800,  y: 2080, scale: 1.15 }  // Stay at Zone 6
+            { p: 0.90, x: 800,  y: 2200, scale: 1.15 }, // Zone 6
+            { p: 1.00, x: 800,  y: 2200, scale: 1.15 }  // Stay at Zone 6
         ];
 
         let cX = 800, cY = 620, cScale = 1.15;
@@ -1415,7 +1415,7 @@
 
             }
 
-            canvasObj.style.transform = `translate(calc(70vw - ${cX * cScale}px), calc(65vh - ${cY * cScale}px)) scale(${cScale})`;
+            canvasObj.style.transform = `translate(calc(70vw - ${cX * cScale}px), calc(50vh - ${cY * cScale}px)) scale(${cScale})`;
         }
 
 window.addEventListener('scroll', () => {
