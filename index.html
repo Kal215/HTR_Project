@@ -525,6 +525,8 @@
 <!-- Foreground Sleek Dashed Line -->
 <path d="M 800 620 C 1700 620, 1600 800, 2500 800 C 3350 800, 3350 1200, 4200 1200 C 4700 1700, 4000 2200, 3500 2200 C 2750 2200, 2750 2500, 2000 2500 C 1400 2500, 1400 2200, 800 2200" fill="none" stroke="#94a3b8" stroke-dasharray="12 16" stroke-linecap="round" stroke-width="2.5" style="opacity: 0.6;"></path>
 <!-- Glowing Junction Nodes -->
+<circle cx="1150" cy="620" fill="#ffffff" r="7" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"></circle>
+<circle cx="1500" cy="620" fill="#ffffff" r="7" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"></circle>
 <circle cx="800" cy="620" fill="#ffffff" r="7" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"></circle>
 <circle cx="2500" cy="800" fill="#ffffff" r="7" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"></circle>
 <circle cx="4200" cy="1200" fill="#ffffff" r="7" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"></circle>
@@ -545,9 +547,7 @@
 </svg>
 </div>
 <!-- ZONE 1: IMAGE ACQUISITION (800, 620) -->
-<div class="absolute flex flex-col md:flex-row items-center gap-12" style="left: 800px; top: 620px; transform: translate(-50%, -50%); z-index: 2;">
-<!-- Premium Side Scroll Hint -->
-<div class="flex flex-col items-center gap-2 transition-opacity duration-700 opacity-100 mr-6 -mt-8" id="side-scroll-hint">
+<div class="absolute flex flex-col items-center" style="left: 600px; top: 620px; transform: translate(-50%, -50%); z-index: 2;"><div class="flex flex-col items-center gap-2 transition-opacity duration-700 opacity-100 mr-6 -mt-8" id="side-scroll-hint">
 <!-- Larger Glassmorphism Track -->
 <div class="w-8 h-16 rounded-full border-2 border-slate-300/80 flex justify-center p-1.5 bg-white/50 backdrop-blur-md shadow-lg">
 <div class="w-2 h-5 bg-sky-500 rounded-full animate-bounce shadow-[0_0_12px_rgba(14,165,233,0.9)]"></div>
@@ -563,25 +563,26 @@
                                 SCROLL
                                 <span class="w-4 h-px bg-slate-400"></span>
 </div>
-</div>
-<div class="flex flex-col gap-8">
-<div class="relative group"><div class="erd-table">
+</div></div><div class="absolute flex flex-col items-center" style="left: 1150px; top: 350px; transform: translate(-50%, -50%); z-index: 2;"><div class="expl-card">
+<div class="expl-icon-wrap bg-sky-50 border-sky-100"><i class="w-6 h-6 text-sky-600" data-lucide="scan"></i></div>
+<h3 class="text-xl font-bold text-slate-800 mb-3">1. Vision Pre-processing</h3>
+<p class="text-slate-600 text-[13px] leading-relaxed">
+<span class="lang-en">The raw image passes through grayscale mapping and <b>Otsu's Thresholding</b> to isolate ink from paper, forming a clean binary tensor.</span>
+<span class="lang-en">The raw image is mapped to grayscale and cleaned using <b>Otsu's Thresholding</b> to separate ink from paper, forming a pure binary tensor.</span>
+<span class="lang-id">Citra mentah dipetakan ke skala abu-abu dan dibersihkan dengan <b>Otsu's Thresholding</b> untuk memisahkan tinta dari kertas, membentuk tensor biner yang murni.</span>
+</p>
+</div></div><div class="absolute flex flex-col items-center" style="left: 1500px; top: 620px; transform: translate(-50%, -50%); z-index: 2;"><div class="relative group"><div class="erd-table">
 <div class="erd-header"><span>Raw_Image</span><i class="w-4 h-4 text-sky-600" data-lucide="image"></i></div>
 <div class="erd-row"><span><span class="erd-pk">PK</span>image_id</span><span class="erd-type">uuid</span></div>
 <div class="erd-row"><span>format</span><span class="erd-val text-amber-500 font-mono" id="tel-raw-format">[STANDBY]</span></div>
-</div></div>
-<div class="w-px h-8 bg-slate-200 mx-auto"></div>
-<div class="relative group"><div class="erd-table">
+</div></div></div><div class="absolute flex flex-col items-center" style="left: 1150px; top: 620px; transform: translate(-50%, -50%); z-index: 2;"><div class="relative group"><div class="erd-table">
 <div class="erd-header"><span>Grayscale_Conv</span><i class="w-4 h-4 text-sky-600" data-lucide="sun"></i></div>
 <div class="erd-row"><span>operation</span><span class="erd-val">cv2.cvtColor</span></div>
 <div class="erd-row"><span>channels</span><span class="erd-val text-amber-500 font-mono" id="tel-gray-channels">[STANDBY]</span></div>
-</div></div>
-<div class="w-px h-8 bg-slate-200 mx-auto"></div>
-<div class="relative group"><div class="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-48 bg-slate-900 rounded-xl p-2 shadow-2xl opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 z-[9999] origin-bottom border border-slate-700">
+</div></div></div><div class="absolute flex flex-col items-center" style="left: 800px; top: 620px; transform: translate(-50%, -50%); z-index: 2;"><div class="relative group"><div class="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-48 bg-slate-900 rounded-xl p-2 shadow-2xl opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 z-[9999] origin-bottom border border-slate-700">
 <div class="text-[9px] font-mono text-slate-400 mb-1 flex justify-between"><span>TENSOR_VISUAL</span><span class="text-sky-400">LIVE</span></div>
 <img alt="Tensor" class="w-full h-auto rounded border border-slate-800 bg-black/50 min-h-[40px]" id="vis-otsu" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAAgCAAAAAD/SS/5AAADMUlEQVRYCcXBb2hVZRzA8e9vbJTbsEBkF3O0HZ2FtK6yfBGJGBQjcrY9mYnuqKgdal6GxQJnkYsiYktG3FKvLo0TJiL63E3p75ts0MBqzBWWduOQTqc4bODmat3t9tzNONegN6cX5/MRQiaETAiZEDIhZELIhJAJIRNuI9ZDSyK93/aOAvOewXfZBazFixZcOtd9FiOyPi/dMYwxpz4v3TFMQEKuyMkqstKNe6BlJ75MHgXvNJI16TZfgef2QV0SY+t7UJckICHH/Z+WcUvr9szrr5FDZnyxlFt+eOQGTgKUxojFQWkCEnxyYS78fPzyknX50LBHtQCld8O5cRisXtkJV5L90doS2L0VJwFKY8TioDQBCb5oH/Q/eh1sF07WkOXaYHkY+7dAXRKiPTO4NBcnAUpjxOKgNAEJvqY22HQQIzWPkVnjGK4NlodxYgVU/ggsnM/w1zgJUBojFgelCUjwfVYNC37B+HADLOvGcG2wPIymNkg1f3KTaU4ClMaIxUFpAhJ8vYth5g2Mt5ph9VEM1wbLw7jv9Ezgj1NdXQMYTgKUxojFQWkCEnxnHoSimxgtO6H+EIZrg+WRtbBzPlmZ73d8CU4ClMaIxUFpAhJ8fVEoHsV441VYexjDtcHymFJUs+qJQoyJHa04CVAaIxYHpQlI8H1XBbOuY+x6CZ4+juHaYHn8o2h59ZrZkLlncMt+WH0UY1s71HYSkOA7uBHWHMHor4SKFIZrg+WRo/jwCqg/9PA3EG/EOKagIkVAgq/+I+h6Cqjsh9/KyHJtsDyg/PP8zO5dGA3vw7Z37xi+k4v3ZqDwWiFXIwQl+OYMCOPbP7627JXH4MBmslwbLA/IHygh3XBgoqAyWQqWR/dS6Pjg9PIXVoFWBCXk0LVAeigCjFV3k+XaYHkYbU3A2IXSQqC3Cpy9AowUAxPPHiMoIUf+3s1MG1rZwxTXBsvDKHj7RWHaV+svAhv3FTBlbG2SwITbND4ZLeGvn868eZ5prS8zWjbElJpND1h5/H5Wt0+S9fjzi8pl8te+9h6CE/4tMvv8n/yXooqrg+S4qzw1wv8ihEwImRAyIWRCyISQ/Q1OpP4heA/zWQAAAABJRU5ErkJggg==" style="image-rendering: pixelated;"/>
 </div><div class="erd-table">
-
 <div class="erd-header"><span>Otsu_Threshold</span><i class="w-4 h-4 text-sky-600" data-lucide="contrast"></i></div>
 <div class="erd-row"><span>algorithm</span><span class="erd-val">Inverse</span></div>
 <div class="p-2 bg-slate-50 border-t border-slate-100 text-[10px] font-mono text-slate-500 overflow-hidden" id="math-vision-otsu">
@@ -595,18 +596,7 @@
 </div>
 </div>
 <div class="erd-row"><span>shape</span><span class="erd-val text-amber-500 font-mono" id="tel-otsu-shape">[STANDBY]</span></div>
-</div></div>
-</div>
-<div class="expl-card">
-<div class="expl-icon-wrap bg-sky-50 border-sky-100"><i class="w-6 h-6 text-sky-600" data-lucide="scan"></i></div>
-<h3 class="text-xl font-bold text-slate-800 mb-3">1. Vision Pre-processing</h3>
-<p class="text-slate-600 text-[13px] leading-relaxed">
-<span class="lang-en">The raw image passes through grayscale mapping and <b>Otsu's Thresholding</b> to isolate ink from paper, forming a clean binary tensor.</span>
-<span class="lang-en">The raw image is mapped to grayscale and cleaned using <b>Otsu's Thresholding</b> to separate ink from paper, forming a pure binary tensor.</span>
-<span class="lang-id">Citra mentah dipetakan ke skala abu-abu dan dibersihkan dengan <b>Otsu's Thresholding</b> untuk memisahkan tinta dari kertas, membentuk tensor biner yang murni.</span>
-</p>
-</div>
-</div>
+</div></div></div>
 <!-- ZONE 2: CNN BLOCKS (2500, 800) -->
 <div class="absolute flex flex-col items-center gap-16" style="left: 2500px; top: 800px; transform: translate(-50%, -50%); z-index: 2;">
 <div class="expl-card w-[540px] text-center flex flex-col items-center">
@@ -622,7 +612,6 @@
 <div class="text-[9px] font-mono text-slate-400 mb-1 flex justify-between"><span>TENSOR_VISUAL</span><span class="text-sky-400">LIVE</span></div>
 <img alt="Tensor" class="w-full h-auto rounded border border-slate-800 bg-black/50 min-h-[40px]" id="vis-cnn" src="data:image/png;base64,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" style="image-rendering: pixelated;"/>
 </div><div class="erd-table">
-
 <div class="erd-header"><span>CNN_Block_1</span><i class="w-4 h-4 text-indigo-600" data-lucide="box"></i></div>
 <div class="erd-row"><span>layers</span><span class="erd-val">Conv2D x2</span></div>
 <div class="erd-row"><span>filters</span><span class="erd-type">64</span></div>
@@ -772,7 +761,6 @@
 <div class="flex items-center gap-1"><span class="w-2 h-2 bg-rose-300 border border-rose-500 block"></span><span class="text-slate-400">ERROR (+1)</span></div>
 </div>
 </div><div class="erd-table">
-
 <div class="erd-header"><span>Dynamic_Programming_Matrix</span><i class="w-4 h-4 text-rose-600" data-lucide="spell-check-2"></i></div>
 <div class="p-2 bg-slate-50 border-t border-slate-100 flex justify-center items-center py-4">
 <div class="grid grid-cols-4 gap-px bg-slate-200 border border-slate-300 p-px text-[8px] font-mono text-center text-slate-500">
