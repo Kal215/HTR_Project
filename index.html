@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+
+<html class="scroll-smooth" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Riskal | Handwritten Text Recognition</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Riskal | Handwritten Text Recognition</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Fira+Code:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
         tailwind.config = {
             theme: {
                 extend: {
@@ -18,7 +19,7 @@
             }
         }
     </script>
-    <style>
+<style>
         body { color: #111827; background-color: #ffffff; -webkit-font-smoothing: antialiased; }
         .grid-pattern {
             background-size: 40px 40px;
@@ -48,205 +49,178 @@
     </style>
 </head>
 <body class="min-h-screen relative flex flex-col lang-id">
-
-    <div class="absolute inset-0 grid-pattern pointer-events-none z-0 h-[60vh]"></div>
-
-    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
-        <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-            <a href="#" class="flex items-center gap-2.5 font-bold tracking-tight text-gray-900 hover:opacity-80 transition-opacity">
-                <div class="w-7 h-7 bg-gray-900 text-white flex items-center justify-center rounded-lg shadow-sm">
-                    <i data-lucide="scan-text" class="w-4 h-4"></i>
-                </div>
-                <span class="text-lg">HTR Engine</span>
-            </a>
-            
-            <div class="flex items-center gap-4 sm:gap-8 text-sm font-semibold text-gray-500 main-nav">
-                <a href="#" class="hover:text-gray-900 transition-colors">
-                    <span class="lang-en">Home</span><span class="lang-id">Beranda</span>
-                </a>
-                <a href="#how-it-works" class="hover:text-gray-900 transition-colors">
-                    <span class="lang-en">How it works</span><span class="lang-id">Cara Kerja</span>
-                </a>
-                <a href="#architecture" class="hover:text-gray-900 transition-colors">
-                    <span class="lang-en">Architecture</span><span class="lang-id">Arsitektur</span>
-                </a>
-                
-                <div class="relative bg-gray-100/80 p-1 flex rounded-lg items-center text-xs font-bold shadow-inner border border-gray-200/60 ml-2 cursor-pointer" id="langToggleBox">
-                    <div id="langSlider" class="absolute left-1 top-1 bottom-1 w-[42px] bg-white rounded shadow-sm border border-gray-200/50 transition-transform duration-300 ease-in-out transform translate-x-[42px]"></div>
-                    <button id="btnEn" class="relative z-10 w-[42px] py-1 text-center text-gray-500 transition-colors tracking-wide">EN</button>
-                    <button id="btnId" class="relative z-10 w-[42px] py-1 text-center text-gray-900 transition-colors tracking-wide">ID</button>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-
-    <div id="mainAppContent" class="flex flex-col flex-grow w-full max-w-5xl mx-auto px-6 pt-12 pb-24 z-10">
-        
-        <header class="mb-10 mt-8">
-            <h1 class="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight mb-3">
-                <span class="lang-en">Handwritten Text Recognition</span>
-                <span class="lang-en">Handwritten Text Recognition</span><span class="lang-id">Pengenalan Tulisan Tangan</span>
-            </h1>
-            <p class="text-slate-500 text-base max-w-2xl">
-                <span class="lang-en">An offline machine learning pipeline powered by a Hybrid CNN-BiLSTM architecture, CTC decoding, and Lexical DP mapping.</span>
-                <span class="lang-en">An offline <i>Machine Learning</i> pipeline powered by a Hybrid CNN-BiLSTM architecture, CTC decoder, and Lexical DP matrix.</span><span class="lang-id">Pipeline <i>Machine Learning offline</i> yang ditenagai oleh arsitektur Hybrid CNN-BiLSTM, dekoder CTC, dan matriks Lexical DP.</span>
-            </p>
-        </header>
-
-        <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden flex flex-col md:flex-row">
-            
-            <!-- Left: Upload -->
-            <div class="w-full md:w-1/2 p-6 md:p-8 border-b md:border-b-0 md:border-r border-slate-200 bg-slate-50/50 flex flex-col">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-sm font-semibold text-slate-800"><span class="lang-en">Input Image</span><span class="lang-id">Input Gambar</span></h3>
-                </div>
-                
-                <div id="dropzone" class="upload-area border-2 border-dashed border-slate-300 rounded-lg bg-white flex-grow relative cursor-pointer min-h-[220px] flex flex-col items-center justify-center hover:bg-slate-50 hover:border-slate-400 transition-colors">
-                    <input type="file" id="fileInput" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" accept="image/png, image/jpeg, image/jpg">
-                    <div id="uploadPlaceholder" class="text-center px-4">
-                        <i data-lucide="image-plus" class="w-8 h-8 mx-auto text-slate-400 mb-3"></i>
-                        <p class="text-sm font-medium text-slate-700">
-                            <span class="lang-en">Click or drag image here</span><span class="lang-id">Klik atau seret gambar ke sini</span>
-                        </p>
-                    </div>
-                    <img id="imagePreview" class="hidden absolute inset-0 w-full h-full object-contain p-4 z-10" />
-                </div>
-                
-                <button id="predictBtn" disabled class="mt-4 w-full py-3 bg-slate-900 hover:bg-slate-800 disabled:bg-slate-100 disabled:text-slate-400 disabled:border border-slate-200 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 group">
-                    <i data-lucide="cpu" class="w-4 h-4 group-disabled:hidden"></i>
-                    <span class="lang-en">Run Prediction</span>
-                    <span class="lang-en">Run Prediction</span><span class="lang-id" id="btnIdTargetHack">Jalankan Prediksi</span>
-                    <span class="lang-en">Run Prediction</span><span class="lang-id">Jalankan Prediksi</span>
-                </button>
-            </div>
-
-            <!-- Right: Output -->
-            <div class="w-full md:w-1/2 p-6 md:p-8 flex flex-col bg-white">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-sm font-semibold text-slate-800"><span class="lang-en">Prediction Result</span><span class="lang-id">Hasil Prediksi</span></h3>
-                    <div class="text-xs font-mono text-slate-500 bg-slate-100 px-2 py-1 rounded border border-slate-200">
-                        <span id="inferenceTime">0ms</span>
-                    </div>
-                </div>
-
-                <div class="flex-grow flex flex-col justify-center items-center p-6 border border-slate-100 rounded-lg bg-slate-50 min-h-[220px]">
-                    <div id="emptyResult" class="text-center">
-                        <p class="text-slate-400 text-sm"><span class="lang-en">No result yet</span><span class="lang-id">Belum ada hasil</span></p>
-                    </div>
-
-                    <div id="resultContainer" class="hidden w-full text-center flex flex-col h-full justify-center">
-                        <p class="text-[11px] font-bold text-emerald-600 uppercase tracking-widest mb-4"><span class="lang-en">Decoded String</span><span class="lang-id">Teks Didekode</span></p>
-                        <h2 id="predictionText" class="text-4xl md:text-5xl font-mono font-bold text-slate-900 break-all mb-8"></h2>
-                        
-                        <div class="mt-auto pt-4 border-t border-slate-200 w-full flex items-center justify-between text-xs">
-                            <div class="flex items-center gap-2 text-slate-500 font-mono">
-                                RAW: <span id="rawText" class="font-bold text-slate-700"></span>
-                            </div>
-                            <a href="#architecture" class="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-1">
-                                <span class="lang-en">View Telemetry</span><span class="lang-id">Lihat Telemetri</span> <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-                            </a>
+<div class="absolute inset-0 grid-pattern pointer-events-none z-0 h-[60vh]"></div>
+<nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
+<div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+<a class="flex items-center gap-2.5 font-bold tracking-tight text-gray-900 hover:opacity-80 transition-opacity" href="#">
+<div class="w-7 h-7 bg-gray-900 text-white flex items-center justify-center rounded-lg shadow-sm">
+<i class="w-4 h-4" data-lucide="scan-text"></i>
+</div>
+<span class="text-lg">HTR Engine</span>
+</a>
+<div class="flex items-center gap-4 sm:gap-8 text-sm font-semibold text-gray-500 main-nav">
+<a class="hover:text-gray-900 transition-colors" href="#">
+<span class="lang-en">Home</span><span class="lang-id">Beranda</span>
+</a>
+<a class="hover:text-gray-900 transition-colors" href="#how-it-works">
+<span class="lang-en">How it works</span><span class="lang-id">Cara Kerja</span>
+</a>
+<a class="hover:text-gray-900 transition-colors" href="#architecture">
+<span class="lang-en">Architecture</span><span class="lang-id">Arsitektur</span>
+</a>
+<div class="relative bg-gray-100/80 p-1 flex rounded-lg items-center text-xs font-bold shadow-inner border border-gray-200/60 ml-2 cursor-pointer" id="langToggleBox">
+<div class="absolute left-1 top-1 bottom-1 w-[42px] bg-white rounded shadow-sm border border-gray-200/50 transition-transform duration-300 ease-in-out transform translate-x-[42px]" id="langSlider"></div>
+<button class="relative z-10 w-[42px] py-1 text-center text-gray-500 transition-colors tracking-wide" id="btnEn">EN</button>
+<button class="relative z-10 w-[42px] py-1 text-center text-gray-900 transition-colors tracking-wide" id="btnId">ID</button>
+</div>
+</div>
+</div>
+</nav>
+<div class="flex flex-col flex-grow w-full max-w-5xl mx-auto px-6 pt-12 pb-24 z-10" id="mainAppContent">
+<header class="mb-10 mt-8">
+<h1 class="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight mb-3">
+<span class="lang-en">Handwritten Text Recognition</span>
+<span class="lang-en">Handwritten Text Recognition</span><span class="lang-id">Pengenalan Tulisan Tangan</span>
+</h1>
+<p class="text-slate-500 text-base max-w-2xl">
+<span class="lang-en">An offline machine learning pipeline powered by a Hybrid CNN-BiLSTM architecture, CTC decoding, and Lexical DP mapping.</span>
+<span class="lang-en">An offline <i>Machine Learning</i> pipeline powered by a Hybrid CNN-BiLSTM architecture, CTC decoder, and Lexical DP matrix.</span><span class="lang-id">Pipeline <i>Machine Learning offline</i> yang ditenagai oleh arsitektur Hybrid CNN-BiLSTM, dekoder CTC, dan matriks Lexical DP.</span>
+</p>
+</header>
+<div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden flex flex-col md:flex-row">
+<!-- Left: Upload -->
+<div class="w-full md:w-1/2 p-6 md:p-8 border-b md:border-b-0 md:border-r border-slate-200 bg-slate-50/50 flex flex-col">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-sm font-semibold text-slate-800"><span class="lang-en">Input Image</span><span class="lang-id">Input Gambar</span></h3>
+</div>
+<div class="upload-area border-2 border-dashed border-slate-300 rounded-lg bg-white flex-grow relative cursor-pointer min-h-[220px] flex flex-col items-center justify-center hover:bg-slate-50 hover:border-slate-400 transition-colors" id="dropzone">
+<input accept="image/png, image/jpeg, image/jpg" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" id="fileInput" type="file"/>
+<div class="text-center px-4" id="uploadPlaceholder">
+<i class="w-8 h-8 mx-auto text-slate-400 mb-3" data-lucide="image-plus"></i>
+<p class="text-sm font-medium text-slate-700">
+<span class="lang-en">Click or drag image here</span><span class="lang-id">Klik atau seret gambar ke sini</span>
+</p>
+</div>
+<img class="hidden absolute inset-0 w-full h-full object-contain p-4 z-10" id="imagePreview"/>
+</div>
+<button class="mt-4 w-full py-3 bg-slate-900 hover:bg-slate-800 disabled:bg-slate-100 disabled:text-slate-400 disabled:border border-slate-200 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 group" disabled="" id="predictBtn">
+<i class="w-4 h-4 group-disabled:hidden" data-lucide="cpu"></i>
+<span class="lang-en">Run Prediction</span>
+<span class="lang-en">Run Prediction</span><span class="lang-id" id="btnIdTargetHack">Jalankan Prediksi</span>
+<span class="lang-en">Run Prediction</span><span class="lang-id">Jalankan Prediksi</span>
+</button>
+</div>
+<!-- Right: Output -->
+<div class="w-full md:w-1/2 p-6 md:p-8 flex flex-col bg-white">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-sm font-semibold text-slate-800"><span class="lang-en">Prediction Result</span><span class="lang-id">Hasil Prediksi</span></h3>
+<div class="text-xs font-mono text-slate-500 bg-slate-100 px-2 py-1 rounded border border-slate-200">
+<span id="inferenceTime">0ms</span>
+</div>
+</div>
+<div class="flex-grow flex flex-col justify-center items-center p-6 border border-slate-100 rounded-lg bg-slate-50 min-h-[220px]">
+<div class="text-center" id="emptyResult">
+<p class="text-slate-400 text-sm"><span class="lang-en">No result yet</span><span class="lang-id">Belum ada hasil</span></p>
+</div>
+<div class="hidden w-full text-center flex flex-col h-full justify-center" id="resultContainer">
+<p class="text-[11px] font-bold text-emerald-600 uppercase tracking-widest mb-4"><span class="lang-en">Decoded String</span><span class="lang-id">Teks Didekode</span></p>
+<h2 class="text-4xl md:text-5xl font-mono font-bold text-slate-900 break-all mb-8" id="predictionText"></h2>
+<div class="mt-auto pt-4 border-t border-slate-200 w-full flex items-center justify-between text-xs">
+<div class="flex items-center gap-2 text-slate-500 font-mono">
+                                RAW: <span class="font-bold text-slate-700" id="rawText"></span>
+</div>
+<a class="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-1" href="#architecture">
+<span class="lang-en">View Telemetry</span><span class="lang-id">Lihat Telemetri</span> <i class="w-3.5 h-3.5" data-lucide="arrow-right"></i>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<section class="w-full hidden bg-[#f8fafc] font-sans min-h-screen text-slate-800 relative select-none" id="how-it-works">
+<!-- Background Graph Paper -->
+<div class="absolute inset-0 pointer-events-none" style="background-image: linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px); background-size: 40px 40px;"></div>
+<div class="max-w-6xl mx-auto px-6 py-24 md:py-32 relative z-10">
+<!-- Back Button -->
+<a class="back-home-btn group fixed top-20 left-6 md:top-24 md:left-12 inline-flex items-center gap-3 text-sm font-semibold text-slate-500 hover:text-slate-900 transition-colors z-[9999] w-fit" href="#">
+<div class="w-10 h-10 rounded-full border border-slate-200 bg-white flex items-center justify-center group-hover:border-slate-300 group-hover:shadow-md transition-all shadow-sm group-hover:-translate-x-1">
+<i class="w-4 h-4 text-slate-600 group-hover:text-slate-900 transition-colors" data-lucide="arrow-left"></i>
+</div>
+<div class="flex flex-col">
+<span class="lang-en">Back to Workspace</span>
+<span class="lang-en">Back to Home</span><span class="lang-id">Kembali ke Beranda</span>
+</div>
+</a>
+<div class="mb-20 max-w-3xl border-b border-slate-200 pb-10">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-200/50 border border-slate-300 mb-6 shadow-sm">
+<div class="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></div>
+<span class="text-xs font-bold tracking-widest text-slate-600 uppercase">Documentation</span>
+</div>
+<h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">
+<span class="lang-en">Pipeline Architecture</span>
+<span class="lang-en">HTR Pipeline Architecture</span><span class="lang-id">Arsitektur Pipeline HTR</span>
+</h2>
+<p class="text-lg text-slate-600 leading-relaxed">
+<span class="lang-en">A deep dive into the handwritten text recognition pipeline. Discover how we transform raw pixel matrices into digital strings using advanced Neural Networks and Dynamic Programming.</span>
+<span class="lang-en">Technical documentation of the <i>Handwritten Text Recognition</i> architecture. Details the transformation of raw pixel matrices into digital text via Artificial Neural Networks and Dynamic Programming.</span><span class="lang-id">Dokumentasi teknis dari arsitektur <i>Handwritten Text Recognition</i>. Menguraikan transformasi matriks piksel mentah menjadi teks digital melalui algoritma Jaringan Saraf Tiruan dan Pemrograman Dinamis.</span>
+</p>
+</div>
+<div class="flex flex-col lg:flex-row gap-16">
+<!-- Sticky Sidebar -->
+<aside class="w-full lg:w-1/4 hidden lg:block">
+<div class="sticky top-32">
+<h3 class="text-xs font-bold tracking-[0.2em] text-slate-400 uppercase mb-6">
+<span class="lang-en">Execution Stages</span>
+<span class="lang-en">Execution Stages</span><span class="lang-id">Tahapan Eksekusi</span>
+</h3>
+<nav class="space-y-6 border-l-2 border-slate-200 pl-6 relative" id="sidebar-nav">
+<div class="absolute -left-[2px] top-0 h-6 w-1 bg-sky-500 rounded-r-md transition-all duration-300" id="scroll-indicator" style="transform: translateY(0px);"></div>
+<a class="stage-link block text-sm font-semibold text-slate-900 hover:text-sky-600 transition-colors" href="#stage-1">
+<span class="lang-en">1. Otsu Variance</span>
+<span class="lang-en">1. Otsu Binarization</span><span class="lang-id">1. Binarisasi Otsu</span>
+</a>
+<a class="stage-link block text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors" href="#stage-2">
+<span class="lang-en">2. Spatial Extraction</span>
+<span class="lang-en">2. Spatial Extraction</span><span class="lang-id">2. Ekstraksi Spasial</span>
+</a>
+<a class="stage-link block text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors" href="#stage-3">
+<span class="lang-en">3. Temporal Memory</span>
+<span class="lang-en">3. Temporal Memory</span><span class="lang-id">3. Memori Temporal</span>
+</a>
+<a class="stage-link block text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors" href="#stage-4">
+<span class="lang-en">4. CTC Alignment</span>
+<span class="lang-en">4. CTC Alignment</span><span class="lang-id">4. Perataan CTC</span>
+</a>
+<a class="stage-link block text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors" href="#stage-5">
+<span class="lang-en">5. Lexical Alignment</span>
+<span class="lang-en">5. Lexical Alignment</span><span class="lang-id">5. Penyelarasan Leksikal</span>
+</a>
+</nav>
+</div>
+</aside>
+<!-- Content Area -->
+<div class="w-full lg:w-3/4 flex flex-col gap-20">
+<!-- STAGE 1 -->
+<article class="relative scroll-mt-32" id="stage-1">
+<div class="flex items-center gap-4 mb-6">
+<div class="w-12 h-12 rounded-2xl bg-sky-100 border border-sky-200 flex items-center justify-center shadow-sm">
+<span class="text-xl font-black text-sky-600">01</span>
+</div>
+<h3 class="text-2xl md:text-3xl font-bold text-slate-900">
+<span class="lang-en">Vision &amp; Otsu Binarization</span>
+<span class="lang-en">Vision &amp; Otsu Binarization</span><span class="lang-id">Binarisasi Visi &amp; Otsu</span>
+</h3>
+</div>
+<div class="space-y-6 text-slate-600 text-base md:text-lg leading-loose">
+<p class="lang-en">Raw handwriting images frequently exhibit uneven illumination and visual noise from paper textures. In this initial stage, the system applies the Inverse Otsu's Thresholding algorithm. Rather than relying on a static contrast threshold, it mathematically calculates the optimal boundary to separate ink strokes from the background. This process yields a pristine binary matrix as the foundation for neural processing.</p>
+<p class="lang-id">Citra tulisan tangan mentah umumnya memiliki intensitas cahaya yang tidak merata serta derau visual dari tekstur kertas. Pada tahap awal ini, sistem menerapkan algoritma <i>Inverse Otsu's Thresholding</i>. Alih-alih menggunakan nilai ambang statis, algoritma ini menghitung titik kontras paling optimal secara matematis untuk memisahkan guratan tinta dari latar belakang. Proses ini menghasilkan matriks biner yang sepenuhnya bersih sebagai landasan pemrosesan jaringan saraf.</p>
+</div>
+<div class="mt-8 rounded-xl overflow-hidden border border-slate-700 shadow-xl">
+<div class="bg-[#1e1e1e] text-slate-300 text-[12px] px-4 py-2.5 font-mono flex items-center gap-2 border-b border-slate-700/80">
+<i class="w-4 h-4 text-sky-400" data-lucide="file-code-2"></i> image_preprocessing.py
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-<section id="how-it-works" class="w-full hidden bg-[#f8fafc] font-sans min-h-screen text-slate-800 relative select-none">
-    
-    <!-- Background Graph Paper -->
-    <div class="absolute inset-0 pointer-events-none" style="background-image: linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px); background-size: 40px 40px;"></div>
-
-    <div class="max-w-6xl mx-auto px-6 py-24 md:py-32 relative z-10">
-        
-        <!-- Back Button -->
-        <a href="#" class="back-home-btn group fixed top-20 left-6 md:top-24 md:left-12 inline-flex items-center gap-3 text-sm font-semibold text-slate-500 hover:text-slate-900 transition-colors z-[9999] w-fit">
-            <div class="w-10 h-10 rounded-full border border-slate-200 bg-white flex items-center justify-center group-hover:border-slate-300 group-hover:shadow-md transition-all shadow-sm group-hover:-translate-x-1">
-                <i data-lucide="arrow-left" class="w-4 h-4 text-slate-600 group-hover:text-slate-900 transition-colors"></i>
-            </div>
-            <div class="flex flex-col">
-                <span class="lang-en">Back to Workspace</span>
-                <span class="lang-en">Back to Home</span><span class="lang-id">Kembali ke Beranda</span>
-            </div>
-        </a>
-
-        <div class="mb-20 max-w-3xl border-b border-slate-200 pb-10">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-200/50 border border-slate-300 mb-6 shadow-sm">
-                <div class="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></div>
-                <span class="text-xs font-bold tracking-widest text-slate-600 uppercase">Documentation</span>
-            </div>
-            <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">
-                <span class="lang-en">Pipeline Architecture</span>
-                <span class="lang-en">HTR Pipeline Architecture</span><span class="lang-id">Arsitektur Pipeline HTR</span>
-            </h2>
-            <p class="text-lg text-slate-600 leading-relaxed">
-                <span class="lang-en">A deep dive into the handwritten text recognition pipeline. Discover how we transform raw pixel matrices into digital strings using advanced Neural Networks and Dynamic Programming.</span>
-                <span class="lang-en">Technical documentation of the <i>Handwritten Text Recognition</i> architecture. Details the transformation of raw pixel matrices into digital text via Artificial Neural Networks and Dynamic Programming.</span><span class="lang-id">Dokumentasi teknis dari arsitektur <i>Handwritten Text Recognition</i>. Menguraikan transformasi matriks piksel mentah menjadi teks digital melalui algoritma Jaringan Saraf Tiruan dan Pemrograman Dinamis.</span>
-            </p>
-        </div>
-
-        <div class="flex flex-col lg:flex-row gap-16">
-            
-            <!-- Sticky Sidebar -->
-            <aside class="w-full lg:w-1/4 hidden lg:block">
-                <div class="sticky top-32">
-                    <h3 class="text-xs font-bold tracking-[0.2em] text-slate-400 uppercase mb-6">
-                        <span class="lang-en">Execution Stages</span>
-                        <span class="lang-en">Execution Stages</span><span class="lang-id">Tahapan Eksekusi</span>
-                    </h3>
-                    <nav id="sidebar-nav" class="space-y-6 border-l-2 border-slate-200 pl-6 relative">
-                        <div id="scroll-indicator" class="absolute -left-[2px] top-0 h-6 w-1 bg-sky-500 rounded-r-md transition-all duration-300" style="transform: translateY(0px);"></div>
-                        
-                        <a href="#stage-1" class="stage-link block text-sm font-semibold text-slate-900 hover:text-sky-600 transition-colors">
-                            <span class="lang-en">1. Otsu Variance</span>
-                            <span class="lang-en">1. Otsu Binarization</span><span class="lang-id">1. Binarisasi Otsu</span>
-                        </a>
-                        <a href="#stage-2" class="stage-link block text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">
-                            <span class="lang-en">2. Spatial Extraction</span>
-                            <span class="lang-en">2. Spatial Extraction</span><span class="lang-id">2. Ekstraksi Spasial</span>
-                        </a>
-                        <a href="#stage-3" class="stage-link block text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">
-                            <span class="lang-en">3. Temporal Memory</span>
-                            <span class="lang-en">3. Temporal Memory</span><span class="lang-id">3. Memori Temporal</span>
-                        </a>
-                        <a href="#stage-4" class="stage-link block text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">
-                            <span class="lang-en">4. CTC Alignment</span>
-                            <span class="lang-en">4. CTC Alignment</span><span class="lang-id">4. Perataan CTC</span>
-                        </a>
-                        <a href="#stage-5" class="stage-link block text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">
-                            <span class="lang-en">5. Lexical Alignment</span>
-                            <span class="lang-en">5. Lexical Alignment</span><span class="lang-id">5. Penyelarasan Leksikal</span>
-                        </a>
-                    </nav>
-                </div>
-            </aside>
-
-            <!-- Content Area -->
-            <div class="w-full lg:w-3/4 flex flex-col gap-20">
-
-                <!-- STAGE 1 -->
-                <article id="stage-1" class="relative scroll-mt-32">
-                    <div class="flex items-center gap-4 mb-6">
-                        <div class="w-12 h-12 rounded-2xl bg-sky-100 border border-sky-200 flex items-center justify-center shadow-sm">
-                            <span class="text-xl font-black text-sky-600">01</span>
-                        </div>
-                        <h3 class="text-2xl md:text-3xl font-bold text-slate-900">
-                            <span class="lang-en">Vision & Otsu Binarization</span>
-                            <span class="lang-en">Vision & Otsu Binarization</span><span class="lang-id">Binarisasi Visi & Otsu</span>
-                        </h3>
-                    </div>
-                    <div class="space-y-6 text-slate-600 text-base md:text-lg leading-loose">
-                        <p class="lang-en">Raw handwriting images frequently exhibit uneven illumination and visual noise from paper textures. In this initial stage, the system applies the Inverse Otsu's Thresholding algorithm. Rather than relying on a static contrast threshold, it mathematically calculates the optimal boundary to separate ink strokes from the background. This process yields a pristine binary matrix as the foundation for neural processing.</p>
-                        <p class="lang-id">Citra tulisan tangan mentah umumnya memiliki intensitas cahaya yang tidak merata serta derau visual dari tekstur kertas. Pada tahap awal ini, sistem menerapkan algoritma <i>Inverse Otsu's Thresholding</i>. Alih-alih menggunakan nilai ambang statis, algoritma ini menghitung titik kontras paling optimal secara matematis untuk memisahkan guratan tinta dari latar belakang. Proses ini menghasilkan matriks biner yang sepenuhnya bersih sebagai landasan pemrosesan jaringan saraf.</p>
-                    </div>
-                    
-                    <div class="mt-8 rounded-xl overflow-hidden border border-slate-700 shadow-xl">
-                        <div class="bg-[#1e1e1e] text-slate-300 text-[12px] px-4 py-2.5 font-mono flex items-center gap-2 border-b border-slate-700/80">
-                            <i data-lucide="file-code-2" class="w-4 h-4 text-sky-400"></i> image_preprocessing.py
-                        </div>
-                        <pre class="bg-[#1e1e1e] text-slate-100 p-5 overflow-x-auto font-mono text-[13.5px] leading-relaxed"><code><span class="text-pink-400">def</span> <span class="text-blue-300">apply_otsu_variance</span>(image_matrix):
+<pre class="bg-[#1e1e1e] text-slate-100 p-5 overflow-x-auto font-mono text-[13.5px] leading-relaxed"><code><span class="text-pink-400">def</span> <span class="text-blue-300">apply_otsu_variance</span>(image_matrix):
     <span class="text-green-500 opacity-80"># 1. Bersihkan noise kecil dengan Gaussian Blur</span>
     blurred = cv2.GaussianBlur(image_matrix, (<span class="text-orange-300">5</span>, <span class="text-orange-300">5</span>), <span class="text-orange-300">0</span>)
     
@@ -257,32 +231,29 @@
     )
     
     <span class="text-pink-400">return</span> (binary_tensor.astype(<span class="text-amber-200">'float32'</span>) / <span class="text-orange-300">255.0</span>)</code></pre>
-                    </div>
-                </article>
-
-                <hr class="border-slate-200">
-
-                <!-- STAGE 2 -->
-                <article id="stage-2" class="relative scroll-mt-32">
-                    <div class="flex items-center gap-4 mb-6">
-                        <div class="w-12 h-12 rounded-2xl bg-indigo-100 border border-indigo-200 flex items-center justify-center shadow-sm">
-                            <span class="text-xl font-black text-indigo-600">02</span>
+</div>
+</article>
+<hr class="border-slate-200"/>
+<!-- STAGE 2 -->
+<article class="relative scroll-mt-32" id="stage-2">
+<div class="flex items-center gap-4 mb-6">
+<div class="w-12 h-12 rounded-2xl bg-indigo-100 border border-indigo-200 flex items-center justify-center shadow-sm">
+<span class="text-xl font-black text-indigo-600">02</span>
+</div>
+<h3 class="text-2xl md:text-3xl font-bold text-slate-900">
+<span class="lang-en">Spatial Feature Extraction</span>
+<span class="lang-en">Spatial Feature Extraction</span><span class="lang-id">Ekstraksi Fitur Spasial</span>
+</h3>
+</div>
+<div class="space-y-6 text-slate-600 text-base md:text-lg leading-loose">
+<p class="lang-en">Once the image is clean, the computer needs to understand the curves and strokes of the letters. We run it through a 3-layer Convolutional Neural Network (CNN). The early layers pick up basic edges, while deeper layers recognize complex shapes. By the end, the visual patterns are translated into 256 distinct numerical features.</p>
+<p class="lang-id">Matriks gambar yang telah dibersihkan kemudian diproses untuk mengenali pola morfologi karakter. Tahap ini memanfaatkan arsitektur <i>Convolutional Neural Network</i> (CNN) tiga lapis. Lapisan konvolusi awal bertugas mendeteksi pola tepi atau garis lengkung dasar, sedangkan lapisan yang lebih dalam menyusun abstraksi bentuk yang lebih kompleks. Pada akhir tahap ini, seluruh representasi visual gambar telah berhasil diekstraksi menjadi 256 fitur numerik spasial.</p>
+</div>
+<div class="mt-8 rounded-xl overflow-hidden border border-slate-700 shadow-xl">
+<div class="bg-[#1e1e1e] text-slate-300 text-[12px] px-4 py-2.5 font-mono flex items-center gap-2 border-b border-slate-700/80">
+<i class="w-4 h-4 text-indigo-400" data-lucide="file-code-2"></i> spatial_cnn.py
                         </div>
-                        <h3 class="text-2xl md:text-3xl font-bold text-slate-900">
-                            <span class="lang-en">Spatial Feature Extraction</span>
-                            <span class="lang-en">Spatial Feature Extraction</span><span class="lang-id">Ekstraksi Fitur Spasial</span>
-                        </h3>
-                    </div>
-                    <div class="space-y-6 text-slate-600 text-base md:text-lg leading-loose">
-                        <p class="lang-en">Once the image is clean, the computer needs to understand the curves and strokes of the letters. We run it through a 3-layer Convolutional Neural Network (CNN). The early layers pick up basic edges, while deeper layers recognize complex shapes. By the end, the visual patterns are translated into 256 distinct numerical features.</p>
-                        <p class="lang-id">Matriks gambar yang telah dibersihkan kemudian diproses untuk mengenali pola morfologi karakter. Tahap ini memanfaatkan arsitektur <i>Convolutional Neural Network</i> (CNN) tiga lapis. Lapisan konvolusi awal bertugas mendeteksi pola tepi atau garis lengkung dasar, sedangkan lapisan yang lebih dalam menyusun abstraksi bentuk yang lebih kompleks. Pada akhir tahap ini, seluruh representasi visual gambar telah berhasil diekstraksi menjadi 256 fitur numerik spasial.</p>
-                    </div>
-                    
-                    <div class="mt-8 rounded-xl overflow-hidden border border-slate-700 shadow-xl">
-                        <div class="bg-[#1e1e1e] text-slate-300 text-[12px] px-4 py-2.5 font-mono flex items-center gap-2 border-b border-slate-700/80">
-                            <i data-lucide="file-code-2" class="w-4 h-4 text-indigo-400"></i> spatial_cnn.py
-                        </div>
-                        <pre class="bg-[#1e1e1e] text-slate-100 p-5 overflow-x-auto font-mono text-[13.5px] leading-relaxed"><code><span class="text-pink-400">def</span> <span class="text-blue-300">build_cnn_extractor</span>(input_tensor):
+<pre class="bg-[#1e1e1e] text-slate-100 p-5 overflow-x-auto font-mono text-[13.5px] leading-relaxed"><code><span class="text-pink-400">def</span> <span class="text-blue-300">build_cnn_extractor</span>(input_tensor):
     <span class="text-green-500 opacity-80"># Deteksi lengkungan dasar (64 Filters)</span>
     x = layers.Conv2D(<span class="text-orange-300">64</span>, (<span class="text-orange-300">3</span>, <span class="text-orange-300">3</span>), activation=<span class="text-amber-200">'relu'</span>)(input_tensor)
     x = layers.MaxPooling2D(pool_size=(<span class="text-orange-300">2</span>, <span class="text-orange-300">2</span>))(x)
@@ -294,32 +265,29 @@
     
     <span class="text-green-500 opacity-80"># Ubah wujud matriks ke deretan waktu (Sequence)</span>
     <span class="text-pink-400">return</span> layers.Reshape(target_shape=(<span class="text-orange-300">32</span>, <span class="text-orange-300">256</span>))(x)</code></pre>
-                    </div>
-                </article>
-
-                <hr class="border-slate-200">
-
-                <!-- STAGE 3 -->
-                <article id="stage-3" class="relative scroll-mt-32">
-                    <div class="flex items-center gap-4 mb-6">
-                        <div class="w-12 h-12 rounded-2xl bg-teal-100 border border-teal-200 flex items-center justify-center shadow-sm">
-                            <span class="text-xl font-black text-teal-600">03</span>
+</div>
+</article>
+<hr class="border-slate-200"/>
+<!-- STAGE 3 -->
+<article class="relative scroll-mt-32" id="stage-3">
+<div class="flex items-center gap-4 mb-6">
+<div class="w-12 h-12 rounded-2xl bg-teal-100 border border-teal-200 flex items-center justify-center shadow-sm">
+<span class="text-xl font-black text-teal-600">03</span>
+</div>
+<h3 class="text-2xl md:text-3xl font-bold text-slate-900">
+<span class="lang-en">Bidirectional Temporal Memory</span>
+<span class="lang-en">Bidirectional Temporal Memory</span><span class="lang-id">Memori Temporal Dua Arah</span>
+</h3>
+</div>
+<div class="space-y-6 text-slate-600 text-base md:text-lg leading-loose">
+<p class="lang-en">Reading cursive handwriting is tricky because the letters are connected. This is where Bidirectional LSTM comes in. It scans the feature sequence from left to right, and simultaneously from right to left. By looking at the preceding and succeeding characters at the same time, the network can accurately deduce ambiguous letters based on context.</p>
+<p class="lang-id">Pengenalan tulisan tegak bersambung memiliki tingkat kompleksitas tinggi akibat karakter yang saling bertumpuk dan berkesinambungan. Untuk mengatasi hal ini, sistem mengandalkan arsitektur <i>Bidirectional Long Short-Term Memory</i> (BiLSTM). Jaringan ini menganalisis deretan fitur spasial secara dua arah: berurutan dari kiri ke kanan dan sebaliknya. Melalui pemahaman konteks karakter sebelum dan sesudahnya secara simultan, model mampu mengklasifikasikan huruf-huruf yang ambigu dengan probabilitas yang jauh lebih akurat.</p>
+</div>
+<div class="mt-8 rounded-xl overflow-hidden border border-slate-700 shadow-xl">
+<div class="bg-[#1e1e1e] text-slate-300 text-[12px] px-4 py-2.5 font-mono flex items-center gap-2 border-b border-slate-700/80">
+<i class="w-4 h-4 text-teal-400" data-lucide="file-code-2"></i> temporal_lstm.py
                         </div>
-                        <h3 class="text-2xl md:text-3xl font-bold text-slate-900">
-                            <span class="lang-en">Bidirectional Temporal Memory</span>
-                            <span class="lang-en">Bidirectional Temporal Memory</span><span class="lang-id">Memori Temporal Dua Arah</span>
-                        </h3>
-                    </div>
-                    <div class="space-y-6 text-slate-600 text-base md:text-lg leading-loose">
-                        <p class="lang-en">Reading cursive handwriting is tricky because the letters are connected. This is where Bidirectional LSTM comes in. It scans the feature sequence from left to right, and simultaneously from right to left. By looking at the preceding and succeeding characters at the same time, the network can accurately deduce ambiguous letters based on context.</p>
-                        <p class="lang-id">Pengenalan tulisan tegak bersambung memiliki tingkat kompleksitas tinggi akibat karakter yang saling bertumpuk dan berkesinambungan. Untuk mengatasi hal ini, sistem mengandalkan arsitektur <i>Bidirectional Long Short-Term Memory</i> (BiLSTM). Jaringan ini menganalisis deretan fitur spasial secara dua arah: berurutan dari kiri ke kanan dan sebaliknya. Melalui pemahaman konteks karakter sebelum dan sesudahnya secara simultan, model mampu mengklasifikasikan huruf-huruf yang ambigu dengan probabilitas yang jauh lebih akurat.</p>
-                    </div>
-                    
-                    <div class="mt-8 rounded-xl overflow-hidden border border-slate-700 shadow-xl">
-                        <div class="bg-[#1e1e1e] text-slate-300 text-[12px] px-4 py-2.5 font-mono flex items-center gap-2 border-b border-slate-700/80">
-                            <i data-lucide="file-code-2" class="w-4 h-4 text-teal-400"></i> temporal_lstm.py
-                        </div>
-                        <pre class="bg-[#1e1e1e] text-slate-100 p-5 overflow-x-auto font-mono text-[13.5px] leading-relaxed"><code><span class="text-pink-400">def</span> <span class="text-blue-300">build_temporal_memory</span>(sequence_tensor):
+<pre class="bg-[#1e1e1e] text-slate-100 p-5 overflow-x-auto font-mono text-[13.5px] leading-relaxed"><code><span class="text-pink-400">def</span> <span class="text-blue-300">build_temporal_memory</span>(sequence_tensor):
     <span class="text-green-500 opacity-80"># Baca data maju (kiri-kanan) dan mundur (kanan-kiri)</span>
     forward_lstm = layers.LSTM(<span class="text-orange-300">256</span>, return_sequences=<span class="text-purple-400">True</span>)
     backward_lstm = layers.LSTM(<span class="text-orange-300">256</span>, return_sequences=<span class="text-purple-400">True</span>, go_backwards=<span class="text-purple-400">True</span>)
@@ -332,32 +300,29 @@
     
     <span class="text-green-500 opacity-80"># Hitung kemungkinan tebakan untuk setiap 80 karakter unik</span>
     <span class="text-pink-400">return</span> layers.Dense(<span class="text-orange-300">80</span>, activation=<span class="text-amber-200">'softmax'</span>)(hidden_states)</code></pre>
-                    </div>
-                </article>
-
-                <hr class="border-slate-200">
-
-                <!-- STAGE 4 -->
-                <article id="stage-4" class="relative scroll-mt-32">
-                    <div class="flex items-center gap-4 mb-6">
-                        <div class="w-12 h-12 rounded-2xl bg-emerald-100 border border-emerald-200 flex items-center justify-center shadow-sm">
-                            <span class="text-xl font-black text-emerald-600">04</span>
+</div>
+</article>
+<hr class="border-slate-200"/>
+<!-- STAGE 4 -->
+<article class="relative scroll-mt-32" id="stage-4">
+<div class="flex items-center gap-4 mb-6">
+<div class="w-12 h-12 rounded-2xl bg-emerald-100 border border-emerald-200 flex items-center justify-center shadow-sm">
+<span class="text-xl font-black text-emerald-600">04</span>
+</div>
+<h3 class="text-2xl md:text-3xl font-bold text-slate-900">
+<span class="lang-en">CTC Alignment</span>
+<span class="lang-en">CTC Alignment</span><span class="lang-id">Perataan CTC</span>
+</h3>
+</div>
+<div class="space-y-6 text-slate-600 text-base md:text-lg leading-loose">
+<p class="lang-en">Because our model scans the image in tiny slices, a wide letter 'a' might be predicted multiple times as 'a-a-a'. The Connectionist Temporal Classification (CTC) algorithm cleans this up. It collapses consecutive duplicate characters and removes blank gaps, merging the raw predictions into a cohesive, readable word.</p>
+<p class="lang-id">Pemindaian gambar dalam bentuk irisan tipis sering kali menyebabkan satu karakter dominan diprediksi secara berulang (misalnya 'a' diprediksi sebagai 'a-a-a'). Modul <i>Connectionist Temporal Classification</i> (CTC) diimplementasikan untuk melakukan normalisasi terhadap hasil keluaran tersebut. Algoritma ini menyusutkan probabilitas karakter berurutan menjadi satu entitas tunggal dan mengeliminasi token kosong, sehingga probabilitas mentah berhasil dirangkai menjadi susunan kata yang utuh.</p>
+</div>
+<div class="mt-8 rounded-xl overflow-hidden border border-slate-700 shadow-xl">
+<div class="bg-[#1e1e1e] text-slate-300 text-[12px] px-4 py-2.5 font-mono flex items-center gap-2 border-b border-slate-700/80">
+<i class="w-4 h-4 text-emerald-400" data-lucide="file-code-2"></i> ctc_decoder.py
                         </div>
-                        <h3 class="text-2xl md:text-3xl font-bold text-slate-900">
-                            <span class="lang-en">CTC Alignment</span>
-                            <span class="lang-en">CTC Alignment</span><span class="lang-id">Perataan CTC</span>
-                        </h3>
-                    </div>
-                    <div class="space-y-6 text-slate-600 text-base md:text-lg leading-loose">
-                        <p class="lang-en">Because our model scans the image in tiny slices, a wide letter 'a' might be predicted multiple times as 'a-a-a'. The Connectionist Temporal Classification (CTC) algorithm cleans this up. It collapses consecutive duplicate characters and removes blank gaps, merging the raw predictions into a cohesive, readable word.</p>
-                        <p class="lang-id">Pemindaian gambar dalam bentuk irisan tipis sering kali menyebabkan satu karakter dominan diprediksi secara berulang (misalnya 'a' diprediksi sebagai 'a-a-a'). Modul <i>Connectionist Temporal Classification</i> (CTC) diimplementasikan untuk melakukan normalisasi terhadap hasil keluaran tersebut. Algoritma ini menyusutkan probabilitas karakter berurutan menjadi satu entitas tunggal dan mengeliminasi token kosong, sehingga probabilitas mentah berhasil dirangkai menjadi susunan kata yang utuh.</p>
-                    </div>
-                    
-                    <div class="mt-8 rounded-xl overflow-hidden border border-slate-700 shadow-xl">
-                        <div class="bg-[#1e1e1e] text-slate-300 text-[12px] px-4 py-2.5 font-mono flex items-center gap-2 border-b border-slate-700/80">
-                            <i data-lucide="file-code-2" class="w-4 h-4 text-emerald-400"></i> ctc_decoder.py
-                        </div>
-                        <pre class="bg-[#1e1e1e] text-slate-100 p-5 overflow-x-auto font-mono text-[13.5px] leading-relaxed"><code><span class="text-pink-400">def</span> <span class="text-blue-300">decode_ctc_matrix</span>(probability_matrix):
+<pre class="bg-[#1e1e1e] text-slate-100 p-5 overflow-x-auto font-mono text-[13.5px] leading-relaxed"><code><span class="text-pink-400">def</span> <span class="text-blue-300">decode_ctc_matrix</span>(probability_matrix):
     <span class="text-green-500 opacity-80"># Tetapkan batas maksimal irisan pembacaan</span>
     sequence_length = np.ones(probability_matrix.shape[<span class="text-orange-300">0</span>]) * <span class="text-orange-300">32</span>
     
@@ -370,32 +335,29 @@
     
     <span class="text-green-500 opacity-80"># Hapus duplikat berturut-turut dan buang token kosong (ID: 79)</span>
     <span class="text-pink-400">return</span> map_indices_to_charset(decoded_indices[<span class="text-orange-300">0</span>])</code></pre>
-                    </div>
-                </article>
-
-                <hr class="border-slate-200">
-
-                <!-- STAGE 5 -->
-                <article id="stage-5" class="relative scroll-mt-32">
-                    <div class="flex items-center gap-4 mb-6">
-                        <div class="w-12 h-12 rounded-2xl bg-rose-100 border border-rose-200 flex items-center justify-center shadow-sm">
-                            <span class="text-xl font-black text-rose-600">05</span>
+</div>
+</article>
+<hr class="border-slate-200"/>
+<!-- STAGE 5 -->
+<article class="relative scroll-mt-32" id="stage-5">
+<div class="flex items-center gap-4 mb-6">
+<div class="w-12 h-12 rounded-2xl bg-rose-100 border border-rose-200 flex items-center justify-center shadow-sm">
+<span class="text-xl font-black text-rose-600">05</span>
+</div>
+<h3 class="text-2xl md:text-3xl font-bold text-slate-900">
+<span class="lang-en">Lexical Alignment</span>
+<span class="lang-en">Lexical Alignment</span><span class="lang-id">Penyelarasan Leksikal</span>
+</h3>
+</div>
+<div class="space-y-6 text-slate-600 text-base md:text-lg leading-loose">
+<p class="lang-en">Sometimes, the network might still misjudge a character (e.g., predicting 'DlassiC' instead of 'classic'). Rather than relying on simple spellcheckers, we engineered a custom Dynamic Programming matrix (Levenshtein Distance). It mathematically calculates the similarity between the raw prediction and our lexical corpus, guaranteeing that the final output is a perfectly valid word.</p>
+<p class="lang-id">Walaupun jaringan saraf telah mengklasifikasikan karakter, probabilitas kesalahan minor akibat kemiripan visual masih berpotensi terjadi (seperti 'classic' diprediksi 'DlassiC'). Guna memitigasi hal ini, sistem memanfaatkan optimasi matematis melalui matriks Pemrograman Dinamis (<i>Levenshtein Distance</i>). Algoritma ini mengevaluasi jarak kedekatan string hasil prediksi dengan korpus linguistik yang valid secara komputasional. Hal ini menjamin bahwa seluruh teks keluaran memiliki integritas leksikal berstandar tinggi.</p>
+</div>
+<div class="mt-8 rounded-xl overflow-hidden border border-slate-700 shadow-xl">
+<div class="bg-[#1e1e1e] text-slate-300 text-[12px] px-4 py-2.5 font-mono flex items-center gap-2 border-b border-slate-700/80">
+<i class="w-4 h-4 text-rose-400" data-lucide="file-code-2"></i> lexical_alignment.py
                         </div>
-                        <h3 class="text-2xl md:text-3xl font-bold text-slate-900">
-                            <span class="lang-en">Lexical Alignment</span>
-                            <span class="lang-en">Lexical Alignment</span><span class="lang-id">Penyelarasan Leksikal</span>
-                        </h3>
-                    </div>
-                    <div class="space-y-6 text-slate-600 text-base md:text-lg leading-loose">
-                        <p class="lang-en">Sometimes, the network might still misjudge a character (e.g., predicting 'DlassiC' instead of 'classic'). Rather than relying on simple spellcheckers, we engineered a custom Dynamic Programming matrix (Levenshtein Distance). It mathematically calculates the similarity between the raw prediction and our lexical corpus, guaranteeing that the final output is a perfectly valid word.</p>
-                        <p class="lang-id">Walaupun jaringan saraf telah mengklasifikasikan karakter, probabilitas kesalahan minor akibat kemiripan visual masih berpotensi terjadi (seperti 'classic' diprediksi 'DlassiC'). Guna memitigasi hal ini, sistem memanfaatkan optimasi matematis melalui matriks Pemrograman Dinamis (<i>Levenshtein Distance</i>). Algoritma ini mengevaluasi jarak kedekatan string hasil prediksi dengan korpus linguistik yang valid secara komputasional. Hal ini menjamin bahwa seluruh teks keluaran memiliki integritas leksikal berstandar tinggi.</p>
-                    </div>
-                    
-                    <div class="mt-8 rounded-xl overflow-hidden border border-slate-700 shadow-xl">
-                        <div class="bg-[#1e1e1e] text-slate-300 text-[12px] px-4 py-2.5 font-mono flex items-center gap-2 border-b border-slate-700/80">
-                            <i data-lucide="file-code-2" class="w-4 h-4 text-rose-400"></i> lexical_alignment.py
-                        </div>
-                        <pre class="bg-[#1e1e1e] text-slate-100 p-5 overflow-x-auto font-mono text-[13.5px] leading-relaxed"><code><span class="text-pink-400">def</span> <span class="text-blue-300">lexical_dp_alignment</span>(raw_string, lexical_corpus):
+<pre class="bg-[#1e1e1e] text-slate-100 p-5 overflow-x-auto font-mono text-[13.5px] leading-relaxed"><code><span class="text-pink-400">def</span> <span class="text-blue-300">lexical_dp_alignment</span>(raw_string, lexical_corpus):
     optimal_string = raw_string
     min_distance = <span class="text-cyan-300">float</span>(<span class="text-amber-200">'inf'</span>)
     
@@ -404,24 +366,20 @@
         <span class="text-green-500 opacity-80"># Hitung seberapa jauh jarak/selisih matriks hurufnya (D[i,j])</span>
         matrix_dist = compute_levenshtein_distance(raw_string, valid_token)
         
-        <span class="text-pink-400">if</span> matrix_dist < min_distance:
+        <span class="text-pink-400">if</span> matrix_dist &lt; min_distance:
             min_distance = matrix_dist
             optimal_string = valid_token
             
     <span class="text-pink-400">return</span> optimal_string</code></pre>
-                    </div>
-                </article>
-
-            </div>
-        </div>
-    </div>
+</div>
+</article>
+</div>
+</div>
+</div>
 </section>
-
-    <!-- Architecture Section (Light Mode Canvas Panning) -->
-
-<section id="architecture" class="w-full hidden bg-[#f8fafc] font-sans select-none">
-        
-        <style>
+<!-- Architecture Section (Light Mode Canvas Panning) -->
+<section class="w-full hidden bg-[#f8fafc] font-sans select-none" id="architecture">
+<style>
             /* Light Mode Premium Enterprise ERD Styling */
             .erd-table { 
                 width: 280px; 
@@ -487,564 +445,453 @@
                 background: #f8fafc; border: 1px solid #e2e8f0;
             }
         </style>
-
-        <div class="scroll-track h-[800vh] w-full relative">
-            
-            <div class="sticky-viewport sticky top-0 h-screen w-full overflow-hidden bg-[#f8fafc]">
-
-                
-                                <!-- Telemetry Status Badge -->
-                <div id="telemetry-status" class="absolute top-6 right-6 md:top-8 md:right-12 z-[9999] shadow-sm">
-                    <span class="px-2 py-1 bg-amber-100 text-amber-700 rounded text-xs font-bold uppercase lang-en">Awaiting Tensor</span>
-                    <span class="px-2 py-1 bg-amber-100 text-amber-700 rounded text-xs font-bold uppercase lang-id">Menunggu Tensor</span>
-                </div>
-                <!-- Back Button (Light Mode Fixed) -->
-                <a href="#" class="back-home-btn group fixed top-20 left-6 md:top-24 md:left-12 inline-flex items-center gap-3 text-sm font-semibold text-slate-500 hover:text-slate-900 transition-colors z-[9999] w-fit">
-                    <div class="w-10 h-10 rounded-full border border-slate-200 bg-white/80 backdrop-blur-md flex items-center justify-center group-hover:border-slate-300 group-hover:bg-white transition-all shadow-sm group-hover:-translate-x-1">
-                        <i data-lucide="arrow-left" class="w-4 h-4 text-slate-600 group-hover:text-slate-900 transition-colors"></i>
-                    </div>
-                    <div class="flex flex-col text-left">
-                        <span class="lang-en">Back to Workspace</span>
-                        <span class="lang-en block">Back to Home</span><span class="lang-id block">Kembali ke Beranda</span>
-                    </div>
-                </a>
-
-                
-                <!-- Clean Light Graph Paper Grid -->
-                <div class="absolute inset-0 pointer-events-none" style="background-image: linear-gradient(to right, rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.04) 1px, transparent 1px); background-size: 50px 50px;"></div>
-
-                
-
-                <!-- The Giant Canvas (5000x3000) -->
-                <div id="miro-canvas" class="absolute top-0 left-0 w-[5000px] h-[3000px] transform-origin-top-left will-change-transform">
-                    
-                    <!-- AMBIENT GLOW ORBS (Premium Vercel/Stripe Aesthetic) -->
-                    <div class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: 0;">
-                        <!-- Orb 1: Upper Right -->
-                        <div class="absolute rounded-full bg-sky-300/20" style="width: 1200px; height: 1200px; left: 1600px; top: -200px; filter: blur(160px); mix-blend-mode: multiply;"></div>
-                        <!-- Orb 2: Middle Left -->
-                        <div class="absolute rounded-full bg-indigo-300/15" style="width: 1400px; height: 1400px; left: -100px; top: 1000px; filter: blur(180px); mix-blend-mode: multiply;"></div>
-                        <!-- Orb 3: Bottom Right -->
-                        <div class="absolute rounded-full bg-cyan-300/20" style="width: 1500px; height: 1500px; left: 2800px; top: 1500px; filter: blur(160px); mix-blend-mode: multiply;"></div>
-                    </div>
-
-                    <!-- MINIMALIST CHAPTER ANNOTATIONS (Option 3) -->
-                    <div class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: 1;">
-                        
-                        <!-- Stage 1 (Attached to Right of curve) -->
-                        <div class="absolute flex items-center gap-3 opacity-80" style="left: 1650px; top: 700px; transform: translateY(-50%);">
-                            <div class="w-12 h-px bg-slate-400"></div>
-                            <div class="flex flex-col">
-                                <span class="font-mono text-[10px] text-slate-500 font-bold tracking-[0.2em] uppercase lang-en">STAGE 01: VISUAL SPATIAL REDUCTION</span>
-                                <span class="font-mono text-[10px] text-slate-500 font-bold tracking-[0.2em] uppercase lang-id">TAHAP 01: REDUKSI SPASIAL VISUAL</span>
-                            </div>
-                        </div>
-
-                        <!-- Stage 2 (Attached to Left of curve) -->
-                        <div class="absolute flex items-center justify-end gap-3 opacity-80" style="right: calc(5000px - 3350px); top: 1000px; transform: translateY(-50%); text-align: right;">
-                            <div class="flex flex-col">
-                                <span class="font-mono text-[10px] text-slate-500 font-bold tracking-[0.2em] uppercase lang-en">STAGE 02: RECURRENT SEQUENCE MODELING</span>
-                                <span class="font-mono text-[10px] text-slate-500 font-bold tracking-[0.2em] uppercase lang-id">TAHAP 02: PEMODELAN SEKUENS BERULANG</span>
-                            </div>
-                            <div class="w-12 h-px bg-slate-400"></div>
-                        </div>
-
-                        <!-- Stage 3 (Attached to Right of curve) -->
-                        <div class="absolute flex items-center gap-3 opacity-80" style="left: 4225px; top: 1887px; transform: translateY(-50%);">
-                            <div class="w-12 h-px bg-slate-400"></div>
-                            <div class="flex flex-col">
-                                <span class="font-mono text-[10px] text-slate-500 font-bold tracking-[0.2em] uppercase lang-en">STAGE 03: CTC PROBABILITY MATRIX</span>
-                                <span class="font-mono text-[10px] text-slate-500 font-bold tracking-[0.2em] uppercase lang-id">TAHAP 03: MATRIKS PROBABILITAS CTC</span>
-                            </div>
-                        </div>
-
-                        <!-- Stage 4 (Attached to Left of curve) -->
-                        <div class="absolute flex items-center justify-end gap-3 opacity-80" style="right: calc(5000px - 2750px); top: 2350px; transform: translateY(-50%); text-align: right;">
-                            <div class="flex flex-col">
-                                <span class="font-mono text-[10px] text-slate-500 font-bold tracking-[0.2em] uppercase lang-en">STAGE 04: LEXICAL DYNAMIC PROGRAMMING</span>
-                                <span class="font-mono text-[10px] text-slate-400 font-bold tracking-[0.2em] uppercase lang-id">TAHAP 04: PEMROGRAMAN DINAMIS LEKSIKAL</span>
-                            </div>
-                            <div class="w-12 h-px bg-slate-400"></div>
-                        </div>
-
-                        <!-- Stage 5 (Attached to Left of curve) -->
-                        <div class="absolute flex items-center justify-end gap-3 opacity-80" style="right: calc(5000px - 1400px); top: 2350px; transform: translateY(-50%); text-align: right;">
-                            <div class="flex flex-col">
-                                <span class="font-mono text-[10px] text-slate-500 font-bold tracking-[0.2em] uppercase lang-en">STAGE 05: INFERENCE RESOLUTION</span>
-                                <span class="font-mono text-[10px] text-slate-500 font-bold tracking-[0.2em] uppercase lang-id">TAHAP 05: RESOLUSI INFERENSI AKHIR</span>
-                            </div>
-                            <div class="w-12 h-px bg-slate-400"></div>
-                        </div>
-
-                    </div>
-
-
-                    <!-- SVG Connectors (Minimalist Flowing Bezier) -->
-                    <svg class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: 1;">
-                        <!-- Thick Ambient Track for Depth -->
-                        <path d="M 800 620 C 1700 620, 1600 800, 2500 800 C 3350 800, 3350 1200, 4200 1200 C 4700 1700, 4000 2200, 3500 2200 C 2750 2200, 2750 2500, 2000 2500 C 1400 2500, 1400 2200, 800 2200" stroke="#f1f5f9" stroke-width="10" fill="none" />
-                        
-                        <!-- Foreground Sleek Dashed Line -->
-                        <path d="M 800 620 C 1700 620, 1600 800, 2500 800 C 3350 800, 3350 1200, 4200 1200 C 4700 1700, 4000 2200, 3500 2200 C 2750 2200, 2750 2500, 2000 2500 C 1400 2500, 1400 2200, 800 2200" stroke="#94a3b8" stroke-width="2.5" fill="none" stroke-dasharray="12 16" stroke-linecap="round" style="opacity: 0.6;" />
-                        
-                        <!-- Glowing Junction Nodes -->
-                        <circle cx="800" cy="620" r="7" fill="#ffffff" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"/>
-                        <circle cx="2500" cy="800" r="7" fill="#ffffff" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"/>
-                        <circle cx="4200" cy="1200" r="7" fill="#ffffff" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"/>
-                        <circle cx="3500" cy="2200" r="7" fill="#ffffff" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"/>
-                        <circle cx="2000" cy="2500" r="7" fill="#ffffff" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"/>
-                        <circle cx="800" cy="2200" r="7" fill="#ffffff" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"/>
-                    </svg>
-
-                    
-                    <!-- WAVY WIND WHOOSH (~) -->
-                    <svg class="absolute top-0 left-0 pointer-events-none" style="z-index: 8; width: 5000px; height: 3000px; overflow: visible;">
-                        <polyline id="wind-path-1" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0; filter: drop-shadow(0 2px 4px rgba(56,189,248,0.4)); transition: opacity 0.2s;" />
-                        <polyline id="wind-path-2" fill="none" stroke="#7dd3fc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0; filter: drop-shadow(0 2px 4px rgba(125,211,252,0.4)); transition: opacity 0.2s;" />
-                        <polyline id="wind-path-3" fill="none" stroke="#bae6fd" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0; transition: opacity 0.2s;" />
-                    </svg>
-
-                    <!-- THE PAPER PLANE (Luxurious Cursor Follower 2D) -->
-                    <div id="paper-plane-wrapper" class="absolute pointer-events-none" style="z-index: 9999; left: 0; top: 0; width: 60px; height: 60px;">
-                        <svg viewBox="0 0 24 24" class="w-full h-full text-sky-500" style="filter: drop-shadow(-5px 10px 10px rgba(14,165,233,0.5));" fill="currentColor">
-                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-                        </svg>
-                    </div>
+<div class="scroll-track h-[800vh] w-full relative">
+<div class="sticky-viewport sticky top-0 h-screen w-full overflow-hidden bg-[#f8fafc]">
+<!-- Telemetry Status Badge -->
+<div class="absolute top-6 right-6 md:top-8 md:right-12 z-[9999] shadow-sm" id="telemetry-status">
+<span class="px-2 py-1 bg-amber-100 text-amber-700 rounded text-xs font-bold uppercase lang-en">Awaiting Tensor</span>
+<span class="px-2 py-1 bg-amber-100 text-amber-700 rounded text-xs font-bold uppercase lang-id">Menunggu Tensor</span>
+</div>
+<!-- Back Button (Light Mode Fixed) -->
+<a class="back-home-btn group fixed top-20 left-6 md:top-24 md:left-12 inline-flex items-center gap-3 text-sm font-semibold text-slate-500 hover:text-slate-900 transition-colors z-[9999] w-fit" href="#">
+<div class="w-10 h-10 rounded-full border border-slate-200 bg-white/80 backdrop-blur-md flex items-center justify-center group-hover:border-slate-300 group-hover:bg-white transition-all shadow-sm group-hover:-translate-x-1">
+<i class="w-4 h-4 text-slate-600 group-hover:text-slate-900 transition-colors" data-lucide="arrow-left"></i>
+</div>
+<div class="flex flex-col text-left">
+<span class="lang-en">Back to Workspace</span>
+<span class="lang-en block">Back to Home</span><span class="lang-id block">Kembali ke Beranda</span>
+</div>
+</a>
+<!-- Clean Light Graph Paper Grid -->
+<div class="absolute inset-0 pointer-events-none" style="background-image: linear-gradient(to right, rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.04) 1px, transparent 1px); background-size: 50px 50px;"></div>
+<!-- The Giant Canvas (5000x3000) -->
+<div class="absolute top-0 left-0 w-[5000px] h-[3000px] transform-origin-top-left will-change-transform" id="miro-canvas">
+<!-- AMBIENT GLOW ORBS (Premium Vercel/Stripe Aesthetic) -->
+<div class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: 0;">
+<!-- Orb 1: Upper Right -->
+<div class="absolute rounded-full bg-sky-300/20" style="width: 1200px; height: 1200px; left: 1600px; top: -200px; filter: blur(160px); mix-blend-mode: multiply;"></div>
+<!-- Orb 2: Middle Left -->
+<div class="absolute rounded-full bg-indigo-300/15" style="width: 1400px; height: 1400px; left: -100px; top: 1000px; filter: blur(180px); mix-blend-mode: multiply;"></div>
+<!-- Orb 3: Bottom Right -->
+<div class="absolute rounded-full bg-cyan-300/20" style="width: 1500px; height: 1500px; left: 2800px; top: 1500px; filter: blur(160px); mix-blend-mode: multiply;"></div>
+</div>
+<!-- MINIMALIST CHAPTER ANNOTATIONS (Option 3) -->
+<div class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: 1;">
+<!-- Stage 1 (Attached to Right of curve) -->
+<div class="absolute flex items-center gap-3 opacity-80" style="left: 1650px; top: 700px; transform: translateY(-50%);">
+<div class="w-12 h-px bg-slate-400"></div>
+<div class="flex flex-col">
+<span class="font-mono text-[10px] text-slate-500 font-bold tracking-[0.2em] uppercase lang-en">STAGE 01: VISUAL SPATIAL REDUCTION</span>
+<span class="font-mono text-[10px] text-slate-500 font-bold tracking-[0.2em] uppercase lang-id">TAHAP 01: REDUKSI SPASIAL VISUAL</span>
+</div>
+</div>
+<!-- Stage 2 (Attached to Left of curve) -->
+<div class="absolute flex items-center justify-end gap-3 opacity-80" style="right: calc(5000px - 3350px); top: 1000px; transform: translateY(-50%); text-align: right;">
+<div class="flex flex-col">
+<span class="font-mono text-[10px] text-slate-500 font-bold tracking-[0.2em] uppercase lang-en">STAGE 02: RECURRENT SEQUENCE MODELING</span>
+<span class="font-mono text-[10px] text-slate-500 font-bold tracking-[0.2em] uppercase lang-id">TAHAP 02: PEMODELAN SEKUENS BERULANG</span>
+</div>
+<div class="w-12 h-px bg-slate-400"></div>
+</div>
+<!-- Stage 3 (Attached to Right of curve) -->
+<div class="absolute flex items-center gap-3 opacity-80" style="left: 4225px; top: 1887px; transform: translateY(-50%);">
+<div class="w-12 h-px bg-slate-400"></div>
+<div class="flex flex-col">
+<span class="font-mono text-[10px] text-slate-500 font-bold tracking-[0.2em] uppercase lang-en">STAGE 03: CTC PROBABILITY MATRIX</span>
+<span class="font-mono text-[10px] text-slate-500 font-bold tracking-[0.2em] uppercase lang-id">TAHAP 03: MATRIKS PROBABILITAS CTC</span>
+</div>
+</div>
+<!-- Stage 4 (Attached to Left of curve) -->
+<div class="absolute flex items-center justify-end gap-3 opacity-80" style="right: calc(5000px - 2750px); top: 2350px; transform: translateY(-50%); text-align: right;">
+<div class="flex flex-col">
+<span class="font-mono text-[10px] text-slate-500 font-bold tracking-[0.2em] uppercase lang-en">STAGE 04: LEXICAL DYNAMIC PROGRAMMING</span>
+<span class="font-mono text-[10px] text-slate-400 font-bold tracking-[0.2em] uppercase lang-id">TAHAP 04: PEMROGRAMAN DINAMIS LEKSIKAL</span>
+</div>
+<div class="w-12 h-px bg-slate-400"></div>
+</div>
+<!-- Stage 5 (Attached to Left of curve) -->
+<div class="absolute flex items-center justify-end gap-3 opacity-80" style="right: calc(5000px - 1400px); top: 2350px; transform: translateY(-50%); text-align: right;">
+<div class="flex flex-col">
+<span class="font-mono text-[10px] text-slate-500 font-bold tracking-[0.2em] uppercase lang-en">STAGE 05: INFERENCE RESOLUTION</span>
+<span class="font-mono text-[10px] text-slate-500 font-bold tracking-[0.2em] uppercase lang-id">TAHAP 05: RESOLUSI INFERENSI AKHIR</span>
+</div>
+<div class="w-12 h-px bg-slate-400"></div>
+</div>
+</div>
+<!-- SVG Connectors (Minimalist Flowing Bezier) -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: 1;">
+<!-- Thick Ambient Track for Depth -->
+<path d="M 800 620 C 1700 620, 1600 800, 2500 800 C 3350 800, 3350 1200, 4200 1200 C 4700 1700, 4000 2200, 3500 2200 C 2750 2200, 2750 2500, 2000 2500 C 1400 2500, 1400 2200, 800 2200" fill="none" stroke="#f1f5f9" stroke-width="10"></path>
+<!-- Foreground Sleek Dashed Line -->
+<path d="M 800 620 C 1700 620, 1600 800, 2500 800 C 3350 800, 3350 1200, 4200 1200 C 4700 1700, 4000 2200, 3500 2200 C 2750 2200, 2750 2500, 2000 2500 C 1400 2500, 1400 2200, 800 2200" fill="none" stroke="#94a3b8" stroke-dasharray="12 16" stroke-linecap="round" stroke-width="2.5" style="opacity: 0.6;"></path>
+<!-- Glowing Junction Nodes -->
+<circle cx="800" cy="620" fill="#ffffff" r="7" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"></circle>
+<circle cx="2500" cy="800" fill="#ffffff" r="7" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"></circle>
+<circle cx="4200" cy="1200" fill="#ffffff" r="7" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"></circle>
+<circle cx="3500" cy="2200" fill="#ffffff" r="7" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"></circle>
+<circle cx="2000" cy="2500" fill="#ffffff" r="7" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"></circle>
+<circle cx="800" cy="2200" fill="#ffffff" r="7" stroke="#38bdf8" stroke-width="3" style="filter: drop-shadow(0 0 4px rgba(56,189,248,0.4));"></circle>
+</svg>
+<!-- WAVY WIND WHOOSH (~) -->
+<svg class="absolute top-0 left-0 pointer-events-none" style="z-index: 8; width: 5000px; height: 3000px; overflow: visible;">
+<polyline fill="none" id="wind-path-1" stroke="#38bdf8" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" style="opacity: 0; filter: drop-shadow(0 2px 4px rgba(56,189,248,0.4)); transition: opacity 0.2s;"></polyline>
+<polyline fill="none" id="wind-path-2" stroke="#7dd3fc" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" style="opacity: 0; filter: drop-shadow(0 2px 4px rgba(125,211,252,0.4)); transition: opacity 0.2s;"></polyline>
+<polyline fill="none" id="wind-path-3" stroke="#bae6fd" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.0" style="opacity: 0; transition: opacity 0.2s;"></polyline>
+</svg>
+<!-- THE PAPER PLANE (Luxurious Cursor Follower 2D) -->
+<div class="absolute pointer-events-none" id="paper-plane-wrapper" style="z-index: 9999; left: 0; top: 0; width: 60px; height: 60px;">
+<svg class="w-full h-full text-sky-500" fill="currentColor" style="filter: drop-shadow(-5px 10px 10px rgba(14,165,233,0.5));" viewbox="0 0 24 24">
+<path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
+</svg>
+</div>
 <!-- ZONE 1: IMAGE ACQUISITION (800, 620) -->
-                    <div class="absolute flex flex-col md:flex-row items-center gap-12" style="left: 800px; top: 620px; transform: translate(-50%, -50%); z-index: 2;">
-                        
-                        <!-- Premium Side Scroll Hint -->
-                        <div id="side-scroll-hint" class="flex flex-col items-center gap-2 transition-opacity duration-700 opacity-100 mr-6 -mt-8">
-                            <!-- Larger Glassmorphism Track -->
-                            <div class="w-8 h-16 rounded-full border-2 border-slate-300/80 flex justify-center p-1.5 bg-white/50 backdrop-blur-md shadow-lg">
-                                <div class="w-2 h-5 bg-sky-500 rounded-full animate-bounce shadow-[0_0_12px_rgba(14,165,233,0.9)]"></div>
-                            </div>
-                            
-                            <!-- Cascading Chevrons -->
-                            <div class="flex flex-col items-center -mt-3 text-sky-500 animate-pulse">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="opacity-60 -mt-4"><path d="m6 9 6 6 6-6"/></svg>
-                            </div>
-
-                            <!-- Horizontal Typography -->
-                            <div class="text-slate-500 font-extrabold tracking-[0.3em] text-[11px] uppercase mt-2 drop-shadow-sm flex items-center gap-2 whitespace-nowrap">
-                                <span class="w-4 h-px bg-slate-400"></span>
+<div class="absolute flex flex-col md:flex-row items-center gap-12" style="left: 800px; top: 620px; transform: translate(-50%, -50%); z-index: 2;">
+<!-- Premium Side Scroll Hint -->
+<div class="flex flex-col items-center gap-2 transition-opacity duration-700 opacity-100 mr-6 -mt-8" id="side-scroll-hint">
+<!-- Larger Glassmorphism Track -->
+<div class="w-8 h-16 rounded-full border-2 border-slate-300/80 flex justify-center p-1.5 bg-white/50 backdrop-blur-md shadow-lg">
+<div class="w-2 h-5 bg-sky-500 rounded-full animate-bounce shadow-[0_0_12px_rgba(14,165,233,0.9)]"></div>
+</div>
+<!-- Cascading Chevrons -->
+<div class="flex flex-col items-center -mt-3 text-sky-500 animate-pulse">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m6 9 6 6 6-6"></path></svg>
+<svg class="opacity-60 -mt-4" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m6 9 6 6 6-6"></path></svg>
+</div>
+<!-- Horizontal Typography -->
+<div class="text-slate-500 font-extrabold tracking-[0.3em] text-[11px] uppercase mt-2 drop-shadow-sm flex items-center gap-2 whitespace-nowrap">
+<span class="w-4 h-px bg-slate-400"></span>
                                 SCROLL
                                 <span class="w-4 h-px bg-slate-400"></span>
-                            </div>
-                        </div>
+</div>
+</div>
+<div class="flex flex-col gap-8">
+<div class="relative group"><div class="erd-table">
+<div class="erd-header"><span>Raw_Image</span><i class="w-4 h-4 text-sky-600" data-lucide="image"></i></div>
+<div class="erd-row"><span><span class="erd-pk">PK</span>image_id</span><span class="erd-type">uuid</span></div>
+<div class="erd-row"><span>format</span><span class="erd-val text-amber-500 font-mono" id="tel-raw-format">[STANDBY]</span></div>
+</div></div>
+<div class="w-px h-8 bg-slate-200 mx-auto"></div>
+<div class="relative group"><div class="erd-table">
+<div class="erd-header"><span>Grayscale_Conv</span><i class="w-4 h-4 text-sky-600" data-lucide="sun"></i></div>
+<div class="erd-row"><span>operation</span><span class="erd-val">cv2.cvtColor</span></div>
+<div class="erd-row"><span>channels</span><span class="erd-val text-amber-500 font-mono" id="tel-gray-channels">[STANDBY]</span></div>
+</div></div>
+<div class="w-px h-8 bg-slate-200 mx-auto"></div>
+<div class="relative group"><div class="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-48 bg-slate-900 rounded-xl p-2 shadow-2xl opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 z-[9999] origin-bottom border border-slate-700">
+<div class="text-[9px] font-mono text-slate-400 mb-1 flex justify-between"><span>TENSOR_VISUAL</span><span class="text-sky-400">LIVE</span></div>
+<img alt="Tensor" class="w-full h-auto rounded border border-slate-800 bg-black/50 min-h-[40px]" id="vis-otsu" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAAgCAAAAAD/SS/5AAADSklEQVRYCcXBf0yUZQDA8e9zO9Drhxvogv5QojRtuLRTr4lE3qU8d3Lly9BRq8HCrs0tW2y1pLk2bVZmv9b6I+Umk6kNcM7XuvNheRMwWHGeEJNamRH9WrZ0djG5O+S90C1Ot/55O7b38xFYTGAxgcUEFhNYTJCdsgeMg5fJgiA7x72sP0YWBNlREk0nC4LsKImmkwXBDWZXL7trpPdQikmVaxZe+a69H2pKE9urvLlfNv1dsnH5QNsgbCwbf63Ue++3bb2gJJoOS1avSnSd/AHzBBmLjxUz6fuKYRz6WiZN7NhBxMOph4DIu623Qdx9BiX55FFg4qX3UBJNp77JBhg1hzFNkNFVzkcnK2vpdPN6I6c/LG6YZazsi3hgKOkERk/fn8/QYpSE+MDSWSTvG1YSTd/QahvZldtYkFj7OWYJptiv5KQL/6C04EIv/iWJ4F/sr2XbzogHvSq9N0DaOXD3WYeRF1eSc8vjeV/NZdtOJdH00DpWd1F1hLYazBJk9K3gl7bOE2Nct2zlwjWLaHo24qG+mYoOzs+HLx6k/JSSvPIG7H6R1seVRAtfvJ3KBPnt/FiMWYKMklARMKo/f4m8QG0J1wQDEQ+ajjNG1AVhH/6Qkjx1ELZ8QPfDSqKdG+Jfcy5ikuAGjspqdwH0r5jYG2CwPbp+M8FAxIOm44wRdUHYhz+kJJv2wctv0uFVEq3vN9J7uCaxNYlJgpsJ/1Ebrkvf5HS6QX+MYCDiQdNxxoi6IOzDH1KS5nr4tJL3G5RE0y/cwfzzkCuuTmCWYMrSsOh67s9FgzksuEdxpiJe02wnGIh40HScMaIuCPvwh5Qk/VaPuwGqjiqJpu97mo+fGX9nC8fXYZZgysweJ8nf59r4rGLG8J0YqZnJGQQDEQ+ajjNG1AVhH/6QkqRymdRbllYSTZ99tpAx41bGvN2YJcjIb9yUR/rX/dvHmdeyym4cPrFH7NravsFwd7Pga3uHFw48aZT3KMkLj/jsqSObL3PoCcPdTeHuagfjHa/2Y5rgJnMKRka57pain0f5b0pS1+KYN5wiw1YkfrrK/yAwT0nqWpgmAvOUpK6FaSIw720tHehkmggsJrCYwGICiwksJrCYwGICi/0Dz+4wMA4R1V8AAAAASUVORK5CYII=" style="image-rendering: pixelated;"/>
+</div><div class="erd-table">
 
-                        <div class="flex flex-col gap-8">
-                            <div class="erd-table">
-                                <div class="erd-header"><span>Raw_Image</span><i data-lucide="image" class="w-4 h-4 text-sky-600"></i></div>
-                                <div class="erd-row"><span><span class="erd-pk">PK</span>image_id</span><span class="erd-type">uuid</span></div>
-                                <div class="erd-row"><span>format</span><span id="tel-raw-format" class="erd-val text-amber-500 font-mono">[STANDBY]</span></div>
-                            </div>
-                            <div class="w-px h-8 bg-slate-200 mx-auto"></div>
-                            <div class="erd-table">
-                                <div class="erd-header"><span>Grayscale_Conv</span><i data-lucide="sun" class="w-4 h-4 text-sky-600"></i></div>
-                                <div class="erd-row"><span>operation</span><span class="erd-val">cv2.cvtColor</span></div>
-                                <div class="erd-row"><span>channels</span><span id="tel-gray-channels" class="erd-val text-amber-500 font-mono">[STANDBY]</span></div>
-                            </div>
-                            <div class="w-px h-8 bg-slate-200 mx-auto"></div>
-                            
-<div class="relative group">
-<div class="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-48 bg-slate-900 rounded-xl p-2 shadow-2xl opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 z-[9999] origin-bottom border border-slate-700">
-                                    <div class="text-[9px] font-mono text-slate-400 mb-1 flex justify-between"><span>TENSOR_VISUAL</span><span class="text-sky-400">LIVE</span></div>
-                                    <img id="vis-otsu" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAAgCAAAAAD/SS/5AAADSklEQVRYCcXBf0yUZQDA8e9zO9Drhxvogv5QojRtuLRTr4lE3qU8d3Lly9BRq8HCrs0tW2y1pLk2bVZmv9b6I+Umk6kNcM7XuvNheRMwWHGeEJNamRH9WrZ0djG5O+S90C1Ot/55O7b38xFYTGAxgcUEFhNYTJCdsgeMg5fJgiA7x72sP0YWBNlREk0nC4LsKImmkwXBDWZXL7trpPdQikmVaxZe+a69H2pKE9urvLlfNv1dsnH5QNsgbCwbf63Ue++3bb2gJJoOS1avSnSd/AHzBBmLjxUz6fuKYRz6WiZN7NhBxMOph4DIu623Qdx9BiX55FFg4qX3UBJNp77JBhg1hzFNkNFVzkcnK2vpdPN6I6c/LG6YZazsi3hgKOkERk/fn8/QYpSE+MDSWSTvG1YSTd/QahvZldtYkFj7OWYJptiv5KQL/6C04EIv/iWJ4F/sr2XbzogHvSq9N0DaOXD3WYeRF1eSc8vjeV/NZdtOJdH00DpWd1F1hLYazBJk9K3gl7bOE2Nct2zlwjWLaHo24qG+mYoOzs+HLx6k/JSSvPIG7H6R1seVRAtfvJ3KBPnt/FiMWYKMklARMKo/f4m8QG0J1wQDEQ+ajjNG1AVhH/6Qkjx1ELZ8QPfDSqKdG+Jfcy5ikuAGjspqdwH0r5jYG2CwPbp+M8FAxIOm44wRdUHYhz+kJJv2wctv0uFVEq3vN9J7uCaxNYlJgpsJ/1Ebrkvf5HS6QX+MYCDiQdNxxoi6IOzDH1KS5nr4tJL3G5RE0y/cwfzzkCuuTmCWYMrSsOh67s9FgzksuEdxpiJe02wnGIh40HScMaIuCPvwh5Qk/VaPuwGqjiqJpu97mo+fGX9nC8fXYZZgysweJ8nf59r4rGLG8J0YqZnJGQQDEQ+ajjNG1AVhH/6QkqRymdRbllYSTZ99tpAx41bGvN2YJcjIb9yUR/rX/dvHmdeyym4cPrFH7NravsFwd7Pga3uHFw48aZT3KMkLj/jsqSObL3PoCcPdTeHuagfjHa/2Y5rgJnMKRka57pain0f5b0pS1+KYN5wiw1YkfrrK/yAwT0nqWpgmAvOUpK6FaSIw720tHehkmggsJrCYwGICiwksJrCYwGICi/0Dz+4wMA4R1V8AAAAASUVORK5CYII=" class="w-full h-auto rounded border border-slate-800 bg-black/50 min-h-[40px]" style="image-rendering: pixelated;" alt="Tensor">
-                                </div>
-<div class="erd-table">
-                                <div class="erd-header"><span>Otsu_Threshold</span><i data-lucide="contrast" class="w-4 h-4 text-sky-600"></i></div>
-                                <div class="erd-row"><span>algorithm</span><span class="erd-val">Inverse</span></div>
-                            <div class="p-2 bg-slate-50 border-t border-slate-100 text-[10px] font-mono text-slate-500 overflow-hidden" id="math-vision-otsu">
+<div class="erd-header"><span>Otsu_Threshold</span><i class="w-4 h-4 text-sky-600" data-lucide="contrast"></i></div>
+<div class="erd-row"><span>algorithm</span><span class="erd-val">Inverse</span></div>
+<div class="p-2 bg-slate-50 border-t border-slate-100 text-[10px] font-mono text-slate-500 overflow-hidden" id="math-vision-otsu">
                                 [Otsu Variance Math Standby]
                             </div>
+<div class="p-2 bg-slate-50 border-t border-slate-100 flex justify-center items-center py-4">
+<div class="grid grid-cols-6 gap-px bg-slate-200 border border-slate-300 p-px shadow-inner">
+<div class="w-3 h-3 bg-white"></div><div class="w-3 h-3 bg-white"></div><div class="w-3 h-3 bg-slate-800"></div><div class="w-3 h-3 bg-slate-800"></div><div class="w-3 h-3 bg-white"></div><div class="w-3 h-3 bg-white"></div>
+<div class="w-3 h-3 bg-white"></div><div class="w-3 h-3 bg-slate-800"></div><div class="w-3 h-3 bg-slate-800"></div><div class="w-3 h-3 bg-slate-800"></div><div class="w-3 h-3 bg-slate-800"></div><div class="w-3 h-3 bg-white"></div>
+<div class="w-3 h-3 bg-white"></div><div class="w-3 h-3 bg-slate-800"></div><div class="w-3 h-3 bg-white"></div><div class="w-3 h-3 bg-white"></div><div class="w-3 h-3 bg-slate-800"></div><div class="w-3 h-3 bg-white"></div>
+</div>
+</div>
+<div class="erd-row"><span>shape</span><span class="erd-val text-amber-500 font-mono" id="tel-otsu-shape">[STANDBY]</span></div>
+</div></div>
+</div>
+<div class="expl-card">
+<div class="expl-icon-wrap bg-sky-50 border-sky-100"><i class="w-6 h-6 text-sky-600" data-lucide="scan"></i></div>
+<h3 class="text-xl font-bold text-slate-800 mb-3">1. Vision Pre-processing</h3>
+<p class="text-slate-600 text-[13px] leading-relaxed">
+<span class="lang-en">The raw image passes through grayscale mapping and <b>Otsu's Thresholding</b> to isolate ink from paper, forming a clean binary tensor.</span>
+<span class="lang-en">The raw image is mapped to grayscale and cleaned using <b>Otsu's Thresholding</b> to separate ink from paper, forming a pure binary tensor.</span>
+<span class="lang-id">Citra mentah dipetakan ke skala abu-abu dan dibersihkan dengan <b>Otsu's Thresholding</b> untuk memisahkan tinta dari kertas, membentuk tensor biner yang murni.</span>
+</p>
+</div>
+</div>
+<!-- ZONE 2: CNN BLOCKS (2500, 800) -->
+<div class="absolute flex flex-col items-center gap-16" style="left: 2500px; top: 800px; transform: translate(-50%, -50%); z-index: 2;">
+<div class="expl-card w-[540px] text-center flex flex-col items-center">
+<div class="expl-icon-wrap bg-indigo-50 border-indigo-100"><i class="w-6 h-6 text-indigo-600" data-lucide="layers"></i></div>
+<h3 class="text-xl font-bold text-slate-800 mb-3">2. Spatial Feature Extraction</h3>
+<p class="text-slate-600 text-[13px] leading-relaxed">
+<span class="lang-en">Visual feature extraction is performed through 3 main CNN blocks (6 layers total). Spatial filters increase from 64, 128, to 256 to detect complex strokes.</span>
+<span class="lang-id">Ekstraksi fitur visual dilakukan melalui 3 blok utama CNN (total 6 lapis). Filter spasial bertambah dari 64, 128, hingga 256 untuk mendeteksi guratan kompleks.</span>
+</p>
+</div>
+<div class="flex flex-row gap-10">
+<div class="relative group"><div class="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-48 bg-slate-900 rounded-xl p-2 shadow-2xl opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 z-[9999] origin-bottom border border-slate-700">
+<div class="text-[9px] font-mono text-slate-400 mb-1 flex justify-between"><span>TENSOR_VISUAL</span><span class="text-sky-400">LIVE</span></div>
+<img alt="Tensor" class="w-full h-auto rounded border border-slate-800 bg-black/50 min-h-[40px]" id="vis-cnn" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAAgCAIAAABVQOdyAAAEUElEQVRoBe3Bb2hVZRwH8O/veuJ0tXBnnlh2jB33BzY7MqYL5ZB0iedUMvS+eZxBrRv+i1NQvpIgxgxtpxe9MO7kvOhFMDuEMPOFyWQKHdp8XCK2ptf0lt7TagvmwGCjbe56lxzYixCnL4Lz4p7PhxhxxKJDjDhi0SFGHLHoECOOWHSIEUcsOsSIIxYdYsQRiw4x4ohFhxhxxKJDjDgew/xrL469/MSq5glp2b2x61XP95fk7y4iNGmbdzbdXSjSuoPjs42rC9ulxvWj1/JrtP7Eit4hhCZt886muwtFWndwfLZxdWG71Lh+9Fp+jdafWNE7hDJGjDge5ffD5rVdRxNIYFEJJUO8Xf3mr6W5WVUonu4DaLncNtB8LEkyFhndttYlAKhC8XQfQMvltoHmY0mSscjotrUugXJFjDiWNPaRefUDF6GOCeP69LM9a08nSQZQc2pv/bsXVaF4uo/QdGm2c8I8XHUhSTKAuYX5bTv30OCwKhRP9xGaLs12TpiHqy4kSQYwtzC/beceGhxGWSJGHEtSheLpPoCak/vq3/8RwOgn5i97XQBBccque6XSX+HpPoCzM9IRq7V4K5Bq13ac690sSwCMblvrEqpQPN0HcHZGOmK1Fm8FUu3ajnO9m2UJgNFta10CZYkYcTzcsooK72qfklgO4NWd79DAT7iPEn9nNt2TSfpnYeWxC6pQPN0HUHNmd/2uSwgFx5tubOkB0HC+vXrHiCoUT/cB1JzZXb/rEkLB8aYbW3oANJxvr94xgrJEjDgeLtG0rq/vG4S21m4uzczgAapQPN0HYGRtzREIFRwzn3EBpHJp2QpUoXi6D8DI2pojECo4Zj7jAkjl0rIVoCwRI46Hk+pqTv9wEqHWlteL43/hAapQPN0HYGRtzREIFRwzn3EBpHJp2QpUoXi6D8DI2pojECo4Zj7jAkjl0rIVoCwRI44lvXVjrP3pSQAbPrWfOSoAUMv6N77uXyVN/3G38lSzVvl90tN9AEbW1hyBUMEx8xkXQCqXlq1AFYqn+wCMrK05AqGCY+YzLoBULi1bAcoSMeJY0m89G26yrwB8cUfv6d6avF166eOhz6p+BtB5+4WhJkkViqf7AIysrTkCoYJj5jMugFQuLVuBKhRP9wEYWVtzBEIFx8xnXACpXFq2ApQlYsSxJKmhvvXbofcq/sR/3SxO79v9oXT2kioUT/cBGFlbcwRCBcfMZ1wAqVxatgJVKJ7uAzCytuYIhAqOmc+4AFK5tGwFKEvEiONRpOdWT3751OeNvVuexH1zC/NWbkfy4EqIYQBTfXWi6QSAjYds1RUIjR8wr+x3ATQMtle3jUz11YmmEwA2HrJVVyA0fsC8st8F0DDYXt02grJEjDgem1RfW1ou4/qt0twsYv8HYsQRiw4x4ohFhxhxxKJDjDhi0SFGHLHoECOOWHSIEUcsOsSIIxYdYsQRiw4x4ohFhxhxxKLzL+lpiVCxE/uiAAAAAElFTkSuQmCC" style="image-rendering: pixelated;"/>
+</div><div class="erd-table">
 
-                                                            <div class="p-2 bg-slate-50 border-t border-slate-100 flex justify-center items-center py-4">
-                                <div class="grid grid-cols-6 gap-px bg-slate-200 border border-slate-300 p-px shadow-inner">
-                                    <div class="w-3 h-3 bg-white"></div><div class="w-3 h-3 bg-white"></div><div class="w-3 h-3 bg-slate-800"></div><div class="w-3 h-3 bg-slate-800"></div><div class="w-3 h-3 bg-white"></div><div class="w-3 h-3 bg-white"></div>
-                                    <div class="w-3 h-3 bg-white"></div><div class="w-3 h-3 bg-slate-800"></div><div class="w-3 h-3 bg-slate-800"></div><div class="w-3 h-3 bg-slate-800"></div><div class="w-3 h-3 bg-slate-800"></div><div class="w-3 h-3 bg-white"></div>
-                                    <div class="w-3 h-3 bg-white"></div><div class="w-3 h-3 bg-slate-800"></div><div class="w-3 h-3 bg-white"></div><div class="w-3 h-3 bg-white"></div><div class="w-3 h-3 bg-slate-800"></div><div class="w-3 h-3 bg-white"></div>
-                                </div>
-                            </div>
-                            <div class="erd-row"><span>shape</span><span id="tel-otsu-shape" class="erd-val text-amber-500 font-mono">[STANDBY]</span></div>
-                            </div></div></div>
-                        </div>
-
-                        <div class="expl-card">
-                            <div class="expl-icon-wrap bg-sky-50 border-sky-100"><i data-lucide="scan" class="w-6 h-6 text-sky-600"></i></div>
-                            <h3 class="text-xl font-bold text-slate-800 mb-3">1. Vision Pre-processing</h3>
-                            <p class="text-slate-600 text-[13px] leading-relaxed">
-                                <span class="lang-en">The raw image passes through grayscale mapping and <b>Otsu's Thresholding</b> to isolate ink from paper, forming a clean binary tensor.</span>
-                                <span class="lang-en">The raw image is mapped to grayscale and cleaned using <b>Otsu's Thresholding</b> to separate ink from paper, forming a pure binary tensor.</span>
-                                <span class="lang-id">Citra mentah dipetakan ke skala abu-abu dan dibersihkan dengan <b>Otsu's Thresholding</b> untuk memisahkan tinta dari kertas, membentuk tensor biner yang murni.</span>
-                            </p>
-                        </div>
-                    </div>
-
-
-                    <!-- ZONE 2: CNN BLOCKS (2500, 800) -->
-                    <div class="absolute flex flex-col items-center gap-16" style="left: 2500px; top: 800px; transform: translate(-50%, -50%); z-index: 2;">
-                        <div class="expl-card w-[540px] text-center flex flex-col items-center">
-                            <div class="expl-icon-wrap bg-indigo-50 border-indigo-100"><i data-lucide="layers" class="w-6 h-6 text-indigo-600"></i></div>
-                            <h3 class="text-xl font-bold text-slate-800 mb-3">2. Spatial Feature Extraction</h3>
-                            <p class="text-slate-600 text-[13px] leading-relaxed">
-                                <span class="lang-en">Visual feature extraction is performed through 3 main CNN blocks (6 layers total). Spatial filters increase from 64, 128, to 256 to detect complex strokes.</span>
-                                <span class="lang-id">Ekstraksi fitur visual dilakukan melalui 3 blok utama CNN (total 6 lapis). Filter spasial bertambah dari 64, 128, hingga 256 untuk mendeteksi guratan kompleks.</span>
-                            </p>
-                        </div>
-
-                        <div class="flex flex-row gap-10">
-                            
-<div class="relative group">
-<div class="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-48 bg-slate-900 rounded-xl p-2 shadow-2xl opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 z-[9999] origin-bottom border border-slate-700">
-                                    <div class="text-[9px] font-mono text-slate-400 mb-1 flex justify-between"><span>TENSOR_VISUAL</span><span class="text-sky-400">LIVE</span></div>
-                                    <img id="vis-cnn" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAAgCAIAAABVQOdyAAAEUElEQVRoBe3Bb2hVZRwH8O/veuJ0tXBnnlh2jB33BzY7MqYL5ZB0iedUMvS+eZxBrRv+i1NQvpIgxgxtpxe9MO7kvOhFMDuEMPOFyWQKHdp8XCK2ptf0lt7TagvmwGCjbe56lxzYixCnL4Lz4p7PhxhxxKJDjDhi0SFGHLHoECOOWHSIEUcsOsSIIxYdYsQRiw4x4ohFhxhxxKJDjDgew/xrL469/MSq5glp2b2x61XP95fk7y4iNGmbdzbdXSjSuoPjs42rC9ulxvWj1/JrtP7Eit4hhCZt886muwtFWndwfLZxdWG71Lh+9Fp+jdafWNE7hDJGjDge5ffD5rVdRxNIYFEJJUO8Xf3mr6W5WVUonu4DaLncNtB8LEkyFhndttYlAKhC8XQfQMvltoHmY0mSscjotrUugXJFjDiWNPaRefUDF6GOCeP69LM9a08nSQZQc2pv/bsXVaF4uo/QdGm2c8I8XHUhSTKAuYX5bTv30OCwKhRP9xGaLs12TpiHqy4kSQYwtzC/beceGhxGWSJGHEtSheLpPoCak/vq3/8RwOgn5i97XQBBccque6XSX+HpPoCzM9IRq7V4K5Bq13ac690sSwCMblvrEqpQPN0HcHZGOmK1Fm8FUu3ajnO9m2UJgNFta10CZYkYcTzcsooK72qfklgO4NWd79DAT7iPEn9nNt2TSfpnYeWxC6pQPN0HUHNmd/2uSwgFx5tubOkB0HC+vXrHiCoUT/cB1JzZXb/rEkLB8aYbW3oANJxvr94xgrJEjDgeLtG0rq/vG4S21m4uzczgAapQPN0HYGRtzREIFRwzn3EBpHJp2QpUoXi6D8DI2pojECo4Zj7jAkjl0rIVoCwRI46Hk+pqTv9wEqHWlteL43/hAapQPN0HYGRtzREIFRwzn3EBpHJp2QpUoXi6D8DI2pojECo4Zj7jAkjl0rIVoCwRI44lvXVjrP3pSQAbPrWfOSoAUMv6N77uXyVN/3G38lSzVvl90tN9AEbW1hyBUMEx8xkXQCqXlq1AFYqn+wCMrK05AqGCY+YzLoBULi1bAcoSMeJY0m89G26yrwB8cUfv6d6avF166eOhz6p+BtB5+4WhJkkViqf7AIysrTkCoYJj5jMugFQuLVuBKhRP9wEYWVtzBEIFx8xnXACpXFq2ApQlYsSxJKmhvvXbofcq/sR/3SxO79v9oXT2kioUT/cBGFlbcwRCBcfMZ1wAqVxatgJVKJ7uAzCytuYIhAqOmc+4AFK5tGwFKEvEiONRpOdWT3751OeNvVuexH1zC/NWbkfy4EqIYQBTfXWi6QSAjYds1RUIjR8wr+x3ATQMtle3jUz11YmmEwA2HrJVVyA0fsC8st8F0DDYXt02grJEjDgem1RfW1ou4/qt0twsYv8HYsQRiw4x4ohFhxhxxKJDjDhi0SFGHLHoECOOWHSIEUcsOsSIIxYdYsQRiw4x4ohFhxhxxKLzL+lpiVCxE/uiAAAAAElFTkSuQmCC" class="w-full h-auto rounded border border-slate-800 bg-black/50 min-h-[40px]" style="image-rendering: pixelated;" alt="Tensor">
-                                </div>
-<div class="erd-table">
-                                <div class="erd-header"><span>CNN_Block_1</span><i data-lucide="box" class="w-4 h-4 text-indigo-600"></i></div>
-                                <div class="erd-row"><span>layers</span><span class="erd-val">Conv2D x2</span></div>
-                                <div class="erd-row"><span>filters</span><span class="erd-type">64</span></div>
-                                <div class="erd-row"><span>activation</span><span class="erd-val">ReLU</span></div>
-                                <div class="p-2 bg-slate-50 border-t border-slate-100 text-[10px] font-mono text-slate-500 overflow-hidden" id="math-spatial-cnn">
+<div class="erd-header"><span>CNN_Block_1</span><i class="w-4 h-4 text-indigo-600" data-lucide="box"></i></div>
+<div class="erd-row"><span>layers</span><span class="erd-val">Conv2D x2</span></div>
+<div class="erd-row"><span>filters</span><span class="erd-type">64</span></div>
+<div class="erd-row"><span>activation</span><span class="erd-val">ReLU</span></div>
+<div class="p-2 bg-slate-50 border-t border-slate-100 text-[10px] font-mono text-slate-500 overflow-hidden" id="math-spatial-cnn">
                                     [CNN Tensor Math Standby]
                                 </div>
-                            </div></div></div>
-                            <div class="h-px w-10 bg-slate-200 my-auto"></div>
-                            
-<div class="relative group">
-<div class="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-48 bg-slate-900 rounded-xl p-2 shadow-2xl opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 z-[9999] origin-bottom border border-slate-700">
-                                    <div class="text-[9px] font-mono text-slate-400 mb-1 flex justify-between"><span>TENSOR_VISUAL</span><span class="text-sky-400">LIVE</span></div>
-                                    <img id="vis-cnn-2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAAgCAIAAABVQOdyAAAEUElEQVRoBe3Bb2hVZRwH8O/veuJ0tXBnnlh2jB33BzY7MqYL5ZB0iedUMvS+eZxBrRv+i1NQvpIgxgxtpxe9MO7kvOhFMDuEMPOFyWQKHdp8XCK2ptf0lt7TagvmwGCjbe56lxzYixCnL4Lz4p7PhxhxxKJDjDhi0SFGHLHoECOOWHSIEUcsOsSIIxYdYsQRiw4x4ohFhxhxxKJDjDgew/xrL469/MSq5glp2b2x61XP95fk7y4iNGmbdzbdXSjSuoPjs42rC9ulxvWj1/JrtP7Eit4hhCZt886muwtFWndwfLZxdWG71Lh+9Fp+jdafWNE7hDJGjDge5ffD5rVdRxNIYFEJJUO8Xf3mr6W5WVUonu4DaLncNtB8LEkyFhndttYlAKhC8XQfQMvltoHmY0mSscjotrUugXJFjDiWNPaRefUDF6GOCeP69LM9a08nSQZQc2pv/bsXVaF4uo/QdGm2c8I8XHUhSTKAuYX5bTv30OCwKhRP9xGaLs12TpiHqy4kSQYwtzC/beceGhxGWSJGHEtSheLpPoCak/vq3/8RwOgn5i97XQBBccque6XSX+HpPoCzM9IRq7V4K5Bq13ac690sSwCMblvrEqpQPN0HcHZGOmK1Fm8FUu3ajnO9m2UJgNFta10CZYkYcTzcsooK72qfklgO4NWd79DAT7iPEn9nNt2TSfpnYeWxC6pQPN0HUHNmd/2uSwgFx5tubOkB0HC+vXrHiCoUT/cB1JzZXb/rEkLB8aYbW3oANJxvr94xgrJEjDgeLtG0rq/vG4S21m4uzczgAapQPN0HYGRtzREIFRwzn3EBpHJp2QpUoXi6D8DI2pojECo4Zj7jAkjl0rIVoCwRI46Hk+pqTv9wEqHWlteL43/hAapQPN0HYGRtzREIFRwzn3EBpHJp2QpUoXi6D8DI2pojECo4Zj7jAkjl0rIVoCwRI44lvXVjrP3pSQAbPrWfOSoAUMv6N77uXyVN/3G38lSzVvl90tN9AEbW1hyBUMEx8xkXQCqXlq1AFYqn+wCMrK05AqGCY+YzLoBULi1bAcoSMeJY0m89G26yrwB8cUfv6d6avF166eOhz6p+BtB5+4WhJkkViqf7AIysrTkCoYJj5jMugFQuLVuBKhRP9wEYWVtzBEIFx8xnXACpXFq2ApQlYsSxJKmhvvXbofcq/sR/3SxO79v9oXT2kioUT/cBGFlbcwRCBcfMZ1wAqVxatgJVKJ7uAzCytuYIhAqOmc+4AFK5tGwFKEvEiONRpOdWT3751OeNvVuexH1zC/NWbkfy4EqIYQBTfXWi6QSAjYds1RUIjR8wr+x3ATQMtle3jUz11YmmEwA2HrJVVyA0fsC8st8F0DDYXt02grJEjDgem1RfW1ou4/qt0twsYv8HYsQRiw4x4ohFhxhxxKJDjDhi0SFGHLHoECOOWHSIEUcsOsSIIxYdYsQRiw4x4ohFhxhxxKLzL+lpiVCxE/uiAAAAAElFTkSuQmCC" class="w-full h-auto rounded border border-slate-800 bg-black/50 min-h-[40px]" style="image-rendering: pixelated;" alt="Tensor">
-                                </div>
-<div class="erd-table">
-                                <div class="erd-header"><span>CNN_Block_2</span><i data-lucide="box" class="w-4 h-4 text-indigo-600"></i></div>
-                                <div class="erd-row"><span>layers</span><span class="erd-val">Conv2D x2</span></div>
-                                <div class="erd-row"><span>filters</span><span class="erd-type">128</span></div>
-                                <div class="erd-row"><span>pooling</span><span class="erd-val">MaxPool2D</span></div>
-                            </div></div>
-                            <div class="h-px w-10 bg-slate-200 my-auto"></div>
-                            </div>
-<div class="relative group">
-<div class="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-48 bg-slate-900 rounded-xl p-2 shadow-2xl opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 z-[9999] origin-bottom border border-slate-700">
-                                    <div class="text-[9px] font-mono text-slate-400 mb-1 flex justify-between"><span>TENSOR_VISUAL</span><span class="text-sky-400">LIVE</span></div>
-                                    <img id="vis-cnn-3" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAAgCAIAAABVQOdyAAAEUElEQVRoBe3Bb2hVZRwH8O/veuJ0tXBnnlh2jB33BzY7MqYL5ZB0iedUMvS+eZxBrRv+i1NQvpIgxgxtpxe9MO7kvOhFMDuEMPOFyWQKHdp8XCK2ptf0lt7TagvmwGCjbe56lxzYixCnL4Lz4p7PhxhxxKJDjDhi0SFGHLHoECOOWHSIEUcsOsSIIxYdYsQRiw4x4ohFhxhxxKJDjDgew/xrL469/MSq5glp2b2x61XP95fk7y4iNGmbdzbdXSjSuoPjs42rC9ulxvWj1/JrtP7Eit4hhCZt886muwtFWndwfLZxdWG71Lh+9Fp+jdafWNE7hDJGjDge5ffD5rVdRxNIYFEJJUO8Xf3mr6W5WVUonu4DaLncNtB8LEkyFhndttYlAKhC8XQfQMvltoHmY0mSscjotrUugXJFjDiWNPaRefUDF6GOCeP69LM9a08nSQZQc2pv/bsXVaF4uo/QdGm2c8I8XHUhSTKAuYX5bTv30OCwKhRP9xGaLs12TpiHqy4kSQYwtzC/beceGhxGWSJGHEtSheLpPoCak/vq3/8RwOgn5i97XQBBccque6XSX+HpPoCzM9IRq7V4K5Bq13ac690sSwCMblvrEqpQPN0HcHZGOmK1Fm8FUu3ajnO9m2UJgNFta10CZYkYcTzcsooK72qfklgO4NWd79DAT7iPEn9nNt2TSfpnYeWxC6pQPN0HUHNmd/2uSwgFx5tubOkB0HC+vXrHiCoUT/cB1JzZXb/rEkLB8aYbW3oANJxvr94xgrJEjDgeLtG0rq/vG4S21m4uzczgAapQPN0HYGRtzREIFRwzn3EBpHJp2QpUoXi6D8DI2pojECo4Zj7jAkjl0rIVoCwRI46Hk+pqTv9wEqHWlteL43/hAapQPN0HYGRtzREIFRwzn3EBpHJp2QpUoXi6D8DI2pojECo4Zj7jAkjl0rIVoCwRI44lvXVjrP3pSQAbPrWfOSoAUMv6N77uXyVN/3G38lSzVvl90tN9AEbW1hyBUMEx8xkXQCqXlq1AFYqn+wCMrK05AqGCY+YzLoBULi1bAcoSMeJY0m89G26yrwB8cUfv6d6avF166eOhz6p+BtB5+4WhJkkViqf7AIysrTkCoYJj5jMugFQuLVuBKhRP9wEYWVtzBEIFx8xnXACpXFq2ApQlYsSxJKmhvvXbofcq/sR/3SxO79v9oXT2kioUT/cBGFlbcwRCBcfMZ1wAqVxatgJVKJ7uAzCytuYIhAqOmc+4AFK5tGwFKEvEiONRpOdWT3751OeNvVuexH1zC/NWbkfy4EqIYQBTfXWi6QSAjYds1RUIjR8wr+x3ATQMtle3jUz11YmmEwA2HrJVVyA0fsC8st8F0DDYXt02grJEjDgem1RfW1ou4/qt0twsYv8HYsQRiw4x4ohFhxhxxKJDjDhi0SFGHLHoECOOWHSIEUcsOsSIIxYdYsQRiw4x4ohFhxhxxKLzL+lpiVCxE/uiAAAAAElFTkSuQmCC" class="w-full h-auto rounded border border-slate-800 bg-black/50 min-h-[40px]" style="image-rendering: pixelated;" alt="Tensor">
-                                </div>
-<div class="erd-table">
-                                <div class="erd-header"><span>CNN_Block_3</span><i data-lucide="box" class="w-4 h-4 text-indigo-600"></i></div>
-                                <div class="erd-row"><span>layers</span><span class="erd-val">Conv2D x2</span></div>
-                                <div class="erd-row"><span>filters</span><span class="erd-type">256</span></div>
-                                                            <div class="p-2 bg-slate-50 border-t border-slate-100 flex justify-center items-center py-6 perspective-1000">
-                                <div class="relative w-16 h-16 transform -rotate-x-12 rotate-y-12">
-                                    <div class="absolute inset-0 bg-indigo-500/20 border border-indigo-400/50 shadow-sm transform translate-x-2 translate-y-2"></div>
-                                    <div class="absolute inset-0 bg-indigo-500/30 border border-indigo-400/60 shadow-sm transform translate-x-1 translate-y-1"></div>
-                                    <div class="absolute inset-0 bg-indigo-500/40 border border-indigo-400/80 shadow-md flex items-center justify-center text-[8px] font-mono text-indigo-900 font-bold">256 CH</div>
-                                </div>
-                            </div>
-                            <div class="erd-row"><span>output</span><span class="erd-val">Feature_Map</span></div>
-                            </div></div>
-                        </div>
-                    </div>
-
-
-                    <!-- ZONE 3: SQUEEZE/RESHAPE (4200, 1200) -->
-                    <div class="absolute flex flex-row items-center gap-20" style="left: 4200px; top: 1200px; transform: translate(-50%, -50%); z-index: 2;">
-                        <div class="flex flex-col gap-8">
-                            </div>
-<div class="relative group">
-<div class="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-48 bg-slate-900 rounded-xl p-2 shadow-2xl opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 z-[9999] origin-bottom border border-slate-700">
-                                    <div class="text-[9px] font-mono text-slate-400 mb-1 flex justify-between"><span>TENSOR_VISUAL</span><span class="text-sky-400">LIVE</span></div>
-                                    <img id="vis-reshape" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAAgCAIAAABVQOdyAAAEUElEQVRoBe3Bb2hVZRwH8O/veuJ0tXBnnlh2jB33BzY7MqYL5ZB0iedUMvS+eZxBrRv+i1NQvpIgxgxtpxe9MO7kvOhFMDuEMPOFyWQKHdp8XCK2ptf0lt7TagvmwGCjbe56lxzYixCnL4Lz4p7PhxhxxKJDjDhi0SFGHLHoECOOWHSIEUcsOsSIIxYdYsQRiw4x4ohFhxhxxKJDjDgew/xrL469/MSq5glp2b2x61XP95fk7y4iNGmbdzbdXSjSuoPjs42rC9ulxvWj1/JrtP7Eit4hhCZt886muwtFWndwfLZxdWG71Lh+9Fp+jdafWNE7hDJGjDge5ffD5rVdRxNIYFEJJUO8Xf3mr6W5WVUonu4DaLncNtB8LEkyFhndttYlAKhC8XQfQMvltoHmY0mSscjotrUugXJFjDiWNPaRefUDF6GOCeP69LM9a08nSQZQc2pv/bsXVaF4uo/QdGm2c8I8XHUhSTKAuYX5bTv30OCwKhRP9xGaLs12TpiHqy4kSQYwtzC/beceGhxGWSJGHEtSheLpPoCak/vq3/8RwOgn5i97XQBBccque6XSX+HpPoCzM9IRq7V4K5Bq13ac690sSwCMblvrEqpQPN0HcHZGOmK1Fm8FUu3ajnO9m2UJgNFta10CZYkYcTzcsooK72qfklgO4NWd79DAT7iPEn9nNt2TSfpnYeWxC6pQPN0HUHNmd/2uSwgFx5tubOkB0HC+vXrHiCoUT/cB1JzZXb/rEkLB8aYbW3oANJxvr94xgrJEjDgeLtG0rq/vG4S21m4uzczgAapQPN0HYGRtzREIFRwzn3EBpHJp2QpUoXi6D8DI2pojECo4Zj7jAkjl0rIVoCwRI46Hk+pqTv9wEqHWlteL43/hAapQPN0HYGRtzREIFRwzn3EBpHJp2QpUoXi6D8DI2pojECo4Zj7jAkjl0rIVoCwRI44lvXVjrP3pSQAbPrWfOSoAUMv6N77uXyVN/3G38lSzVvl90tN9AEbW1hyBUMEx8xkXQCqXlq1AFYqn+wCMrK05AqGCY+YzLoBULi1bAcoSMeJY0m89G26yrwB8cUfv6d6avF166eOhz6p+BtB5+4WhJkkViqf7AIysrTkCoYJj5jMugFQuLVuBKhRP9wEYWVtzBEIFx8xnXACpXFq2ApQlYsSxJKmhvvXbofcq/sR/3SxO79v9oXT2kioUT/cBGFlbcwRCBcfMZ1wAqVxatgJVKJ7uAzCytuYIhAqOmc+4AFK5tGwFKEvEiONRpOdWT3751OeNvVuexH1zC/NWbkfy4EqIYQBTfXWi6QSAjYds1RUIjR8wr+x3ATQMtle3jUz11YmmEwA2HrJVVyA0fsC8st8F0DDYXt02grJEjDgem1RfW1ou4/qt0twsYv8HYsQRiw4x4ohFhxhxxKJDjDhi0SFGHLHoECOOWHSIEUcsOsSIIxYdYsQRiw4x4ohFhxhxxKLzL+lpiVCxE/uiAAAAAElFTkSuQmCC" class="w-full h-auto rounded border border-slate-800 bg-black/50 min-h-[40px]" style="image-rendering: pixelated;" alt="Tensor">
-                                </div>
-<div class="erd-table">
-                                <div class="erd-header"><span>Reshape_Layer</span><i data-lucide="arrow-right-left" class="w-4 h-4 text-violet-600"></i></div>
-                                <div class="erd-row"><span>operation</span><span class="erd-val">Squeeze_Dims</span></div>
-                                <div class="erd-row"><span>input</span><span class="erd-type">3D_Tensor</span></div>
-                            </div></div>
-                            <div class="w-px h-8 bg-slate-200 mx-auto"></div>
-                            </div>
-<div class="relative group">
-<div class="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-48 bg-slate-900 rounded-xl p-2 shadow-2xl opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 z-[9999] origin-bottom border border-slate-700">
-                                    <div class="text-[9px] font-mono text-slate-400 mb-1 flex justify-between"><span>TENSOR_VISUAL</span><span class="text-sky-400">LIVE</span></div>
-                                    <img id="vis-lstm-1" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAAgCAIAAABVQOdyAAAEUElEQVRoBe3Bb2hVZRwH8O/veuJ0tXBnnlh2jB33BzY7MqYL5ZB0iedUMvS+eZxBrRv+i1NQvpIgxgxtpxe9MO7kvOhFMDuEMPOFyWQKHdp8XCK2ptf0lt7TagvmwGCjbe56lxzYixCnL4Lz4p7PhxhxxKJDjDhi0SFGHLHoECOOWHSIEUcsOsSIIxYdYsQRiw4x4ohFhxhxxKJDjDgew/xrL469/MSq5glp2b2x61XP95fk7y4iNGmbdzbdXSjSuoPjs42rC9ulxvWj1/JrtP7Eit4hhCZt886muwtFWndwfLZxdWG71Lh+9Fp+jdafWNE7hDJGjDge5ffD5rVdRxNIYFEJJUO8Xf3mr6W5WVUonu4DaLncNtB8LEkyFhndttYlAKhC8XQfQMvltoHmY0mSscjotrUugXJFjDiWNPaRefUDF6GOCeP69LM9a08nSQZQc2pv/bsXVaF4uo/QdGm2c8I8XHUhSTKAuYX5bTv30OCwKhRP9xGaLs12TpiHqy4kSQYwtzC/beceGhxGWSJGHEtSheLpPoCak/vq3/8RwOgn5i97XQBBccque6XSX+HpPoCzM9IRq7V4K5Bq13ac690sSwCMblvrEqpQPN0HcHZGOmK1Fm8FUu3ajnO9m2UJgNFta10CZYkYcTzcsooK72qfklgO4NWd79DAT7iPEn9nNt2TSfpnYeWxC6pQPN0HUHNmd/2uSwgFx5tubOkB0HC+vXrHiCoUT/cB1JzZXb/rEkLB8aYbW3oANJxvr94xgrJEjDgeLtG0rq/vG4S21m4uzczgAapQPN0HYGRtzREIFRwzn3EBpHJp2QpUoXi6D8DI2pojECo4Zj7jAkjl0rIVoCwRI46Hk+pqTv9wEqHWlteL43/hAapQPN0HYGRtzREIFRwzn3EBpHJp2QpUoXi6D8DI2pojECo4Zj7jAkjl0rIVoCwRI44lvXVjrP3pSQAbPrWfOSoAUMv6N77uXyVN/3G38lSzVvl90tN9AEbW1hyBUMEx8xkXQCqXlq1AFYqn+wCMrK05AqGCY+YzLoBULi1bAcoSMeJY0m89G26yrwB8cUfv6d6avF166eOhz6p+BtB5+4WhJkkViqf7AIysrTkCoYJj5jMugFQuLVuBKhRP9wEYWVtzBEIFx8xnXACpXFq2ApQlYsSxJKmhvvXbofcq/sR/3SxO79v9oXT2kioUT/cBGFlbcwRCBcfMZ1wAqVxatgJVKJ7uAzCytuYIhAqOmc+4AFK5tGwFKEvEiONRpOdWT3751OeNvVuexH1zC/NWbkfy4EqIYQBTfXWi6QSAjYds1RUIjR8wr+x3ATQMtle3jUz11YmmEwA2HrJVVyA0fsC8st8F0DDYXt02grJEjDgem1RfW1ou4/qt0twsYv8HYsQRiw4x4ohFhxhxxKJDjDhi0SFGHLHoECOOWHSIEUcsOsSIIxYdYsQRiw4x4ohFhxhxxKLzL+lpiVCxE/uiAAAAAElFTkSuQmCC" class="w-full h-auto rounded border border-slate-800 bg-black/50 min-h-[40px]" style="image-rendering: pixelated;" alt="Tensor">
-                                </div>
-<div class="erd-table">
-                                <div class="erd-header"><span>Time_Steps</span><i data-lucide="clock" class="w-4 h-4 text-violet-600"></i></div>
-                                <div class="erd-row"><span>frames</span><span class="erd-val">64</span></div>
-                                <div class="erd-row"><span>features</span><span class="erd-type">256</span></div>
-                            </div></div>
-                        </div>
-                        
-                        <div class="expl-card">
-                            <div class="expl-icon-wrap bg-violet-50 border-violet-100"><i data-lucide="align-center-horizontal" class="w-6 h-6 text-violet-600"></i></div>
-                            <h3 class="text-xl font-bold text-slate-800 mb-3">3. Sequence Reshape</h3>
-                            <p class="text-slate-600 text-[13px] leading-relaxed">
-                                <span class="lang-en">The spatial feature map from the CNN is flattened and converted into a sequence of 64 time-steps, preparing it for the sequential memory network.</span>
-                                <span class="lang-id">Peta fitur spasial dari CNN dipipihkan dan dikonversi menjadi urutan 64 langkah-waktu (Time-steps), mempersiapkannya untuk jaringan memori sekuensial.</span>
-                            </p>
-                        </div>
-                    </div>
-
-
-                    <!-- ZONE 4: BILSTM (3500, 2200) -->
-                    <div class="absolute flex flex-col items-center gap-16" style="left: 3500px; top: 2200px; transform: translate(-50%, -50%); z-index: 2;">
-                        <div class="expl-card w-[540px] text-center flex flex-col items-center">
-                            <div class="expl-icon-wrap bg-teal-50 border-teal-100"><i data-lucide="git-merge" class="w-6 h-6 text-teal-600"></i></div>
-                            <h3 class="text-xl font-bold text-slate-800 mb-2">4. Bidirectional Temporal Memory</h3>
-                            <p class="text-slate-600 text-[13px] leading-relaxed">
-                                <span class="lang-en">The LSTM network processes the sequence in parallel from two directions (Forward and Backward) with 256 units each to read letter context before merging into the Softmax layer.</span>
-                                <span class="lang-id">Jaringan LSTM memproses urutan secara paralel dari dua arah (Maju dan Mundur) dengan masing-masing 256 unit untuk membaca konteks huruf sebelum digabung ke lapisan Softmax.</span>
-                            </p>
-                        </div>
-
-                        <div class="flex flex-row items-start gap-12">
-                            <div class="erd-table mt-8">
-                                <div class="erd-header"><span>Forward_LSTM</span><i data-lucide="arrow-right" class="w-4 h-4 text-teal-600"></i></div>
-                                <div class="erd-row"><span>direction</span><span class="erd-val">Left-to-Right</span></div>
-                                                            <div class="p-2 bg-slate-50 border-t border-slate-100 flex flex-col justify-center items-center py-4 gap-2">
-                                <div class="flex items-center gap-1">
-                                    <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
-                                    <div class="w-6 h-px bg-slate-300"></div>
-                                    <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" style="animation-delay: 0.2s;"></div>
-                                    <div class="w-6 h-px bg-slate-300"></div>
-                                    <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" style="animation-delay: 0.4s;"></div>
-                                </div>
-                                <div class="flex gap-4 text-[8px] font-mono font-bold text-slate-400">
-                                    <span>&rarr; FWD</span>
-                                    <span>BWD &larr;</span>
-                                </div>
-                            </div>
-                            <div class="erd-row"><span>units</span><span class="erd-type">256</span></div>
-                            </div>
-                            
-                            <div class="flex flex-col items-center">
-                                <div class="w-px h-10 bg-slate-200"></div>
-                                <div class="w-full h-px bg-slate-200 relative flex justify-between" style="width: 320px; margin-left: -160px; margin-right: -160px;">
-                                    <div class="w-px h-8 bg-slate-200 absolute left-0 top-0"></div>
-                                    <div class="w-px h-8 bg-slate-200 absolute right-0 top-0"></div>
-                                </div>
-                                <div class="w-px h-8 bg-slate-200"></div>
-                                
-                                </div>
-<div class="relative group">
-<div class="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-48 bg-slate-900 rounded-xl p-2 shadow-2xl opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 z-[9999] origin-bottom border border-slate-700">
-                                    <div class="text-[9px] font-mono text-slate-400 mb-1 flex justify-between"><span>TENSOR_VISUAL</span><span class="text-sky-400">LIVE</span></div>
-                                    <img id="vis-lstm-2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAAgCAIAAABVQOdyAAAEUElEQVRoBe3Bb2hVZRwH8O/veuJ0tXBnnlh2jB33BzY7MqYL5ZB0iedUMvS+eZxBrRv+i1NQvpIgxgxtpxe9MO7kvOhFMDuEMPOFyWQKHdp8XCK2ptf0lt7TagvmwGCjbe56lxzYixCnL4Lz4p7PhxhxxKJDjDhi0SFGHLHoECOOWHSIEUcsOsSIIxYdYsQRiw4x4ohFhxhxxKJDjDgew/xrL469/MSq5glp2b2x61XP95fk7y4iNGmbdzbdXSjSuoPjs42rC9ulxvWj1/JrtP7Eit4hhCZt886muwtFWndwfLZxdWG71Lh+9Fp+jdafWNE7hDJGjDge5ffD5rVdRxNIYFEJJUO8Xf3mr6W5WVUonu4DaLncNtB8LEkyFhndttYlAKhC8XQfQMvltoHmY0mSscjotrUugXJFjDiWNPaRefUDF6GOCeP69LM9a08nSQZQc2pv/bsXVaF4uo/QdGm2c8I8XHUhSTKAuYX5bTv30OCwKhRP9xGaLs12TpiHqy4kSQYwtzC/beceGhxGWSJGHEtSheLpPoCak/vq3/8RwOgn5i97XQBBccque6XSX+HpPoCzM9IRq7V4K5Bq13ac690sSwCMblvrEqpQPN0HcHZGOmK1Fm8FUu3ajnO9m2UJgNFta10CZYkYcTzcsooK72qfklgO4NWd79DAT7iPEn9nNt2TSfpnYeWxC6pQPN0HUHNmd/2uSwgFx5tubOkB0HC+vXrHiCoUT/cB1JzZXb/rEkLB8aYbW3oANJxvr94xgrJEjDgeLtG0rq/vG4S21m4uzczgAapQPN0HYGRtzREIFRwzn3EBpHJp2QpUoXi6D8DI2pojECo4Zj7jAkjl0rIVoCwRI46Hk+pqTv9wEqHWlteL43/hAapQPN0HYGRtzREIFRwzn3EBpHJp2QpUoXi6D8DI2pojECo4Zj7jAkjl0rIVoCwRI44lvXVjrP3pSQAbPrWfOSoAUMv6N77uXyVN/3G38lSzVvl90tN9AEbW1hyBUMEx8xkXQCqXlq1AFYqn+wCMrK05AqGCY+YzLoBULi1bAcoSMeJY0m89G26yrwB8cUfv6d6avF166eOhz6p+BtB5+4WhJkkViqf7AIysrTkCoYJj5jMugFQuLVuBKhRP9wEYWVtzBEIFx8xnXACpXFq2ApQlYsSxJKmhvvXbofcq/sR/3SxO79v9oXT2kioUT/cBGFlbcwRCBcfMZ1wAqVxatgJVKJ7uAzCytuYIhAqOmc+4AFK5tGwFKEvEiONRpOdWT3751OeNvVuexH1zC/NWbkfy4EqIYQBTfXWi6QSAjYds1RUIjR8wr+x3ATQMtle3jUz11YmmEwA2HrJVVyA0fsC8st8F0DDYXt02grJEjDgem1RfW1ou4/qt0twsYv8HYsQRiw4x4ohFhxhxxKJDjDhi0SFGHLHoECOOWHSIEUcsOsSIIxYdYsQRiw4x4ohFhxhxxKLzL+lpiVCxE/uiAAAAAElFTkSuQmCC" class="w-full h-auto rounded border border-slate-800 bg-black/50 min-h-[40px]" style="image-rendering: pixelated;" alt="Tensor">
-                                </div>
-<div class="erd-table">
-                                    <div class="erd-header"><span>Dense_Softmax</span><i data-lucide="bar-chart" class="w-4 h-4 text-teal-600"></i></div>
-                                    <div class="erd-row"><span>activation</span><span class="erd-val">Softmax</span></div>
-                                    <div class="erd-row"><span>classes</span><span class="erd-type">80_Chars</span></div>
-                                    <div class="erd-row"><span>output</span><span class="erd-val">Probabilities</span></div>
-                                    <div class="p-2 bg-slate-50 border-t border-slate-100 text-[10px] font-mono text-slate-500 overflow-hidden" id="math-temporal-lstm">
+</div></div>
+<div class="h-px w-10 bg-slate-200 my-auto"></div>
+<div class="relative group"><div class="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-48 bg-slate-900 rounded-xl p-2 shadow-2xl opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 z-[9999] origin-bottom border border-slate-700"><div class="text-[9px] font-mono text-slate-400 mb-1 flex justify-between"><span>TENSOR_VISUAL</span><span class="text-sky-400">LIVE</span></div><img alt="Tensor" class="w-full h-auto rounded border border-slate-800 bg-black/50 min-h-[40px]" id="vis-cnn-2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAAgCAAAAAD/SS/5AAADSklEQVRYCcXBf0yUZQDA8e9zO9Drhxvogv5QojRtuLRTr4lE3qU8d3Lly9BRq8HCrs0tW2y1pLk2bVZmv9b6I+Umk6kNcM7XuvNheRMwWHGeEJNamRH9WrZ0djG5O+S90C1Ot/55O7b38xFYTGAxgcUEFhNYTJCdsgeMg5fJgiA7x72sP0YWBNlREk0nC4LsKImmkwXBDWZXL7trpPdQikmVaxZe+a69H2pKE9urvLlfNv1dsnH5QNsgbCwbf63Ue++3bb2gJJoOS1avSnSd/AHzBBmLjxUz6fuKYRz6WiZN7NhBxMOph4DIu623Qdx9BiX55FFg4qX3UBJNp77JBhg1hzFNkNFVzkcnK2vpdPN6I6c/LG6YZazsi3hgKOkERk/fn8/QYpSE+MDSWSTvG1YSTd/QahvZldtYkFj7OWYJptiv5KQL/6C04EIv/iWJ4F/sr2XbzogHvSq9N0DaOXD3WYeRF1eSc8vjeV/NZdtOJdH00DpWd1F1hLYazBJk9K3gl7bOE2Nct2zlwjWLaHo24qG+mYoOzs+HLx6k/JSSvPIG7H6R1seVRAtfvJ3KBPnt/FiMWYKMklARMKo/f4m8QG0J1wQDEQ+ajjNG1AVhH/6Qkjx1ELZ8QPfDSqKdG+Jfcy5ikuAGjspqdwH0r5jYG2CwPbp+M8FAxIOm44wRdUHYhz+kJJv2wctv0uFVEq3vN9J7uCaxNYlJgpsJ/1Ebrkvf5HS6QX+MYCDiQdNxxoi6IOzDH1KS5nr4tJL3G5RE0y/cwfzzkCuuTmCWYMrSsOh67s9FgzksuEdxpiJe02wnGIh40HScMaIuCPvwh5Qk/VaPuwGqjiqJpu97mo+fGX9nC8fXYZZgysweJ8nf59r4rGLG8J0YqZnJGQQDEQ+ajjNG1AVhH/6QkqRymdRbllYSTZ99tpAx41bGvN2YJcjIb9yUR/rX/dvHmdeyym4cPrFH7NravsFwd7Pga3uHFw48aZT3KMkLj/jsqSObL3PoCcPdTeHuagfjHa/2Y5rgJnMKRka57pain0f5b0pS1+KYN5wiw1YkfrrK/yAwT0nqWpgmAvOUpK6FaSIw720tHehkmggsJrCYwGICiwksJrCYwGICi/0Dz+4wMA4R1V8AAAAASUVORK5CYII=" style="image-rendering: pixelated;"/></div><div class="erd-table">
+<div class="erd-header"><span>CNN_Block_2</span><i class="w-4 h-4 text-indigo-600" data-lucide="box"></i></div>
+<div class="erd-row"><span>layers</span><span class="erd-val">Conv2D x2</span></div>
+<div class="erd-row"><span>filters</span><span class="erd-type">128</span></div>
+<div class="erd-row"><span>pooling</span><span class="erd-val">MaxPool2D</span></div>
+</div></div>
+<div class="h-px w-10 bg-slate-200 my-auto"></div>
+<div class="relative group"><div class="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-48 bg-slate-900 rounded-xl p-2 shadow-2xl opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 z-[9999] origin-bottom border border-slate-700"><div class="text-[9px] font-mono text-slate-400 mb-1 flex justify-between"><span>TENSOR_VISUAL</span><span class="text-sky-400">LIVE</span></div><img alt="Tensor" class="w-full h-auto rounded border border-slate-800 bg-black/50 min-h-[40px]" id="vis-cnn-3" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAAgCAAAAAD/SS/5AAADSklEQVRYCcXBf0yUZQDA8e9zO9Drhxvogv5QojRtuLRTr4lE3qU8d3Lly9BRq8HCrs0tW2y1pLk2bVZmv9b6I+Umk6kNcM7XuvNheRMwWHGeEJNamRH9WrZ0djG5O+S90C1Ot/55O7b38xFYTGAxgcUEFhNYTJCdsgeMg5fJgiA7x72sP0YWBNlREk0nC4LsKImmkwXBDWZXL7trpPdQikmVaxZe+a69H2pKE9urvLlfNv1dsnH5QNsgbCwbf63Ue++3bb2gJJoOS1avSnSd/AHzBBmLjxUz6fuKYRz6WiZN7NhBxMOph4DIu623Qdx9BiX55FFg4qX3UBJNp77JBhg1hzFNkNFVzkcnK2vpdPN6I6c/LG6YZazsi3hgKOkERk/fn8/QYpSE+MDSWSTvG1YSTd/QahvZldtYkFj7OWYJptiv5KQL/6C04EIv/iWJ4F/sr2XbzogHvSq9N0DaOXD3WYeRF1eSc8vjeV/NZdtOJdH00DpWd1F1hLYazBJk9K3gl7bOE2Nct2zlwjWLaHo24qG+mYoOzs+HLx6k/JSSvPIG7H6R1seVRAtfvJ3KBPnt/FiMWYKMklARMKo/f4m8QG0J1wQDEQ+ajjNG1AVhH/6Qkjx1ELZ8QPfDSqKdG+Jfcy5ikuAGjspqdwH0r5jYG2CwPbp+M8FAxIOm44wRdUHYhz+kJJv2wctv0uFVEq3vN9J7uCaxNYlJgpsJ/1Ebrkvf5HS6QX+MYCDiQdNxxoi6IOzDH1KS5nr4tJL3G5RE0y/cwfzzkCuuTmCWYMrSsOh67s9FgzksuEdxpiJe02wnGIh40HScMaIuCPvwh5Qk/VaPuwGqjiqJpu97mo+fGX9nC8fXYZZgysweJ8nf59r4rGLG8J0YqZnJGQQDEQ+ajjNG1AVhH/6QkqRymdRbllYSTZ99tpAx41bGvN2YJcjIb9yUR/rX/dvHmdeyym4cPrFH7NravsFwd7Pga3uHFw48aZT3KMkLj/jsqSObL3PoCcPdTeHuagfjHa/2Y5rgJnMKRka57pain0f5b0pS1+KYN5wiw1YkfrrK/yAwT0nqWpgmAvOUpK6FaSIw720tHehkmggsJrCYwGICiwksJrCYwGICi/0Dz+4wMA4R1V8AAAAASUVORK5CYII=" style="image-rendering: pixelated;"/></div><div class="erd-table">
+<div class="erd-header"><span>CNN_Block_3</span><i class="w-4 h-4 text-indigo-600" data-lucide="box"></i></div>
+<div class="erd-row"><span>layers</span><span class="erd-val">Conv2D x2</span></div>
+<div class="erd-row"><span>filters</span><span class="erd-type">256</span></div>
+<div class="p-2 bg-slate-50 border-t border-slate-100 flex justify-center items-center py-6 perspective-1000">
+<div class="relative w-16 h-16 transform -rotate-x-12 rotate-y-12">
+<div class="absolute inset-0 bg-indigo-500/20 border border-indigo-400/50 shadow-sm transform translate-x-2 translate-y-2"></div>
+<div class="absolute inset-0 bg-indigo-500/30 border border-indigo-400/60 shadow-sm transform translate-x-1 translate-y-1"></div>
+<div class="absolute inset-0 bg-indigo-500/40 border border-indigo-400/80 shadow-md flex items-center justify-center text-[8px] font-mono text-indigo-900 font-bold">256 CH</div>
+</div>
+</div>
+<div class="erd-row"><span>output</span><span class="erd-val">Feature_Map</span></div>
+</div></div>
+</div>
+</div>
+<!-- ZONE 3: SQUEEZE/RESHAPE (4200, 1200) -->
+<div class="absolute flex flex-row items-center gap-20" style="left: 4200px; top: 1200px; transform: translate(-50%, -50%); z-index: 2;">
+<div class="flex flex-col gap-8">
+<div class="relative group"><div class="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-48 bg-slate-900 rounded-xl p-2 shadow-2xl opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 z-[9999] origin-bottom border border-slate-700"><div class="text-[9px] font-mono text-slate-400 mb-1 flex justify-between"><span>TENSOR_VISUAL</span><span class="text-sky-400">LIVE</span></div><img alt="Tensor" class="w-full h-auto rounded border border-slate-800 bg-black/50 min-h-[40px]" id="vis-reshape" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAAgCAAAAAD/SS/5AAADSklEQVRYCcXBf0yUZQDA8e9zO9Drhxvogv5QojRtuLRTr4lE3qU8d3Lly9BRq8HCrs0tW2y1pLk2bVZmv9b6I+Umk6kNcM7XuvNheRMwWHGeEJNamRH9WrZ0djG5O+S90C1Ot/55O7b38xFYTGAxgcUEFhNYTJCdsgeMg5fJgiA7x72sP0YWBNlREk0nC4LsKImmkwXBDWZXL7trpPdQikmVaxZe+a69H2pKE9urvLlfNv1dsnH5QNsgbCwbf63Ue++3bb2gJJoOS1avSnSd/AHzBBmLjxUz6fuKYRz6WiZN7NhBxMOph4DIu623Qdx9BiX55FFg4qX3UBJNp77JBhg1hzFNkNFVzkcnK2vpdPN6I6c/LG6YZazsi3hgKOkERk/fn8/QYpSE+MDSWSTvG1YSTd/QahvZldtYkFj7OWYJptiv5KQL/6C04EIv/iWJ4F/sr2XbzogHvSq9N0DaOXD3WYeRF1eSc8vjeV/NZdtOJdH00DpWd1F1hLYazBJk9K3gl7bOE2Nct2zlwjWLaHo24qG+mYoOzs+HLx6k/JSSvPIG7H6R1seVRAtfvJ3KBPnt/FiMWYKMklARMKo/f4m8QG0J1wQDEQ+ajjNG1AVhH/6Qkjx1ELZ8QPfDSqKdG+Jfcy5ikuAGjspqdwH0r5jYG2CwPbp+M8FAxIOm44wRdUHYhz+kJJv2wctv0uFVEq3vN9J7uCaxNYlJgpsJ/1Ebrkvf5HS6QX+MYCDiQdNxxoi6IOzDH1KS5nr4tJL3G5RE0y/cwfzzkCuuTmCWYMrSsOh67s9FgzksuEdxpiJe02wnGIh40HScMaIuCPvwh5Qk/VaPuwGqjiqJpu97mo+fGX9nC8fXYZZgysweJ8nf59r4rGLG8J0YqZnJGQQDEQ+ajjNG1AVhH/6QkqRymdRbllYSTZ99tpAx41bGvN2YJcjIb9yUR/rX/dvHmdeyym4cPrFH7NravsFwd7Pga3uHFw48aZT3KMkLj/jsqSObL3PoCcPdTeHuagfjHa/2Y5rgJnMKRka57pain0f5b0pS1+KYN5wiw1YkfrrK/yAwT0nqWpgmAvOUpK6FaSIw720tHehkmggsJrCYwGICiwksJrCYwGICi/0Dz+4wMA4R1V8AAAAASUVORK5CYII=" style="image-rendering: pixelated;"/></div><div class="erd-table">
+<div class="erd-header"><span>Reshape_Layer</span><i class="w-4 h-4 text-violet-600" data-lucide="arrow-right-left"></i></div>
+<div class="erd-row"><span>operation</span><span class="erd-val">Squeeze_Dims</span></div>
+<div class="erd-row"><span>input</span><span class="erd-type">3D_Tensor</span></div>
+</div></div>
+<div class="w-px h-8 bg-slate-200 mx-auto"></div>
+<div class="relative group"><div class="erd-table">
+<div class="erd-header"><span>Time_Steps</span><i class="w-4 h-4 text-violet-600" data-lucide="clock"></i></div>
+<div class="erd-row"><span>frames</span><span class="erd-val">64</span></div>
+<div class="erd-row"><span>features</span><span class="erd-type">256</span></div>
+</div></div>
+</div>
+<div class="expl-card">
+<div class="expl-icon-wrap bg-violet-50 border-violet-100"><i class="w-6 h-6 text-violet-600" data-lucide="align-center-horizontal"></i></div>
+<h3 class="text-xl font-bold text-slate-800 mb-3">3. Sequence Reshape</h3>
+<p class="text-slate-600 text-[13px] leading-relaxed">
+<span class="lang-en">The spatial feature map from the CNN is flattened and converted into a sequence of 64 time-steps, preparing it for the sequential memory network.</span>
+<span class="lang-id">Peta fitur spasial dari CNN dipipihkan dan dikonversi menjadi urutan 64 langkah-waktu (Time-steps), mempersiapkannya untuk jaringan memori sekuensial.</span>
+</p>
+</div>
+</div>
+<!-- ZONE 4: BILSTM (3500, 2200) -->
+<div class="absolute flex flex-col items-center gap-16" style="left: 3500px; top: 2200px; transform: translate(-50%, -50%); z-index: 2;">
+<div class="expl-card w-[540px] text-center flex flex-col items-center">
+<div class="expl-icon-wrap bg-teal-50 border-teal-100"><i class="w-6 h-6 text-teal-600" data-lucide="git-merge"></i></div>
+<h3 class="text-xl font-bold text-slate-800 mb-2">4. Bidirectional Temporal Memory</h3>
+<p class="text-slate-600 text-[13px] leading-relaxed">
+<span class="lang-en">The LSTM network processes the sequence in parallel from two directions (Forward and Backward) with 256 units each to read letter context before merging into the Softmax layer.</span>
+<span class="lang-id">Jaringan LSTM memproses urutan secara paralel dari dua arah (Maju dan Mundur) dengan masing-masing 256 unit untuk membaca konteks huruf sebelum digabung ke lapisan Softmax.</span>
+</p>
+</div>
+<div class="flex flex-row items-start gap-12">
+<div class="relative group"><div class="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-48 bg-slate-900 rounded-xl p-2 shadow-2xl opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 z-[9999] origin-bottom border border-slate-700"><div class="text-[9px] font-mono text-slate-400 mb-1 flex justify-between"><span>TENSOR_VISUAL</span><span class="text-sky-400">LIVE</span></div><img alt="Tensor" class="w-full h-auto rounded border border-slate-800 bg-black/50 min-h-[40px]" id="vis-lstm-1" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAAgCAAAAAD/SS/5AAADSklEQVRYCcXBf0yUZQDA8e9zO9Drhxvogv5QojRtuLRTr4lE3qU8d3Lly9BRq8HCrs0tW2y1pLk2bVZmv9b6I+Umk6kNcM7XuvNheRMwWHGeEJNamRH9WrZ0djG5O+S90C1Ot/55O7b38xFYTGAxgcUEFhNYTJCdsgeMg5fJgiA7x72sP0YWBNlREk0nC4LsKImmkwXBDWZXL7trpPdQikmVaxZe+a69H2pKE9urvLlfNv1dsnH5QNsgbCwbf63Ue++3bb2gJJoOS1avSnSd/AHzBBmLjxUz6fuKYRz6WiZN7NhBxMOph4DIu623Qdx9BiX55FFg4qX3UBJNp77JBhg1hzFNkNFVzkcnK2vpdPN6I6c/LG6YZazsi3hgKOkERk/fn8/QYpSE+MDSWSTvG1YSTd/QahvZldtYkFj7OWYJptiv5KQL/6C04EIv/iWJ4F/sr2XbzogHvSq9N0DaOXD3WYeRF1eSc8vjeV/NZdtOJdH00DpWd1F1hLYazBJk9K3gl7bOE2Nct2zlwjWLaHo24qG+mYoOzs+HLx6k/JSSvPIG7H6R1seVRAtfvJ3KBPnt/FiMWYKMklARMKo/f4m8QG0J1wQDEQ+ajjNG1AVhH/6Qkjx1ELZ8QPfDSqKdG+Jfcy5ikuAGjspqdwH0r5jYG2CwPbp+M8FAxIOm44wRdUHYhz+kJJv2wctv0uFVEq3vN9J7uCaxNYlJgpsJ/1Ebrkvf5HS6QX+MYCDiQdNxxoi6IOzDH1KS5nr4tJL3G5RE0y/cwfzzkCuuTmCWYMrSsOh67s9FgzksuEdxpiJe02wnGIh40HScMaIuCPvwh5Qk/VaPuwGqjiqJpu97mo+fGX9nC8fXYZZgysweJ8nf59r4rGLG8J0YqZnJGQQDEQ+ajjNG1AVhH/6QkqRymdRbllYSTZ99tpAx41bGvN2YJcjIb9yUR/rX/dvHmdeyym4cPrFH7NravsFwd7Pga3uHFw48aZT3KMkLj/jsqSObL3PoCcPdTeHuagfjHa/2Y5rgJnMKRka57pain0f5b0pS1+KYN5wiw1YkfrrK/yAwT0nqWpgmAvOUpK6FaSIw720tHehkmggsJrCYwGICiwksJrCYwGICi/0Dz+4wMA4R1V8AAAAASUVORK5CYII=" style="image-rendering: pixelated;"/></div><div class="erd-table mt-8">
+<div class="erd-header"><span>Forward_LSTM</span><i class="w-4 h-4 text-teal-600" data-lucide="arrow-right"></i></div>
+<div class="erd-row"><span>direction</span><span class="erd-val">Left-to-Right</span></div>
+<div class="p-2 bg-slate-50 border-t border-slate-100 flex flex-col justify-center items-center py-4 gap-2">
+<div class="flex items-center gap-1">
+<div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+<div class="w-6 h-px bg-slate-300"></div>
+<div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" style="animation-delay: 0.2s;"></div>
+<div class="w-6 h-px bg-slate-300"></div>
+<div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" style="animation-delay: 0.4s;"></div>
+</div>
+<div class="flex gap-4 text-[8px] font-mono font-bold text-slate-400">
+<span>→ FWD</span>
+<span>BWD ←</span>
+</div>
+</div>
+<div class="erd-row"><span>units</span><span class="erd-type">256</span></div>
+</div></div>
+<div class="flex flex-col items-center">
+<div class="w-px h-10 bg-slate-200"></div>
+<div class="w-full h-px bg-slate-200 relative flex justify-between" style="width: 320px; margin-left: -160px; margin-right: -160px;">
+<div class="w-px h-8 bg-slate-200 absolute left-0 top-0"></div>
+<div class="w-px h-8 bg-slate-200 absolute right-0 top-0"></div>
+</div>
+<div class="w-px h-8 bg-slate-200"></div>
+<div class="relative group"><div class="erd-table">
+<div class="erd-header"><span>Dense_Softmax</span><i class="w-4 h-4 text-teal-600" data-lucide="bar-chart"></i></div>
+<div class="erd-row"><span>activation</span><span class="erd-val">Softmax</span></div>
+<div class="erd-row"><span>classes</span><span class="erd-type">80_Chars</span></div>
+<div class="erd-row"><span>output</span><span class="erd-val">Probabilities</span></div>
+<div class="p-2 bg-slate-50 border-t border-slate-100 text-[10px] font-mono text-slate-500 overflow-hidden" id="math-temporal-lstm">
                                         [LSTM Math Standby]
                                     </div>
-                                </div></div>
-                            </div>
-                            
-                            <div class="erd-table mt-8">
-                                <div class="erd-header"><span>Backward_LSTM</span><i data-lucide="arrow-left" class="w-4 h-4 text-teal-600"></i></div>
-                                <div class="erd-row"><span>direction</span><span class="erd-val">Right-to-Left</span></div>
-                                <div class="erd-row"><span>units</span><span class="erd-type">256</span></div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <!-- ZONE 5: CTC DECODER (2000, 2500) -->
-                    <div class="absolute flex flex-row items-center gap-20" style="left: 2000px; top: 2500px; transform: translate(-50%, -50%); z-index: 2;">
-                        <div class="expl-card">
-                            <div class="expl-icon-wrap bg-emerald-50 border-emerald-100"><i data-lucide="file-digit" class="w-6 h-6 text-emerald-600"></i></div>
-                            <h3 class="text-xl font-bold text-slate-800 mb-3">5. CTC Alignment</h3>
-                            <p class="text-slate-600 text-[13px] leading-relaxed">
-                                <span class="lang-en"><b>Connectionist Temporal Classification (CTC)</b> reduces probabilities into actual text by shrinking repeating characters (e.g., 'a-a-a' to 'a') and discarding blank tokens.</span>
-                                <span class="lang-id"><b>Connectionist Temporal Classification (CTC)</b> mereduksi probabilitas menjadi teks aktual dengan menyusutkan karakter berulang (misal: 'a-a-a' menjadi 'a') dan membuang token kosong.</span>
-                            </p>
-                        </div>
-                        
-                        <div class="flex flex-col gap-8">
-                            </div>
-<div class="relative group">
-<div class="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-48 bg-slate-900 rounded-xl p-2 shadow-2xl opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 z-[9999] origin-bottom border border-slate-700">
-                                    <div class="text-[9px] font-mono text-slate-400 mb-1 flex justify-between"><span>TENSOR_VISUAL</span><span class="text-sky-400">LIVE</span></div>
-                                    <img id="vis-ctc-1" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAAgCAIAAABVQOdyAAAEUElEQVRoBe3Bb2hVZRwH8O/veuJ0tXBnnlh2jB33BzY7MqYL5ZB0iedUMvS+eZxBrRv+i1NQvpIgxgxtpxe9MO7kvOhFMDuEMPOFyWQKHdp8XCK2ptf0lt7TagvmwGCjbe56lxzYixCnL4Lz4p7PhxhxxKJDjDhi0SFGHLHoECOOWHSIEUcsOsSIIxYdYsQRiw4x4ohFhxhxxKJDjDgew/xrL469/MSq5glp2b2x61XP95fk7y4iNGmbdzbdXSjSuoPjs42rC9ulxvWj1/JrtP7Eit4hhCZt886muwtFWndwfLZxdWG71Lh+9Fp+jdafWNE7hDJGjDge5ffD5rVdRxNIYFEJJUO8Xf3mr6W5WVUonu4DaLncNtB8LEkyFhndttYlAKhC8XQfQMvltoHmY0mSscjotrUugXJFjDiWNPaRefUDF6GOCeP69LM9a08nSQZQc2pv/bsXVaF4uo/QdGm2c8I8XHUhSTKAuYX5bTv30OCwKhRP9xGaLs12TpiHqy4kSQYwtzC/beceGhxGWSJGHEtSheLpPoCak/vq3/8RwOgn5i97XQBBccque6XSX+HpPoCzM9IRq7V4K5Bq13ac690sSwCMblvrEqpQPN0HcHZGOmK1Fm8FUu3ajnO9m2UJgNFta10CZYkYcTzcsooK72qfklgO4NWd79DAT7iPEn9nNt2TSfpnYeWxC6pQPN0HUHNmd/2uSwgFx5tubOkB0HC+vXrHiCoUT/cB1JzZXb/rEkLB8aYbW3oANJxvr94xgrJEjDgeLtG0rq/vG4S21m4uzczgAapQPN0HYGRtzREIFRwzn3EBpHJp2QpUoXi6D8DI2pojECo4Zj7jAkjl0rIVoCwRI46Hk+pqTv9wEqHWlteL43/hAapQPN0HYGRtzREIFRwzn3EBpHJp2QpUoXi6D8DI2pojECo4Zj7jAkjl0rIVoCwRI44lvXVjrP3pSQAbPrWfOSoAUMv6N77uXyVN/3G38lSzVvl90tN9AEbW1hyBUMEx8xkXQCqXlq1AFYqn+wCMrK05AqGCY+YzLoBULi1bAcoSMeJY0m89G26yrwB8cUfv6d6avF166eOhz6p+BtB5+4WhJkkViqf7AIysrTkCoYJj5jMugFQuLVuBKhRP9wEYWVtzBEIFx8xnXACpXFq2ApQlYsSxJKmhvvXbofcq/sR/3SxO79v9oXT2kioUT/cBGFlbcwRCBcfMZ1wAqVxatgJVKJ7uAzCytuYIhAqOmc+4AFK5tGwFKEvEiONRpOdWT3751OeNvVuexH1zC/NWbkfy4EqIYQBTfXWi6QSAjYds1RUIjR8wr+x3ATQMtle3jUz11YmmEwA2HrJVVyA0fsC8st8F0DDYXt02grJEjDgem1RfW1ou4/qt0twsYv8HYsQRiw4x4ohFhxhxxKJDjDhi0SFGHLHoECOOWHSIEUcsOsSIIxYdYsQRiw4x4ohFhxhxxKLzL+lpiVCxE/uiAAAAAElFTkSuQmCC" class="w-full h-auto rounded border border-slate-800 bg-black/50 min-h-[40px]" style="image-rendering: pixelated;" alt="Tensor">
-                                </div>
-<div class="erd-table">
-                                <div class="erd-header"><span>CTC_Loss</span><i data-lucide="cpu" class="w-4 h-4 text-emerald-600"></i></div>
-                                <div class="erd-row"><span>algorithm</span><span class="erd-val">CTC</span></div>
-                                <div class="erd-row"><span>blank_token</span><span class="erd-type">True</span></div>
-                                <div class="p-2 bg-slate-50 border-t border-slate-100 text-[10px] font-mono text-slate-500 overflow-hidden" id="math-ctc-softmax">
+</div></div>
+</div>
+<div class="relative group"><div class="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-48 bg-slate-900 rounded-xl p-2 shadow-2xl opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 z-[9999] origin-bottom border border-slate-700"><div class="text-[9px] font-mono text-slate-400 mb-1 flex justify-between"><span>TENSOR_VISUAL</span><span class="text-sky-400">LIVE</span></div><img alt="Tensor" class="w-full h-auto rounded border border-slate-800 bg-black/50 min-h-[40px]" id="vis-lstm-2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAAgCAAAAAD/SS/5AAADSklEQVRYCcXBf0yUZQDA8e9zO9Drhxvogv5QojRtuLRTr4lE3qU8d3Lly9BRq8HCrs0tW2y1pLk2bVZmv9b6I+Umk6kNcM7XuvNheRMwWHGeEJNamRH9WrZ0djG5O+S90C1Ot/55O7b38xFYTGAxgcUEFhNYTJCdsgeMg5fJgiA7x72sP0YWBNlREk0nC4LsKImmkwXBDWZXL7trpPdQikmVaxZe+a69H2pKE9urvLlfNv1dsnH5QNsgbCwbf63Ue++3bb2gJJoOS1avSnSd/AHzBBmLjxUz6fuKYRz6WiZN7NhBxMOph4DIu623Qdx9BiX55FFg4qX3UBJNp77JBhg1hzFNkNFVzkcnK2vpdPN6I6c/LG6YZazsi3hgKOkERk/fn8/QYpSE+MDSWSTvG1YSTd/QahvZldtYkFj7OWYJptiv5KQL/6C04EIv/iWJ4F/sr2XbzogHvSq9N0DaOXD3WYeRF1eSc8vjeV/NZdtOJdH00DpWd1F1hLYazBJk9K3gl7bOE2Nct2zlwjWLaHo24qG+mYoOzs+HLx6k/JSSvPIG7H6R1seVRAtfvJ3KBPnt/FiMWYKMklARMKo/f4m8QG0J1wQDEQ+ajjNG1AVhH/6Qkjx1ELZ8QPfDSqKdG+Jfcy5ikuAGjspqdwH0r5jYG2CwPbp+M8FAxIOm44wRdUHYhz+kJJv2wctv0uFVEq3vN9J7uCaxNYlJgpsJ/1Ebrkvf5HS6QX+MYCDiQdNxxoi6IOzDH1KS5nr4tJL3G5RE0y/cwfzzkCuuTmCWYMrSsOh67s9FgzksuEdxpiJe02wnGIh40HScMaIuCPvwh5Qk/VaPuwGqjiqJpu97mo+fGX9nC8fXYZZgysweJ8nf59r4rGLG8J0YqZnJGQQDEQ+ajjNG1AVhH/6QkqRymdRbllYSTZ99tpAx41bGvN2YJcjIb9yUR/rX/dvHmdeyym4cPrFH7NravsFwd7Pga3uHFw48aZT3KMkLj/jsqSObL3PoCcPdTeHuagfjHa/2Y5rgJnMKRka57pain0f5b0pS1+KYN5wiw1YkfrrK/yAwT0nqWpgmAvOUpK6FaSIw720tHehkmggsJrCYwGICiwksJrCYwGICi/0Dz+4wMA4R1V8AAAAASUVORK5CYII=" style="image-rendering: pixelated;"/></div><div class="erd-table mt-8">
+<div class="erd-header"><span>Backward_LSTM</span><i class="w-4 h-4 text-teal-600" data-lucide="arrow-left"></i></div>
+<div class="erd-row"><span>direction</span><span class="erd-val">Right-to-Left</span></div>
+<div class="erd-row"><span>units</span><span class="erd-type">256</span></div>
+</div></div>
+</div>
+</div>
+<!-- ZONE 5: CTC DECODER (2000, 2500) -->
+<div class="absolute flex flex-row items-center gap-20" style="left: 2000px; top: 2500px; transform: translate(-50%, -50%); z-index: 2;">
+<div class="expl-card">
+<div class="expl-icon-wrap bg-emerald-50 border-emerald-100"><i class="w-6 h-6 text-emerald-600" data-lucide="file-digit"></i></div>
+<h3 class="text-xl font-bold text-slate-800 mb-3">5. CTC Alignment</h3>
+<p class="text-slate-600 text-[13px] leading-relaxed">
+<span class="lang-en"><b>Connectionist Temporal Classification (CTC)</b> reduces probabilities into actual text by shrinking repeating characters (e.g., 'a-a-a' to 'a') and discarding blank tokens.</span>
+<span class="lang-id"><b>Connectionist Temporal Classification (CTC)</b> mereduksi probabilitas menjadi teks aktual dengan menyusutkan karakter berulang (misal: 'a-a-a' menjadi 'a') dan membuang token kosong.</span>
+</p>
+</div>
+<div class="flex flex-col gap-8">
+<div class="relative group"><div class="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-48 bg-slate-900 rounded-xl p-2 shadow-2xl opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 z-[9999] origin-bottom border border-slate-700"><div class="text-[9px] font-mono text-slate-400 mb-1 flex justify-between"><span>TENSOR_VISUAL</span><span class="text-sky-400">LIVE</span></div><img alt="Tensor" class="w-full h-auto rounded border border-slate-800 bg-black/50 min-h-[40px]" id="vis-ctc-1" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAAgCAAAAAD/SS/5AAADSklEQVRYCcXBf0yUZQDA8e9zO9Drhxvogv5QojRtuLRTr4lE3qU8d3Lly9BRq8HCrs0tW2y1pLk2bVZmv9b6I+Umk6kNcM7XuvNheRMwWHGeEJNamRH9WrZ0djG5O+S90C1Ot/55O7b38xFYTGAxgcUEFhNYTJCdsgeMg5fJgiA7x72sP0YWBNlREk0nC4LsKImmkwXBDWZXL7trpPdQikmVaxZe+a69H2pKE9urvLlfNv1dsnH5QNsgbCwbf63Ue++3bb2gJJoOS1avSnSd/AHzBBmLjxUz6fuKYRz6WiZN7NhBxMOph4DIu623Qdx9BiX55FFg4qX3UBJNp77JBhg1hzFNkNFVzkcnK2vpdPN6I6c/LG6YZazsi3hgKOkERk/fn8/QYpSE+MDSWSTvG1YSTd/QahvZldtYkFj7OWYJptiv5KQL/6C04EIv/iWJ4F/sr2XbzogHvSq9N0DaOXD3WYeRF1eSc8vjeV/NZdtOJdH00DpWd1F1hLYazBJk9K3gl7bOE2Nct2zlwjWLaHo24qG+mYoOzs+HLx6k/JSSvPIG7H6R1seVRAtfvJ3KBPnt/FiMWYKMklARMKo/f4m8QG0J1wQDEQ+ajjNG1AVhH/6Qkjx1ELZ8QPfDSqKdG+Jfcy5ikuAGjspqdwH0r5jYG2CwPbp+M8FAxIOm44wRdUHYhz+kJJv2wctv0uFVEq3vN9J7uCaxNYlJgpsJ/1Ebrkvf5HS6QX+MYCDiQdNxxoi6IOzDH1KS5nr4tJL3G5RE0y/cwfzzkCuuTmCWYMrSsOh67s9FgzksuEdxpiJe02wnGIh40HScMaIuCPvwh5Qk/VaPuwGqjiqJpu97mo+fGX9nC8fXYZZgysweJ8nf59r4rGLG8J0YqZnJGQQDEQ+ajjNG1AVhH/6QkqRymdRbllYSTZ99tpAx41bGvN2YJcjIb9yUR/rX/dvHmdeyym4cPrFH7NravsFwd7Pga3uHFw48aZT3KMkLj/jsqSObL3PoCcPdTeHuagfjHa/2Y5rgJnMKRka57pain0f5b0pS1+KYN5wiw1YkfrrK/yAwT0nqWpgmAvOUpK6FaSIw720tHehkmggsJrCYwGICiwksJrCYwGICi/0Dz+4wMA4R1V8AAAAASUVORK5CYII=" style="image-rendering: pixelated;"/></div><div class="erd-table">
+<div class="erd-header"><span>CTC_Loss</span><i class="w-4 h-4 text-emerald-600" data-lucide="cpu"></i></div>
+<div class="erd-row"><span>algorithm</span><span class="erd-val">CTC</span></div>
+<div class="erd-row"><span>blank_token</span><span class="erd-type">True</span></div>
+<div class="p-2 bg-slate-50 border-t border-slate-100 text-[10px] font-mono text-slate-500 overflow-hidden" id="math-ctc-softmax">
                                     [CTC Softmax Math Standby]
                                 </div>
-                            </div></div>
-                            <div class="w-px h-8 bg-slate-200 mx-auto"></div>
-                            </div>
-<div class="relative group">
-<div class="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-48 bg-slate-900 rounded-xl p-2 shadow-2xl opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 z-[9999] origin-bottom border border-slate-700">
-                                    <div class="text-[9px] font-mono text-slate-400 mb-1 flex justify-between"><span>TENSOR_VISUAL</span><span class="text-sky-400">LIVE</span></div>
-                                    <img id="vis-ctc-2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAAgCAIAAABVQOdyAAAEUElEQVRoBe3Bb2hVZRwH8O/veuJ0tXBnnlh2jB33BzY7MqYL5ZB0iedUMvS+eZxBrRv+i1NQvpIgxgxtpxe9MO7kvOhFMDuEMPOFyWQKHdp8XCK2ptf0lt7TagvmwGCjbe56lxzYixCnL4Lz4p7PhxhxxKJDjDhi0SFGHLHoECOOWHSIEUcsOsSIIxYdYsQRiw4x4ohFhxhxxKJDjDgew/xrL469/MSq5glp2b2x61XP95fk7y4iNGmbdzbdXSjSuoPjs42rC9ulxvWj1/JrtP7Eit4hhCZt886muwtFWndwfLZxdWG71Lh+9Fp+jdafWNE7hDJGjDge5ffD5rVdRxNIYFEJJUO8Xf3mr6W5WVUonu4DaLncNtB8LEkyFhndttYlAKhC8XQfQMvltoHmY0mSscjotrUugXJFjDiWNPaRefUDF6GOCeP69LM9a08nSQZQc2pv/bsXVaF4uo/QdGm2c8I8XHUhSTKAuYX5bTv30OCwKhRP9xGaLs12TpiHqy4kSQYwtzC/beceGhxGWSJGHEtSheLpPoCak/vq3/8RwOgn5i97XQBBccque6XSX+HpPoCzM9IRq7V4K5Bq13ac690sSwCMblvrEqpQPN0HcHZGOmK1Fm8FUu3ajnO9m2UJgNFta10CZYkYcTzcsooK72qfklgO4NWd79DAT7iPEn9nNt2TSfpnYeWxC6pQPN0HUHNmd/2uSwgFx5tubOkB0HC+vXrHiCoUT/cB1JzZXb/rEkLB8aYbW3oANJxvr94xgrJEjDgeLtG0rq/vG4S21m4uzczgAapQPN0HYGRtzREIFRwzn3EBpHJp2QpUoXi6D8DI2pojECo4Zj7jAkjl0rIVoCwRI46Hk+pqTv9wEqHWlteL43/hAapQPN0HYGRtzREIFRwzn3EBpHJp2QpUoXi6D8DI2pojECo4Zj7jAkjl0rIVoCwRI44lvXVjrP3pSQAbPrWfOSoAUMv6N77uXyVN/3G38lSzVvl90tN9AEbW1hyBUMEx8xkXQCqXlq1AFYqn+wCMrK05AqGCY+YzLoBULi1bAcoSMeJY0m89G26yrwB8cUfv6d6avF166eOhz6p+BtB5+4WhJkkViqf7AIysrTkCoYJj5jMugFQuLVuBKhRP9wEYWVtzBEIFx8xnXACpXFq2ApQlYsSxJKmhvvXbofcq/sR/3SxO79v9oXT2kioUT/cBGFlbcwRCBcfMZ1wAqVxatgJVKJ7uAzCytuYIhAqOmc+4AFK5tGwFKEvEiONRpOdWT3751OeNvVuexH1zC/NWbkfy4EqIYQBTfXWi6QSAjYds1RUIjR8wr+x3ATQMtle3jUz11YmmEwA2HrJVVyA0fsC8st8F0DDYXt02grJEjDgem1RfW1ou4/qt0twsYv8HYsQRiw4x4ohFhxhxxKJDjDhi0SFGHLHoECOOWHSIEUcsOsSIIxYdYsQRiw4x4ohFhxhxxKLzL+lpiVCxE/uiAAAAAElFTkSuQmCC" class="w-full h-auto rounded border border-slate-800 bg-black/50 min-h-[40px]" style="image-rendering: pixelated;" alt="Tensor">
-                                </div>
-<div class="erd-table">
-                                <div class="erd-header"><span>Greedy_Decoder</span><i data-lucide="chevron-right" class="w-4 h-4 text-emerald-600"></i></div>
-                                <div class="erd-row"><span>operation</span><span class="erd-val">ArgMax</span></div>
-                                <div class="erd-row"><span>output</span><span class="erd-type">Raw_String</span></div>
-                            </div></div>
-                        </div>
-                    </div>
-
-
-                    <!-- ZONE 6: LEXICAL DECODING (800, 2200) -->
-                    <div class="absolute flex flex-row items-center gap-20" style="left: 800px; top: 2200px; transform: translate(-50%, -50%); z-index: 2;">
-                        <div class="flex flex-col gap-8">
-                            
-<div class="relative group">
-<div class="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-80 bg-slate-900 rounded-xl p-3 shadow-2xl opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 z-[9999] origin-bottom border border-slate-700">
-                                    <div class="text-[9px] font-mono text-slate-400 mb-2 flex justify-between"><span>LEVENSHTEIN_DISTANCE</span><span class="text-sky-400">LIVE COMPUTATION</span></div>
-                                    <div id="vis-dp" class="w-full bg-white rounded-lg p-2 overflow-hidden text-center text-xs font-mono">
-                                        <!-- Matrix rendered via JS -->
-                                        <table class="w-full border-collapse border border-slate-300 text-[10px] text-slate-700 text-center bg-slate-50"><tr class="bg-slate-200 font-bold text-slate-600"><th class="border border-slate-300 p-1"></th><th class="border border-slate-300 p-1 uppercase">ε</th><th class="border border-slate-300 p-1 uppercase">S</th><th class="border border-slate-300 p-1 uppercase">A</th><th class="border border-slate-300 p-1 uppercase">M</th><th class="border border-slate-300 p-1 uppercase">P</th><th class="border border-slate-300 p-1 uppercase">L</th></tr><tr><th class="border border-slate-300 p-1 bg-slate-200 font-bold text-slate-600 uppercase">ε</th><td class="border border-slate-300 p-1 bg-emerald-100 border-2 border-emerald-400 font-bold text-emerald-700">0</td><td class="border border-slate-300 p-1 bg-white ">1</td><td class="border border-slate-300 p-1 bg-white ">2</td><td class="border border-slate-300 p-1 bg-white ">3</td><td class="border border-slate-300 p-1 bg-white ">4</td><td class="border border-slate-300 p-1 bg-white ">5</td></tr><tr><th class="border border-slate-300 p-1 bg-slate-200 font-bold text-slate-600 uppercase">S</th><td class="border border-slate-300 p-1 bg-white ">1</td><td class="border border-slate-300 p-1 bg-emerald-100 border-2 border-emerald-400 font-bold text-emerald-700">0</td><td class="border border-slate-300 p-1 bg-white ">1</td><td class="border border-slate-300 p-1 bg-white ">2</td><td class="border border-slate-300 p-1 bg-white ">3</td><td class="border border-slate-300 p-1 bg-white ">4</td></tr><tr><th class="border border-slate-300 p-1 bg-slate-200 font-bold text-slate-600 uppercase">A</th><td class="border border-slate-300 p-1 bg-white ">2</td><td class="border border-slate-300 p-1 bg-white ">1</td><td class="border border-slate-300 p-1 bg-emerald-100 border-2 border-emerald-400 font-bold text-emerald-700">0</td><td class="border border-slate-300 p-1 bg-white ">1</td><td class="border border-slate-300 p-1 bg-white ">2</td><td class="border border-slate-300 p-1 bg-white ">3</td></tr><tr><th class="border border-slate-300 p-1 bg-slate-200 font-bold text-slate-600 uppercase">M</th><td class="border border-slate-300 p-1 bg-white ">3</td><td class="border border-slate-300 p-1 bg-white ">2</td><td class="border border-slate-300 p-1 bg-white ">1</td><td class="border border-slate-300 p-1 bg-emerald-100 border-2 border-emerald-400 font-bold text-emerald-700">0</td><td class="border border-slate-300 p-1 bg-white ">1</td><td class="border border-slate-300 p-1 bg-white ">2</td></tr></table>
-                                    </div>
-                                    <div class="mt-2 flex justify-between items-center text-[8px] font-mono">
-                                        <div class="flex items-center gap-1"><span class="w-2 h-2 bg-emerald-300 border border-emerald-500 block"></span><span class="text-slate-400">MATCH (0)</span></div>
-                                        <div class="flex items-center gap-1"><span class="w-2 h-2 bg-rose-300 border border-rose-500 block"></span><span class="text-slate-400">ERROR (+1)</span></div>
-                                    </div>
-                                </div>
+</div></div>
+<div class="w-px h-8 bg-slate-200 mx-auto"></div>
+<div class="relative group"><div class="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-48 bg-slate-900 rounded-xl p-2 shadow-2xl opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 z-[9999] origin-bottom border border-slate-700"><div class="text-[9px] font-mono text-slate-400 mb-1 flex justify-between"><span>TENSOR_VISUAL</span><span class="text-sky-400">LIVE</span></div><img alt="Tensor" class="w-full h-auto rounded border border-slate-800 bg-black/50 min-h-[40px]" id="vis-ctc-2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAAgCAAAAAD/SS/5AAADSklEQVRYCcXBf0yUZQDA8e9zO9Drhxvogv5QojRtuLRTr4lE3qU8d3Lly9BRq8HCrs0tW2y1pLk2bVZmv9b6I+Umk6kNcM7XuvNheRMwWHGeEJNamRH9WrZ0djG5O+S90C1Ot/55O7b38xFYTGAxgcUEFhNYTJCdsgeMg5fJgiA7x72sP0YWBNlREk0nC4LsKImmkwXBDWZXL7trpPdQikmVaxZe+a69H2pKE9urvLlfNv1dsnH5QNsgbCwbf63Ue++3bb2gJJoOS1avSnSd/AHzBBmLjxUz6fuKYRz6WiZN7NhBxMOph4DIu623Qdx9BiX55FFg4qX3UBJNp77JBhg1hzFNkNFVzkcnK2vpdPN6I6c/LG6YZazsi3hgKOkERk/fn8/QYpSE+MDSWSTvG1YSTd/QahvZldtYkFj7OWYJptiv5KQL/6C04EIv/iWJ4F/sr2XbzogHvSq9N0DaOXD3WYeRF1eSc8vjeV/NZdtOJdH00DpWd1F1hLYazBJk9K3gl7bOE2Nct2zlwjWLaHo24qG+mYoOzs+HLx6k/JSSvPIG7H6R1seVRAtfvJ3KBPnt/FiMWYKMklARMKo/f4m8QG0J1wQDEQ+ajjNG1AVhH/6Qkjx1ELZ8QPfDSqKdG+Jfcy5ikuAGjspqdwH0r5jYG2CwPbp+M8FAxIOm44wRdUHYhz+kJJv2wctv0uFVEq3vN9J7uCaxNYlJgpsJ/1Ebrkvf5HS6QX+MYCDiQdNxxoi6IOzDH1KS5nr4tJL3G5RE0y/cwfzzkCuuTmCWYMrSsOh67s9FgzksuEdxpiJe02wnGIh40HScMaIuCPvwh5Qk/VaPuwGqjiqJpu97mo+fGX9nC8fXYZZgysweJ8nf59r4rGLG8J0YqZnJGQQDEQ+ajjNG1AVhH/6QkqRymdRbllYSTZ99tpAx41bGvN2YJcjIb9yUR/rX/dvHmdeyym4cPrFH7NravsFwd7Pga3uHFw48aZT3KMkLj/jsqSObL3PoCcPdTeHuagfjHa/2Y5rgJnMKRka57pain0f5b0pS1+KYN5wiw1YkfrrK/yAwT0nqWpgmAvOUpK6FaSIw720tHehkmggsJrCYwGICiwksJrCYwGICi/0Dz+4wMA4R1V8AAAAASUVORK5CYII=" style="image-rendering: pixelated;"/></div><div class="erd-table">
+<div class="erd-header"><span>Greedy_Decoder</span><i class="w-4 h-4 text-emerald-600" data-lucide="chevron-right"></i></div>
+<div class="erd-row"><span>operation</span><span class="erd-val">ArgMax</span></div>
+<div class="erd-row"><span>output</span><span class="erd-type">Raw_String</span></div>
+</div></div>
+</div>
+</div>
+<!-- ZONE 6: LEXICAL DECODING (800, 2200) -->
+<div class="absolute flex flex-row items-center gap-20" style="left: 800px; top: 2200px; transform: translate(-50%, -50%); z-index: 2;">
+<div class="flex flex-col gap-8">
+<div class="relative group"><div class="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-80 bg-slate-900 rounded-xl p-3 shadow-2xl opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 z-[9999] origin-bottom border border-slate-700">
+<div class="text-[9px] font-mono text-slate-400 mb-2 flex justify-between"><span>LEVENSHTEIN_DISTANCE</span><span class="text-sky-400">LIVE COMPUTATION</span></div>
+<div class="w-full bg-white rounded-lg p-2 overflow-hidden text-center text-xs font-mono" id="vis-dp">
+<!-- Matrix rendered via JS -->
+<table class="w-full border-collapse border border-slate-300 text-[10px] text-slate-700 text-center bg-slate-50"><tr class="bg-slate-200 font-bold text-slate-600"><th class="border border-slate-300 p-1"></th><th class="border border-slate-300 p-1 uppercase">ε</th><th class="border border-slate-300 p-1 uppercase">S</th><th class="border border-slate-300 p-1 uppercase">A</th><th class="border border-slate-300 p-1 uppercase">M</th><th class="border border-slate-300 p-1 uppercase">P</th><th class="border border-slate-300 p-1 uppercase">L</th></tr><tr><th class="border border-slate-300 p-1 bg-slate-200 font-bold text-slate-600 uppercase">ε</th><td class="border border-slate-300 p-1 bg-emerald-100 border-2 border-emerald-400 font-bold text-emerald-700">0</td><td class="border border-slate-300 p-1 bg-white">1</td><td class="border border-slate-300 p-1 bg-white">2</td><td class="border border-slate-300 p-1 bg-white">3</td><td class="border border-slate-300 p-1 bg-white">4</td><td class="border border-slate-300 p-1 bg-white">5</td></tr><tr><th class="border border-slate-300 p-1 bg-slate-200 font-bold text-slate-600 uppercase">S</th><td class="border border-slate-300 p-1 bg-white">1</td><td class="border border-slate-300 p-1 bg-emerald-100 border-2 border-emerald-400 font-bold text-emerald-700">0</td><td class="border border-slate-300 p-1 bg-white">1</td><td class="border border-slate-300 p-1 bg-white">2</td><td class="border border-slate-300 p-1 bg-white">3</td><td class="border border-slate-300 p-1 bg-white">4</td></tr><tr><th class="border border-slate-300 p-1 bg-slate-200 font-bold text-slate-600 uppercase">A</th><td class="border border-slate-300 p-1 bg-white">2</td><td class="border border-slate-300 p-1 bg-white">1</td><td class="border border-slate-300 p-1 bg-emerald-100 border-2 border-emerald-400 font-bold text-emerald-700">0</td><td class="border border-slate-300 p-1 bg-white">1</td><td class="border border-slate-300 p-1 bg-white">2</td><td class="border border-slate-300 p-1 bg-white">3</td></tr><tr><th class="border border-slate-300 p-1 bg-slate-200 font-bold text-slate-600 uppercase">M</th><td class="border border-slate-300 p-1 bg-white">3</td><td class="border border-slate-300 p-1 bg-white">2</td><td class="border border-slate-300 p-1 bg-white">1</td><td class="border border-slate-300 p-1 bg-emerald-100 border-2 border-emerald-400 font-bold text-emerald-700">0</td><td class="border border-slate-300 p-1 bg-white">1</td><td class="border border-slate-300 p-1 bg-white">2</td></tr></table>
+</div>
+<div class="mt-2 flex justify-between items-center text-[8px] font-mono">
+<div class="flex items-center gap-1"><span class="w-2 h-2 bg-emerald-300 border border-emerald-500 block"></span><span class="text-slate-400">MATCH (0)</span></div>
+<div class="flex items-center gap-1"><span class="w-2 h-2 bg-rose-300 border border-rose-500 block"></span><span class="text-slate-400">ERROR (+1)</span></div>
+</div>
 </div><div class="erd-table">
-                                <div class="erd-header"><span>Dynamic_Programming_Matrix</span><i data-lucide="spell-check-2" class="w-4 h-4 text-rose-600"></i></div>
-                                                            <div class="p-2 bg-slate-50 border-t border-slate-100 flex justify-center items-center py-4">
-                                <div class="grid grid-cols-4 gap-px bg-slate-200 border border-slate-300 p-px text-[8px] font-mono text-center text-slate-500">
-                                    <div class="w-4 bg-slate-100">0</div><div class="w-4 bg-slate-100">1</div><div class="w-4 bg-slate-100">2</div><div class="w-4 bg-slate-100">3</div>
-                                    <div class="w-4 bg-slate-100">1</div><div class="w-4 bg-emerald-100 font-bold text-emerald-600">0</div><div class="w-4 bg-slate-100">1</div><div class="w-4 bg-slate-100">2</div>
-                                    <div class="w-4 bg-slate-100">2</div><div class="w-4 bg-slate-100">1</div><div class="w-4 bg-emerald-100 font-bold text-emerald-600">0</div><div class="w-4 bg-slate-100">1</div>
-                                </div>
-                            </div>
-                            <div class="erd-row"><span>distance</span><span class="erd-val">Matrix_Ops</span></div>
-                            <div class="p-2 bg-slate-50 border-t border-slate-100 text-[10px] font-mono text-slate-500 overflow-hidden leading-tight" id="math-nlp-dp">
+
+<div class="erd-header"><span>Dynamic_Programming_Matrix</span><i class="w-4 h-4 text-rose-600" data-lucide="spell-check-2"></i></div>
+<div class="p-2 bg-slate-50 border-t border-slate-100 flex justify-center items-center py-4">
+<div class="grid grid-cols-4 gap-px bg-slate-200 border border-slate-300 p-px text-[8px] font-mono text-center text-slate-500">
+<div class="w-4 bg-slate-100">0</div><div class="w-4 bg-slate-100">1</div><div class="w-4 bg-slate-100">2</div><div class="w-4 bg-slate-100">3</div>
+<div class="w-4 bg-slate-100">1</div><div class="w-4 bg-emerald-100 font-bold text-emerald-600">0</div><div class="w-4 bg-slate-100">1</div><div class="w-4 bg-slate-100">2</div>
+<div class="w-4 bg-slate-100">2</div><div class="w-4 bg-slate-100">1</div><div class="w-4 bg-emerald-100 font-bold text-emerald-600">0</div><div class="w-4 bg-slate-100">1</div>
+</div>
+</div>
+<div class="erd-row"><span>distance</span><span class="erd-val">Matrix_Ops</span></div>
+<div class="p-2 bg-slate-50 border-t border-slate-100 text-[10px] font-mono text-slate-500 overflow-hidden leading-tight" id="math-nlp-dp">
                                 [DP Grid Standby]
                             </div>
-
-                                <div class="erd-row"><span>library</span><span class="erd-type">Contextual_Lexicon</span></div>
-                            </div></div></div>
-                            <div class="w-px h-8 bg-slate-200 mx-auto"></div>
-                            <div class="erd-table">
-                                <div class="erd-header"><span>English_Corpus</span><i data-lucide="book" class="w-4 h-4 text-rose-600"></i></div>
-                                <div class="erd-row"><span>source</span><span class="erd-val">NLTK_Words</span></div>
-                                <div class="erd-row"><span>type</span><span class="erd-type">Lexical_Weights</span></div>
-                            </div>
-                            <div class="w-px h-8 bg-slate-200 mx-auto"></div>
-                            <div class="erd-table" style="background: #fff1f2; border-color: #fecdd3; box-shadow: 0 10px 40px -10px rgba(225,29,72,0.15);">
-                                <div class="erd-header" style="background: #ffe4e6; border-color: #fecdd3;"><span class="text-rose-700">Digital_String</span><i data-lucide="check-circle" class="w-4 h-4 text-rose-600"></i></div>
-                                <div class="erd-row" style="background: transparent;"><span>output_type</span><span class="text-rose-600 font-bold">TEXT</span></div>
-                                <div class="p-6 text-center">
-                                    <span id="final-output-text" class="font-mono text-2xl text-rose-600 font-bold tracking-widest drop-shadow-sm">[STANDBY]</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="expl-card">
-                            <div class="expl-icon-wrap bg-rose-50 border-rose-100"><i data-lucide="text-cursor" class="w-6 h-6 text-rose-600"></i></div>
-                            <h3 class="text-xl font-bold text-slate-800 mb-3">6. Lexical Alignment</h3>
-                            <p class="text-slate-600 text-[13px] leading-relaxed">
-                                <span class="lang-en">The raw string often contains minor spelling errors due to model confusion. <b>Levenshtein Distance</b> compares it against a valid vocabulary dictionary to produce perfect final text.</span>
-                                <span class="lang-id">String mentah seringkali mengandung salah eja minor akibat kebingungan model. <b>Jarak Levenshtein</b> membandingkannya dengan kamus kosakata yang valid untuk menghasilkan teks akhir yang sempurna.</span>
-                            </p>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-
-
-
-
+<div class="erd-row"><span>library</span><span class="erd-type">Contextual_Lexicon</span></div>
+</div></div>
+<div class="w-px h-8 bg-slate-200 mx-auto"></div>
+<div class="relative group"><div class="erd-table">
+<div class="erd-header"><span>English_Corpus</span><i class="w-4 h-4 text-rose-600" data-lucide="book"></i></div>
+<div class="erd-row"><span>source</span><span class="erd-val">NLTK_Words</span></div>
+<div class="erd-row"><span>type</span><span class="erd-type">Lexical_Weights</span></div>
+</div></div>
+<div class="w-px h-8 bg-slate-200 mx-auto"></div>
+<div class="relative group"><div class="erd-table" style="background: #fff1f2; border-color: #fecdd3; box-shadow: 0 10px 40px -10px rgba(225,29,72,0.15);">
+<div class="erd-header" style="background: #ffe4e6; border-color: #fecdd3;"><span class="text-rose-700">Digital_String</span><i class="w-4 h-4 text-rose-600" data-lucide="check-circle"></i></div>
+<div class="erd-row" style="background: transparent;"><span>output_type</span><span class="text-rose-600 font-bold">TEXT</span></div>
+<div class="p-6 text-center">
+<span class="font-mono text-2xl text-rose-600 font-bold tracking-widest drop-shadow-sm" id="final-output-text">[STANDBY]</span>
+</div>
+</div></div>
+</div>
+<div class="expl-card">
+<div class="expl-icon-wrap bg-rose-50 border-rose-100"><i class="w-6 h-6 text-rose-600" data-lucide="text-cursor"></i></div>
+<h3 class="text-xl font-bold text-slate-800 mb-3">6. Lexical Alignment</h3>
+<p class="text-slate-600 text-[13px] leading-relaxed">
+<span class="lang-en">The raw string often contains minor spelling errors due to model confusion. <b>Levenshtein Distance</b> compares it against a valid vocabulary dictionary to produce perfect final text.</span>
+<span class="lang-id">String mentah seringkali mengandung salah eja minor akibat kebingungan model. <b>Jarak Levenshtein</b> membandingkannya dengan kamus kosakata yang valid untuk menghasilkan teks akhir yang sempurna.</span>
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
 <footer class="mt-auto border-t border-slate-200 bg-slate-50 overflow-hidden relative">
-        <!-- Decorative grid/gradient -->
-        <div class="absolute inset-0 pointer-events-none" style="background-image: radial-gradient(circle at 100% 100%, rgba(14, 165, 233, 0.05) 0%, transparent 50%);"></div>
-        
-        <div class="max-w-6xl mx-auto px-6 py-16 relative z-10">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 border-b border-slate-200 pb-12 mb-8">
-                
-                <div class="md:col-span-2">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center shadow-md">
-                            <i data-lucide="scan-line" class="w-4 h-4 text-white"></i>
-                        </div>
-                        <span class="font-black text-xl text-slate-900 tracking-tight">HTR<span class="text-sky-600">Engine</span></span>
-                    </div>
-                    <p class="text-sm text-slate-500 leading-relaxed max-w-sm mb-6">
-                        <span class="lang-en">An offline Handwritten Text Recognition engine. It processes raw handwriting into digital text using a Hybrid CNN-BiLSTM network and Dynamic Programming.</span>
-                        <span class="lang-en">Offline Handwritten Text Recognition (HTR) engine. This system converts pen stroke pixels into digital text using a Hybrid CNN-BiLSTM architecture and Dynamic Programming.</span>
-                        <span class="lang-id">Mesin pengenal tulisan tangan (HTR) luring. Sistem ini mengonversi piksel guratan pena menjadi teks digital menggunakan arsitektur Hybrid CNN-BiLSTM dan Pemrograman Dinamis.</span>
-                    </p>
-                    <div class="flex items-center gap-2">
-                        <span class="flex h-2.5 w-2.5 relative">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                        </span>
-                        <span class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                            <span class="lang-en">System Operational</span>
-                            <span class="lang-en">Active Systems</span><span class="lang-id">Sistem Aktif</span>
-                        </span>
-                    </div>
-                </div>
-
-                <div>
-                    <h4 class="text-xs font-bold text-slate-900 uppercase tracking-widest mb-6">
-                        <span class="lang-en">Architecture</span>
-                        <span class="lang-en">Architecture</span><span class="lang-id">Arsitektur</span>
-                    </h4>
-                    <ul class="space-y-4 text-sm text-slate-500 font-medium">
-                        <li><a href="#how-it-works" class="hover:text-sky-600 transition-colors">
-                            <span class="lang-en">Pipeline Stages</span>
-                            <span class="lang-en">Pipeline Stages</span><span class="lang-id">Tahapan Pipeline</span>
-                        </a></li>
-                        <li><a href="#architecture" class="hover:text-sky-600 transition-colors">
-                            <span class="lang-en">Data Telemetry</span>
-                            <span class="lang-en">Telemetry Dashboard</span><span class="lang-id">Dasbor Telemetri</span>
-                        </a></li>
-                        <li><a href="#" class="hover:text-sky-600 transition-colors cursor-default">
-                            <span class="lang-en">Lexical Corpus</span>
-                            <span class="lang-en">Lexical Corpus</span><span class="lang-id">Korpus Leksikal</span>
-                        </a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 class="text-xs font-bold text-slate-900 uppercase tracking-widest mb-6">
-                        <span class="lang-en">Technology</span>
-                        <span class="lang-en">Technology</span><span class="lang-id">Teknologi</span>
-                    </h4>
-                    <ul class="space-y-4 text-sm text-slate-500 font-mono text-[13px]">
-                        <li class="flex items-center gap-2"><i data-lucide="cpu" class="w-3.5 h-3.5"></i> TensorFlow <span class="text-slate-400">2.14</span></li>
-                        <li class="flex items-center gap-2"><i data-lucide="server" class="w-3.5 h-3.5"></i> FastAPI <span class="text-slate-400">0.111</span></li>
-                        <li class="flex items-center gap-2"><i data-lucide="box" class="w-3.5 h-3.5"></i> OpenCV-Py <span class="text-slate-400">4.10</span></li>
-                    </ul>
-                </div>
-
-            </div>
-
-            <div class="flex flex-col sm:flex-row items-center justify-between text-[13px] font-medium text-slate-400">
-                <div class="flex items-center gap-2">
-                    <i data-lucide="copyright" class="w-3.5 h-3.5"></i>
-                    <span>2026 Muhammad Riskal Fadhilla (ID: 10122487)</span>
-                </div>
-                <div class="mt-4 sm:mt-0 flex items-center gap-6">
-                    <span class="hover:text-slate-600 transition-colors cursor-default hidden sm:block">
-                        <span class="lang-en">System Architect</span>
-                        <span class="lang-en">System Architect</span><span class="lang-id">Arsitek Sistem</span>
-                    </span>
-                    <span class="w-1 h-1 rounded-full bg-slate-300 hidden sm:block"></span>
-                    <span class="hover:text-slate-600 transition-colors cursor-default font-mono text-xs">v1.4.0-Enterprise</span>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script>
+<!-- Decorative grid/gradient -->
+<div class="absolute inset-0 pointer-events-none" style="background-image: radial-gradient(circle at 100% 100%, rgba(14, 165, 233, 0.05) 0%, transparent 50%);"></div>
+<div class="max-w-6xl mx-auto px-6 py-16 relative z-10">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 border-b border-slate-200 pb-12 mb-8">
+<div class="md:col-span-2">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center shadow-md">
+<i class="w-4 h-4 text-white" data-lucide="scan-line"></i>
+</div>
+<span class="font-black text-xl text-slate-900 tracking-tight">HTR<span class="text-sky-600">Engine</span></span>
+</div>
+<p class="text-sm text-slate-500 leading-relaxed max-w-sm mb-6">
+<span class="lang-en">An offline Handwritten Text Recognition engine. It processes raw handwriting into digital text using a Hybrid CNN-BiLSTM network and Dynamic Programming.</span>
+<span class="lang-en">Offline Handwritten Text Recognition (HTR) engine. This system converts pen stroke pixels into digital text using a Hybrid CNN-BiLSTM architecture and Dynamic Programming.</span>
+<span class="lang-id">Mesin pengenal tulisan tangan (HTR) luring. Sistem ini mengonversi piksel guratan pena menjadi teks digital menggunakan arsitektur Hybrid CNN-BiLSTM dan Pemrograman Dinamis.</span>
+</p>
+<div class="flex items-center gap-2">
+<span class="flex h-2.5 w-2.5 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+</span>
+<span class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+<span class="lang-en">System Operational</span>
+<span class="lang-en">Active Systems</span><span class="lang-id">Sistem Aktif</span>
+</span>
+</div>
+</div>
+<div>
+<h4 class="text-xs font-bold text-slate-900 uppercase tracking-widest mb-6">
+<span class="lang-en">Architecture</span>
+<span class="lang-en">Architecture</span><span class="lang-id">Arsitektur</span>
+</h4>
+<ul class="space-y-4 text-sm text-slate-500 font-medium">
+<li><a class="hover:text-sky-600 transition-colors" href="#how-it-works">
+<span class="lang-en">Pipeline Stages</span>
+<span class="lang-en">Pipeline Stages</span><span class="lang-id">Tahapan Pipeline</span>
+</a></li>
+<li><a class="hover:text-sky-600 transition-colors" href="#architecture">
+<span class="lang-en">Data Telemetry</span>
+<span class="lang-en">Telemetry Dashboard</span><span class="lang-id">Dasbor Telemetri</span>
+</a></li>
+<li><a class="hover:text-sky-600 transition-colors cursor-default" href="#">
+<span class="lang-en">Lexical Corpus</span>
+<span class="lang-en">Lexical Corpus</span><span class="lang-id">Korpus Leksikal</span>
+</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-xs font-bold text-slate-900 uppercase tracking-widest mb-6">
+<span class="lang-en">Technology</span>
+<span class="lang-en">Technology</span><span class="lang-id">Teknologi</span>
+</h4>
+<ul class="space-y-4 text-sm text-slate-500 font-mono text-[13px]">
+<li class="flex items-center gap-2"><i class="w-3.5 h-3.5" data-lucide="cpu"></i> TensorFlow <span class="text-slate-400">2.14</span></li>
+<li class="flex items-center gap-2"><i class="w-3.5 h-3.5" data-lucide="server"></i> FastAPI <span class="text-slate-400">0.111</span></li>
+<li class="flex items-center gap-2"><i class="w-3.5 h-3.5" data-lucide="box"></i> OpenCV-Py <span class="text-slate-400">4.10</span></li>
+</ul>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row items-center justify-between text-[13px] font-medium text-slate-400">
+<div class="flex items-center gap-2">
+<i class="w-3.5 h-3.5" data-lucide="copyright"></i>
+<span>2026 Muhammad Riskal Fadhilla (ID: 10122487)</span>
+</div>
+<div class="mt-4 sm:mt-0 flex items-center gap-6">
+<span class="hover:text-slate-600 transition-colors cursor-default hidden sm:block">
+<span class="lang-en">System Architect</span>
+<span class="lang-en">System Architect</span><span class="lang-id">Arsitek Sistem</span>
+</span>
+<span class="w-1 h-1 rounded-full bg-slate-300 hidden sm:block"></span>
+<span class="hover:text-slate-600 transition-colors cursor-default font-mono text-xs">v1.4.0-Enterprise</span>
+</div>
+</div>
+</div>
+</footer>
+<script>
         const body = document.body;
         const btnEn = document.getElementById('btnEn');
         const btnId = document.getElementById('btnId');
