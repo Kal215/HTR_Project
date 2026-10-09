@@ -1401,5 +1401,22 @@ window.addEventListener('scroll', () => {
         renderLoop();
 
     </script>
+
+    <script>
+        // Ensure icons are loaded
+        document.addEventListener("DOMContentLoaded", function() {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+        
+        // As a fallback for dynamic elements
+        window.onload = function() {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        };
+    </script>
 </body>
+
 </html>
