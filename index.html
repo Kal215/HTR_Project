@@ -780,6 +780,7 @@
         const langToggleBox = document.getElementById('langToggleBox');
         
         function setLanguage(lang) {
+            localStorage.setItem('htr_lang', lang);
             if (lang === 'en') {
                 body.classList.remove('lang-id');
                 body.classList.add('lang-en');
@@ -806,7 +807,14 @@
             });
         }
 
-        if(body.classList.contains('lang-en')) setLanguage('en'); else setLanguage('id');
+        
+        const savedLang = localStorage.getItem('htr_lang');
+        if (savedLang) {
+            setLanguage(savedLang);
+        } else {
+            if(body.classList.contains('lang-en')) setLanguage('en'); else setLanguage('id');
+        }
+
 
         const navLinks = document.querySelectorAll('.main-nav a[href^="#"]');
         const mainAppContent = document.getElementById('mainAppContent');
